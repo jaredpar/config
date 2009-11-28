@@ -5,7 +5,7 @@ if ( $Jsh.IsTestMachine ) {
 
 # Set LUA process monitor to run when we login
 echo "Making LuaProcessMonitor start on login"
-$luaExe = join-path $Jsh.UtilsPath "LuaProcessMonitor.exe"
+$luaExe = join-path $Jsh.UtilsRawPath "LuaProcessMonitor.exe"
 sp hkcu:\Software\Microsoft\Windows\CurrentVersion\Run LuaProcessMonitor $luaExe
 
 $found = @( $(gps LuaProcessMonitor -ea SilentlyContinue))
