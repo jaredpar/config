@@ -1,4 +1,17 @@
 
+$scriptPath = split-path -parent $MyInvocation.MyCommand.Definition 
+
+# Run the normal configuration scripts first
+if ( ($args.Length -eq 0) -or ($args[0] -ne "AdminOnly") ) {
+
+    pushd (join-path $scriptPath "Configure" )
+    echo "Running Configuration Scripts"
+    foreach ( $file in (dir *.ps1)) {
+        & $file.FullName
+    }
+
+    popd
+}
 
 # First, go ahead and configure the administrative tasks
 pushd $(join-path $Jsh.ScriptPath "ConfigureAdmin")
@@ -39,8 +52,11 @@ if ( -not (Test-Admin) ) {
     foreach ( $file in (dir *.ps1)) {
         $needed = & $file.FullName "check"
         if ( $needed ) {
-            & $file.FullName "run" 
-            $ranOne = $true
+            $run = read-host "Run $($file.Name)? (Y/N): " 
+            if ( $run -eq "y" ) {
+                & $file.FullName "run" 
+                $ranOne = $true
+            }
         }
     }
 
@@ -51,17 +67,4 @@ if ( -not (Test-Admin) ) {
     }
 }
 popd
-
-# If this is not an admin only run then run the normal configuration scripts
-if ( ($args.Length -eq 0) -or ($args[0] -ne "AdminOnly") ) {
-
-    pushd $(join-path $Jsh.ScriptPath "Configure")
-    echo "Running Configuration Scripts"
-    foreach ( $file in (dir *.ps1)) {
-        & $file.FullName
-    }
-
-    popd
-}
-
 
