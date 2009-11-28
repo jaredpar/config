@@ -163,11 +163,6 @@ if ($env:UserDomain -ne $env:ComputerName ) {
     . ".\$domainProfile"
 }
 
-# Run the get-fortune command if JshCmdlet was loaded
-if ( get-command "get-fortune" -ea SilentlyContinue ) {
-    get-fortune -timeout 1000
-}
-
 # Finished with the profile, go back to the original directory
 popd
 
