@@ -1,0 +1,191 @@
+<favorites>
+  <header />
+  <Link>
+    <Path>
+    </Path>
+    <Name>DSPSTestHandbook - PowerShell Scripting Guidelines.url</Name>
+    <Content>[DEFAULT] BASEURL=http://mswikis/DSPSTestHandbook/Wiki%20Pages/PowerShell%20Scripting%20Guidelines.aspx [InternetShortcut] URL=http://mswikis/DSPSTestHandbook/Wiki%20Pages/PowerShell%20Scripting%20Guidelines.aspx IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>
+    </Path>
+    <Name>Real Time Traffic Map.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.wsdot.wa.gov/traffic/seattle/ [InternetShortcut] URL=http://www.wsdot.wa.gov/traffic/seattle/ IDList= IconFile=http://www.wsdot.wa.gov/favicon.ico IconIndex=1 [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>
+    </Path>
+    <Name>Real Time Traffic Times.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.wsdot.wa.gov/traffic/seattle/traveltimes/ [InternetShortcut] URL=http://www.wsdot.wa.gov/traffic/seattle/traveltimes/ IDList= IconFile=http://www.wsdot.wa.gov/favicon.ico IconIndex=1 [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Bikes</Path>
+    <Name>Seattle Bike Trails.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.metrokc.gov/parks/trails/trails1.htm [InternetShortcut] URL=http://www.metrokc.gov/parks/trails/trails1.htm Modified=C0D301036AD0C60198 IconFile=http://www.metrokc.gov/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Deals</Path>
+    <Name>Fat Wallet .url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.fatwallet.com/ [InternetShortcut] URL=http://www.fatwallet.com/ Modified=D09E86216DCCC60115 IconFile=http://www.fatwallet.com/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Deals</Path>
+    <Name>GotApex.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.gotapex.com/ [InternetShortcut] URL=http://www.gotapex.com/ Modified=30C513096DCCC60111 IconFile=http://www.gotapex.com/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Deals</Path>
+    <Name>Techbargains.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.techbargains.com/ [InternetShortcut] URL=http://www.techbargains.com/ Modified=40AEFF146DCCC60101 IconFile=http://www.techbargains.com/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>C++ Tips and Tricks.url</Name>
+    <Content>[DEFAULT] BASEURL=http://cpptips.hyperformix.com/cpptips.html [InternetShortcut] URL=http://cpptips.hyperformix.com/cpptips.html Modified=F026033319D1C601FD</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>Code Format.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.manoli.net/csharpformat/ [InternetShortcut] URL=http://www.manoli.net/csharpformat/ Modified=D08049153DE6C60198 IconFile=http://www.manoli.net/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>IL Op Codes.url</Name>
+    <Content>[DEFAULT] BASEURL=http://msdn2.microsoft.com/en-us/library/system.reflection.emit.opcodes.box.aspx [InternetShortcut] URL=http://msdn2.microsoft.com/en-us/library/system.reflection.emit.opcodes.box.aspx Modified=50E30F3862D7C6017A IconFile=http://msdn2.microsoft.com/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>Vi-IMproved.org Wiki - Home Page.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.vi-improved.org/wiki/index.php/HomePage [InternetShortcut] URL=http://www.vi-improved.org/wiki/index.php/HomePage Modified=30545B8E85E9C601A2 IconFile=http://www.vi-improved.org/wiki/themes/default/images/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>Vim Tips #2.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.rayninfo.co.uk/vimtips.html [InternetShortcut] URL=http://www.rayninfo.co.uk/vimtips.html Modified=908474406CDEC601D9 IconFile=http://www.rayninfo.co.uk/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>Vim Tips.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.vim.org/tips/tip.php?tip_id=305 [InternetShortcut] URL=http://www.vim.org/tips/tip.php?tip_id=305 Modified=E088665F6BDEC6013D IconFile=http://www.vim.org/images/vim_shortcut.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer</Path>
+    <Name>Windows Forms .NET The Official Microsoft Windows Forms Community Site.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.windowsforms.net/FAQs/ [InternetShortcut] URL=http://www.windowsforms.net/FAQs/ Modified=10B48F69C3E8C6012E IconFile=http://www.windowsforms.net/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer\Reference2</Path>
+    <Name>CLI Emca Standard.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.ecma-international.org/publications/standards/Ecma-335.htm [InternetShortcut] URL=http://www.ecma-international.org/publications/standards/Ecma-335.htm Modified=50ED7C9B19CDC60101</Content>
+  </Link>
+  <Link>
+    <Path>Developer\Reference2</Path>
+    <Name>ECMA C# and Common Language Infrastructure Standards.url</Name>
+    <Content>[DEFAULT] BASEURL=http://msdn.microsoft.com/netframework/ecma/ [InternetShortcut] URL=http://msdn.microsoft.com/netframework/ecma/ Modified=F0B2DE7B6CD7C60105 IconFile=http://msdn.microsoft.com/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Developer\Reference2</Path>
+    <Name>Redmond Parks and Recreation Softball - (Redmond, WA) - powered by LeagueLineup.com.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.leaguelineup.com/welcome.asp?url=redmondsoftball [InternetShortcut] URL=http://www.leaguelineup.com/welcome.asp?url=redmondsoftball IDList= IconFile=http://www.leaguelineup.com/favicon.ico IconIndex=1 [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Developer\Reference2</Path>
+    <Name>Visual Basic 8.0 Language Specification.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.microsoft.com/downloads/details.aspx?FamilyId=6D50D709-EAA4-44D7-8AF3-E14280403E6E&amp;displaylang=en [InternetShortcut] URL=http://www.microsoft.com/downloads/details.aspx?FamilyId=6D50D709-EAA4-44D7-8AF3-E14280403E6E&amp;displaylang=en Modified=B0C378AE1BD1C6014C IconFile=http://www.microsoft.com/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Family</Path>
+    <Name>Brooke's School.url</Name>
+    <Content>[DEFAULT] BASEURL=http://www.averett.edu/index.php [InternetShortcut] URL=http://www.averett.edu/index.php Modified=B0F4F9BBC9D1C601B9 IconFile=http://www.averett.edu/favicon.ico IconIndex=1</Content>
+  </Link>
+  <Link>
+    <Path>Forums</Path>
+    <Name>.NET Base Class Library - MSDN Forums.url</Name>
+    <Content>[DEFAULT] BASEURL=http://forums.microsoft.com/MSDN/ShowForum.aspx?ForumID=39&amp;SiteID=1 [InternetShortcut] URL=http://forums.microsoft.com/MSDN/ShowForum.aspx?ForumID=39&amp;SiteID=1 Modified=4029522670CCC601E4 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Forums</Path>
+    <Name>Visual Basic.url</Name>
+    <Content>[DEFAULT] BASEURL=http://forums.microsoft.com/MSDN/default.aspx?forumgroupid=10&amp;siteid=1 [InternetShortcut] URL=http://forums.microsoft.com/MSDN/default.aspx?forumgroupid=10&amp;siteid=1 Modified=E052E91A70CCC60138 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Forums</Path>
+    <Name>Visual C# Language - MSDN Forums.url</Name>
+    <Content>[DEFAULT] BASEURL=http://forums.microsoft.com/MSDN/ShowForum.aspx?ForumID=59&amp;SiteID=1 [InternetShortcut] URL=http://forums.microsoft.com/MSDN/ShowForum.aspx?ForumID=59&amp;SiteID=1 Modified=80F4E3F341D1C60123</Content>
+  </Link>
+  <Link>
+    <Path>Forums</Path>
+    <Name>Windows Forms General - MSDN Forums.url</Name>
+    <Content>[DEFAULT] BASEURL=http://forums.microsoft.com/MSDN/ShowForum.aspx?ForumID=8&amp;SiteID=1 [InternetShortcut] URL=http://forums.microsoft.com/MSDN/ShowForum.aspx?ForumID=8&amp;SiteID=1 Modified=10E5EC3170CCC60115 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Links</Path>
+    <Name>Customize Links.url</Name>
+    <Content>[InternetShortcut] URL=http://go.microsoft.com/fwlink/?LinkId=53540 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work</Path>
+    <Name>Home - TS Gateway.url</Name>
+    <Content>[DEFAULT] BASEURL=http://teamv2/sites/tsgateway/default.aspx [InternetShortcut] URL=http://teamv2/sites/tsgateway/default.aspx Modified=A0A4CCAF70D3C601C9</Content>
+  </Link>
+  <Link>
+    <Path>Work</Path>
+    <Name>http--itweb-ITServices-Cellphones-Pages-Purchasing.aspx.url</Name>
+    <Content>[DEFAULT] BASEURL=http://itweb/ITServices/Cellphones/Pages/Purchasing.aspx [InternetShortcut] URL=http://itweb/ITServices/Cellphones/Pages/Purchasing.aspx IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work</Path>
+    <Name>MSDN Product Feedback Center (Ladybug) Triage Process.url</Name>
+    <Content>[DEFAULT] BASEURL=http://vb/ladybug/ladybugprocess.htm [InternetShortcut] URL=http://vb/ladybug/ladybugprocess.htm Modified=60E64D4B9ED2C60115</Content>
+  </Link>
+  <Link>
+    <Path>Work</Path>
+    <Name>Product Keys.url</Name>
+    <Content>[DEFAULT] BASEURL=http://mspkd/ [InternetShortcut] URL=http://mspkd/ Modified=C084EFDA55D7C60100 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work</Path>
+    <Name>Win Forms Layout.url</Name>
+    <Content>[DEFAULT] BASEURL=http://wiki/default.aspx/Microsoft.Teams.EFT/WinFormsLayout.html [InternetShortcut] URL=http://wiki/default.aspx/Microsoft.Teams.EFT/WinFormsLayout.html Modified=003442155CDCC6018A</Content>
+  </Link>
+  <Link>
+    <Path>Work\Fb Tools</Path>
+    <Name>Feature Crews Home.url</Name>
+    <Content>[DEFAULT] BASEURL=http://devdiv/sites/orcas/featurecrews/default.aspx [InternetShortcut] URL=http://devdiv/sites/orcas/featurecrews/default.aspx Modified=B072210B71CCC60152 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work\Fb Tools</Path>
+    <Name>Home - Feature Branch Tools.url</Name>
+    <Content>[DEFAULT] BASEURL=http://devdiv/sites/tools/coretools/default.aspx [InternetShortcut] URL=http://devdiv/sites/tools/coretools/default.aspx IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work\VB Team</Path>
+    <Name>BuddyTest.url</Name>
+    <Content>[DEFAULT] BASEURL=http://vbqa/Buddytest/ [InternetShortcut] URL=http://vbqa/Buddytest/ IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work\VB Team</Path>
+    <Name>MSW Home Page.url</Name>
+    <Content>! -</Content>
+  </Link>
+  <Link>
+    <Path>Work\VB Team</Path>
+    <Name>Orcas Docs.url</Name>
+    <Content>[DEFAULT] BASEURL=http://devdiv/sites/docs/Orcas/Forms/AllItems.aspx?RootFolder=http%3a%2f%2fdevdiv%2fsites%2fdocs%2forcas%2fvb&amp;FolderCTID=0x01200062643BD35466F24491187018F25DFA34 [InternetShortcut] URL=http://devdiv/sites/docs/Orcas/Forms/AllItems.aspx?RootFolder=http%3a%2f%2fdevdiv%2fsites%2fdocs%2forcas%2fvb&amp;FolderCTID=0x01200062643BD35466F24491187018F25DFA34 IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work\VB Team</Path>
+    <Name>Orcas Spec Site.url</Name>
+    <Content>[DEFAULT] BASEURL=http://devdiv/sites/docs/Orcas/Forms/AllItems.aspx [InternetShortcut] URL=http://devdiv/sites/docs/Orcas/Forms/AllItems.aspx Modified=30EDF7B671CCC601CE IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work\VB Team</Path>
+    <Name>VBTS.url</Name>
+    <Content>[DEFAULT] BASEURL=http://vbqa/setup/VBTS.aspx [InternetShortcut] URL=http://vbqa/setup/VBTS.aspx IDList= [{000214A0-0000-0000-C000-000000000046}] Prop3=19,2</Content>
+  </Link>
+  <Link>
+    <Path>Work\VB Team</Path>
+    <Name>Wiki.url</Name>
+    <Content>[DEFAULT] BASEURL=http://mswikis/vb/Pages/Home.aspx [InternetShortcut] URL=http://mswikis/vb/Pages/Home.aspx Modified=20F663986CCCC60110</Content>
+  </Link>
+</favorites>

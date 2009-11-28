@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Operator Equals</Title>
+			<Shortcut>equalsFull</Shortcut>
+            <Description>Generates the equals code including operators</Description>
+			<Author>Jared Parsons</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+                <Literal default="true" Editable="true">
+					<ID>type</ID>
+					<ToolTip>Type for Equals</ToolTip>
+                    <Function>ClassName()</Function> 
+                    <Default>ClassNamePlaceholder</Default> 
+                </Literal>
+			</Declarations>
+            <Code Language="csharp"><![CDATA[
+                  public override bool Equals(object obj)
+                  {
+                    var other = obj as $type$;
+                    if ( null == other )
+                    {
+                        return false;
+                    }
+
+                    
+                  }
+
+                  public override int GetHashCode()
+                  {
+                  }
+
+                  public static bool operator==($type$ left, $type$ right)
+                  {
+                  return EqualityComparer<$type$>.Default.Equals(left,right);
+                  }
+
+                  public static bool operator!=($type$ left, $type$ right)
+                  {
+                  return !EqualityComparer<$type$>.Default.Equals(left,right);
+                  }
+                  ]]></Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
+

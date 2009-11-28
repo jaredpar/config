@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Operator Equals</Title>
+			<Shortcut>opeq</Shortcut>
+            <Description>Generates the operator== code</Description>
+			<Author>Jared Parsons</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>type</ID>
+					<ToolTip>Type for Equals</ToolTip>
+					<Default>""</Default>
+				</Literal>
+			</Declarations>
+            <Code Language="csharp"><![CDATA[
+                  public static bool operator==($type$ left, $type$ right)
+                  {
+                  return EqualityComparer<$type$>.Default.Equals(left,right);
+                  }
+
+                  public static bool operator!=($type$ left, $type$ right)
+                  {
+                  return !EqualityComparer<$type$>.Default.Equals(left,right);
+                  }
+                  ]]></Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
+

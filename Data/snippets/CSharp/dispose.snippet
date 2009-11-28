@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Dispose</Title>
+			<Shortcut>dispose</Shortcut>
+			<Description>Implements the dispose pattern</Description>
+			<Author>Jared Parsons</Author>
+			<SnippetTypes>
+				<SnippetType>Expansion</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations>
+				<Literal>
+					<ID>classname</ID>
+					<ToolTip>Class Name</ToolTip>
+					<Default>ClassName</Default>
+				</Literal>
+			</Declarations>
+			<Code Language="csharp"><![CDATA[#region Dispose 
+			
+			public void Dispose()
+			{
+				Dispose(true);
+				GC.SuppressFinalize(this);
+			}
+
+			~$classname$()
+			{
+				Dispose(false);
+			}
+
+			private void Dispose(bool disposing)
+			{
+				if ( disposing )
+				{
+					$end$
+				}
+			}
+			
+			#endregion]]></Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>
+

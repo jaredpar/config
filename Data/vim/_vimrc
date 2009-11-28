@@ -1,0 +1,62 @@
+set nobackup 
+set nocp
+set tabstop=4
+set shiftwidth=4
+set et
+set ignorecase
+
+set ai
+set ruler
+set showcmd
+set incsearch
+set dir=$temp       " Make swap live in the %TEMP% directory
+syn on
+
+" Load the color scheme
+colo inkpot
+
+" Setup some common abbreviations 
+iabbrev #c //==============================================================================
+
+" Filetype settings
+filetype plugin on
+filetype indent on
+set completeopt=menu,longest,preview
+
+" Key mappings
+imap <C-Space> <C-x><C-o>
+
+" Source a Couple of scripts
+source ~\vimfiles\matchit.vim
+source ~\vimfiles\plugin\fswitch.vim
+
+" ---
+"  C++ Options and Functions
+" ---
+au BufNewFile,BufRead *.cpp call <SID>CppSetup()
+au BufNewFile,BufRead *.h call <SID>CppSetup()
+
+func! <SID>CppSetup()
+
+    " Enable quick switching between buffers
+    nmap <silent> <C-F4> :FSTab<CR>
+endfunc
+
+" ---
+"  C# Options and Functions
+" ---
+au BufNewFile,BufRead *.cs call <SID>CSharpSetup()
+
+func! <SID>CSharpSetup()
+
+    " Match #region/#endregion
+    let b:match_words = '\s*#\s*region:\s*#\s*endregion'
+endfunc
+
+au BufNewFile,BufRead *.txt call <SID>TextSetup()
+
+func! <SID>TextSetup()
+    set lbr     " Break on words rather that column width
+    set nolist  " Don't show whitespace information
+endfunc
+

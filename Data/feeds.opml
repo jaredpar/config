@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<opml version="1.0">
+  <head>
+    <title>Feed Subscriptions</title>
+  </head>
+  <body>
+    <outline text="Developers">
+      <outline title="Aaron Margosis' WebLog" description="The Non-Admin blog - running with least privilege on the desktop" xmlUrl="http://blogs.msdn.com/aaron_margosis/rss.aspx" htmlUrl="http://blogs.msdn.com/aaron_margosis/default.aspx" />
+      <outline title="Aaron Marten's WebLog" description="Visual Studio SDK &amp; VSPackage Authoring for Newbies&lt;br /&gt;All postings are provided &quot;AS IS&quot; with no warranties, and confer no rights." xmlUrl="http://blogs.msdn.com/aaronmar/Rss.aspx" htmlUrl="http://blogs.msdn.com/aaronmar/default.aspx" />
+      <outline title="Andy Pennell's Blog" description="See me blather about software development, Audio/Visual stuff (esp HD-DVD), Tech Toys, Fatherhood, plus anything else that gets me going." xmlUrl="http://blogs.msdn.com/andypennell/Rss.aspx" htmlUrl="http://blogs.msdn.com/andypennell/default.aspx" />
+      <outline title="Brad Abrams " description="Design Guidelines, Managed code and WinFX" xmlUrl="http://blogs.msdn.com/brada/Rss.aspx" htmlUrl="http://blogs.msdn.com/brada/default.aspx" />
+      <outline title="Cyrus' Blather" xmlUrl="http://blogs.msdn.com/cyrusn/rss.aspx" htmlUrl="http://blogs.msdn.com/cyrusn/default.aspx" />
+      <outline title="Dino's Blog" description=".NET Stuff" xmlUrl="http://blogs.msdn.com/dinoviehland/Rss.aspx" htmlUrl="http://blogs.msdn.com/dinoviehland/default.aspx" />
+      <outline title="IEBlog" description="The Microsoft Internet Explorer Weblog" xmlUrl="http://blogs.msdn.com/ie/rss.aspx" htmlUrl="http://blogs.msdn.com/ie/default.aspx" />
+      <outline title="jaybaz [MS] WebLog" description="We believe in nothing." xmlUrl="http://blogs.msdn.com/jaybaz_ms/rss.aspx" htmlUrl="http://blogs.msdn.com/jaybaz_ms/default.aspx" />
+      <outline title="Larry Osterman's WebLog" description="Confessions of an Old Fogey" xmlUrl="http://blogs.msdn.com/larryosterman/rss.aspx" htmlUrl="http://blogs.msdn.com/larryosterman/default.aspx" />
+      <outline title="Michael Howard's Web Log" description="A Simple Software Security Guy at Microsoft!" xmlUrl="http://blogs.msdn.com/michael_howard/Rss.aspx" htmlUrl="http://blogs.msdn.com/michael_howard/default.aspx" />
+      <outline title="Monad" description="Monad Technology Blog" xmlUrl="http://blogs.msdn.com/monad/rss.aspx" htmlUrl="http://blogs.msdn.com/monad/default.aspx" />
+      <outline title="The Old New Thing" description="not actually a .NET blog" xmlUrl="http://blogs.msdn.com/oldnewthing/rss.aspx" htmlUrl="http://blogs.msdn.com/oldnewthing/default.aspx" />
+      <outline title="Stan Lippman's BLog" description="C++/CLI" xmlUrl="http://blogs.msdn.com/slippman/rss.aspx" htmlUrl="http://blogs.msdn.com/slippman/default.aspx" />
+      <outline title="Windows Server Division WebLog : Longhorn" description="The next version of Windows Server" xmlUrl="http://blogs.technet.com/windowsserver/rss.aspx?CategoryID=9905" htmlUrl="http://blogs.technet.com/windowsserver/archive/category/9905.aspx" />
+      <outline title="Mark's Sysinternals Blog" xmlUrl="http://feeds.feedburner.com/sysinternals/feed" htmlUrl="http://www.sysinternals.com/blog/" />
+      <outline title="Hackward and Foreword" xmlUrl="http://gauss.dynalias.net/blog/SyndicationService.asmx/GetRss" htmlUrl="http://gauss.dynalias.net/blog/" />
+      <outline title="Valery's blog" description="powered by dasBlog" xmlUrl="http://www.harper.no/valery/SyndicationService.asmx/GetRssCategory?categoryName=RunAsAdmin" htmlUrl="http://www.harper.no/valery/" />
+      <outline title="Lee Holmse - Precision Computing" description="Software Design and Development" xmlUrl="http://www.leeholmes.com/blog/SyndicationService.asmx/GetRss" htmlUrl="http://www.leeholmes.com/blog/" />
+      <outline title="The Daily Wtf" description="Who has the spec?" xmlUrl="http://www.thedailywtf.com/rss.aspx" htmlUrl="http://www.thedailywtf.com/forums/12/ShowForum.aspx" />
+    </outline>
+    <outline text="News">
+      <outline title="Omea News" description="Latest news about JetBrains Omea product family" xmlUrl="http://jetbrains.com/omearss.xml" htmlUrl="http://www.jetbrains.com/omea" />
+      <outline title="ZDNet News - Front Door" description="ZDNet delivers information resources for IT professionals. " xmlUrl="http://news.zdnet.com/2509-1_22-0-5.xml" htmlUrl="http://news.zdnet.com/2001-1_22.html" />
+      <outline title="CNN Top Stories" description="CNN.com delivers up-to-the-minute news and information on the latest top stories, weather, entertainment, politics and more." xmlUrl="http://rss.cnn.com/rss/cnn_topstories.rss" htmlUrl="http://www.cnn.com/rssclick/?section=cnn_topstories" />
+      <outline text="Seattle Times">
+        <outline title="The Seattle Times: Business &amp; Technology" xmlUrl="http://seattletimes.nwsource.com/rss/businesstechnology.xml" htmlUrl="http://seattletimes.nwsource.com/html/businesstechnology" />
+        <outline title="Local News" xmlUrl="http://seattletimes.nwsource.com/rss/localnews.xml" htmlUrl="http://seattletimes.nwsource.com/html/localnews" />
+      </outline>
+      <outline text="Espn">
+        <outline title="College Football" description="Latest College Football news from ESPN.com" xmlUrl="http://sports.espn.go.com/espn/rss/ncf/news" htmlUrl="http://sports.espn.go.com/ncf/index" />
+        <outline title="ESPN.com" description="Latest news from ESPN.com" xmlUrl="http://sports.espn.go.com/espn/rss/news" htmlUrl="http://espn.go.com/" />
+        <outline title="NFL" description="Latest NFL news from ESPN.com" xmlUrl="http://sports.espn.go.com/espn/rss/nfl/news" htmlUrl="http://sports.espn.go.com/nfl/index" />
+        <outline title="NHL" description="Latest NHL news from ESPN.com" xmlUrl="http://sports.espn.go.com/espn/rss/nhl/news" htmlUrl="http://sports.espn.go.com/nhl/index" />
+      </outline>
+      <outline title="Fark.com" description="It's not news, it's Fark." xmlUrl="http://www.fark.com/fark.rss" htmlUrl="http://www.fark.com/" />
+    </outline>
+    <outline text="Cycling">
+      <outline title="Cycling" description="Jeremy Bostron's site for cycling reviews, training tips, and other cycling knowledge" xmlUrl="http://spaces.msn.com/members/cycling/feed.rss" htmlUrl="http://spaces.msn.com/members/cycling/" />
+    </outline>
+    <outline text="Fun Stuff">
+      <outline title="The Official Robert Jordan Blog" description="A blog featuring commentary by Robert Jordan, author of the Wheel of Time book series.  Hosted by Dragonmount.com." xmlUrl="http://www.dragonmount.com/RobertJordan/rss.xml" htmlUrl="http://www.dragonmount.com/RobertJordan/" />
+      <outline title="New Urban Legends" description="Recent additions to the Urban Legends Reference Pages at snopes.com" xmlUrl="http://www.snopes.com/info/whatsnew.rss" htmlUrl="http://www.snopes.com/info/whatsnew.asp" />
+    </outline>
+    <outline text="Bargains">
+      <outline title="Techbargains.com" description="Technology products buying guide - Find the best bargains on the latest products" xmlUrl="http://www.techbargains.com/rss.xml" htmlUrl="http://www.techbargains.com/" />
+    </outline>
+  </body>
+</opml>
