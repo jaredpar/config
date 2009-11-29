@@ -5,7 +5,7 @@ echo "Updating Subversion configuration"
 
 function vimiffound()
 {
-    $vim = get-command "gvim"
+    $vim = get-command "gvim" -erroraction silentlycontinue
     if ( $vim -ne $null )
     {
         return "editor-cmd = " + ($vim.Definition)
