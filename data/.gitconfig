@@ -1,0 +1,6 @@
+[user]
+	name = Jared Parsons
+	email = jaredpparsons@gmail.com
+
+[core]
+    autocrlf=false
