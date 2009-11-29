@@ -1,7 +1,8 @@
 
-# Copy the config file over
+# Global Settings
+git config --global user.name "Jared Parsons"
+git config --global user.email "jaredpparsons@gmail.com"
+git config --global core.autocrlf false
 
-$source = join-path $Jsh.ConfigPath "Data\.gitconfig"
-copy -fo $source $env:userprofile
-$source = join-path $Jsh.ConfigPath "Data\.gitignore"
-copy -fo $source $env:userprofile
+$file = join-path $Jsh.ConfigPath Data\.gitignore
+git config --global core.excludesfile "$file"
