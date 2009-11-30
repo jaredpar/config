@@ -14,8 +14,9 @@ popd
 # Run the normal configuration scripts.  Load the profile script
 # so the environment is properly set
 . $(join-path $winconfigPath "PowerShell\Profile.ps1")
-. $(join-path $winconfigPath "PowerShell\LibraryConfig.ps1")
 
-Configure-All
+# Run the configuration script
+& (join-path $winconfigPath "PowerShell\ConfigureAll.ps1")
+
 popd
 

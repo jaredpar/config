@@ -122,13 +122,11 @@ $Jsh.ScriptMap["reg"]           = $(join-path $Jsh.ScriptPath "LibraryRegistry.p
 $Jsh.ScriptMap["token"]         = $(join-path $Jsh.ScriptPath "LibraryTokenize.ps1")
 $Jsh.ScriptMap["unit"]          = $(join-path $Jsh.ScriptPath "LibraryUnitTest.ps1")
 $Jsh.ScriptMap["tfs"]           = $(join-path $Jsh.ScriptPath "LibraryTfs.ps1")
-$Jsh.ScriptMap["config"]        = $(join-path $Jsh.ScriptPath "LibraryConfig.ps1")
 $Jsh.ScriptMap["tab"]           = $(join-path $Jsh.ScriptPath "TabExpansion.ps1")
 $Jsh.ScriptMap["cprofile"]      = $(join-path $Jsh.ScriptPath "LocalComputer\Profile.ps1")
 
 # Load the common functions
 . script common
-. script config
 . script tab
 $global:libCommonCertPath = (join-path $Jsh.ConfigPath "Data\Certs\jaredp_code.pfx")
 
