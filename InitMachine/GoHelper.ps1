@@ -1,5 +1,6 @@
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition 
+$setupDir = join-path ([IO.Path]::GetPathRoot($scriptPath)) "MachineSetup"
 
 # Load all of the library functions
 $libPath = join-path $scriptPath "LibraryCommon.ps1"
@@ -26,12 +27,12 @@ if ( $isRedmond ) {
 }
 
 # Copy all of the keys to the home directory
-copy -re -fo (join-path $scriptPath ".ssh") $env:UserProfile
+copy -re -fo (join-path $setupDir ".ssh") $env:UserProfile
 
 # Install Git if it's not already installed
 $gitExe = join-path (Get-ProgramFiles32) "Git\bin\git.exe"
 if ( -not (test-path $gitExe ) ) { 
-    & (join-path $scriptPath "Git-Setup.exe")
+    & (join-path $setupDir "Git-Setup.exe")
     set-alias git $gitExe
 }
 
