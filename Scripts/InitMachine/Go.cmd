@@ -1,14 +1,16 @@
 @echo off
 set SOURCE=%~dp0
-set TARGET=%TMP%\Init
-set PS=%WINDIR%\system32\WindowsPowershell\v1.0\powershell.exe 
-mkdir %TMP%\Init
-copy %SOURCE%\* %TARGET%
+powershell -ExecutionPolicy RemoteSigned %SOURCE%\GoHelper.ps1
 
-echo Source: %SOURCE%
-echo Target: %TARGET%
+REM set TARGET=%TMP%\Init
+REM set PS=%WINDIR%\system32\WindowsPowershell\v1.0\powershell.exe 
+REM mkdir %TMP%\Init
+REM copy %SOURCE%\* %TARGET%
 
-call %TARGET%\Enable-PowerShell.cmd
+REM echo Source: %SOURCE%
+REM echo Target: %TARGET%
 
-%PS% -command "set-executionpolicy remotesigned"
-%PS% %TARGET%\Redmond.ps1
+REM call %TARGET%\Enable-PowerShell.cmd
+
+REM %PS% -command "set-executionpolicy remotesigned"
+REM %PS% %TARGET%\Redmond.ps1
