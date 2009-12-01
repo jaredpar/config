@@ -6,11 +6,15 @@ $setupDir = join-path ([IO.Path]::GetPathRoot($scriptPath)) "MachineSetup"
 $libPath = join-path $scriptPath "LibraryCommon.ps1"
 . $libPath
 
+$progPath = Get-ProgramFiles32
+
 # First make sure that PowerShell script execution is enabled on this machine
-if ( -not (Test-Admin) ) {
-    Invoke-Admin powershell "-Command Set-ExecutionPolicy RemoteSigned"
-} else {
-    Invoke-Admin powershell "-Command Set-ExecutionPolicy RemoteSigned"
+if ( (Get-ExecutionPolicy) -ne "RemoteSigned" ) {
+    if ( -not (Test-Admin) ) {
+        Invoke-Admin powershell "-Command Set-ExecutionPolicy RemoteSigned"
+    } else {
+        Invoke-Admin powershell "-Command Set-ExecutionPolicy RemoteSigned"
+    }
 }
 
 $isRedmond = $env:UserDomain -eq "Redmond"
@@ -22,17 +26,21 @@ if ( $isRedmond ) {
         write-host "Installing ISA Firewall Client"
         $filePath = "\\products\public\products\Applications\Server\Firewall Client for ISA Server\ISACLIENT-KB929556-ENU.EXE"
         $s = [Diagnostics.Process]::Start($filePath)
+        $s.WaitForExit()
     }
-    $s.WaitForExit()
 }
 
-# Copy all of the keys to the home directory
+# Copy all of the keys to the home directory and ensure that %HOME% is 
+# not pointed to previous places my setup scripts pointed to
 copy -re -fo (join-path $setupDir ".ssh") $env:UserProfile
+if ( test-path env:\home ) { rm env:\home }
 
 # Install Git if it's not already installed
-$gitExe = join-path (Get-ProgramFiles32) "Git\bin\git.exe"
+$gitExe = join-path $progPath "Git\bin\git.exe"
 if ( -not (test-path $gitExe ) ) { 
-    & (join-path $setupDir "Git-Setup.exe")
+    $setupPath = join-path $setupDir "Git-Setup.exe"
+    $s = [Diagnostics.Process]::Start($setupPath) 
+    $s.WaitForExit() 
     set-alias git $gitExe
 }
 
