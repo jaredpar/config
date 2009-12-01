@@ -21,14 +21,15 @@ if ( $isRedmond ) {
         write-host "Installing ISA Firewall Client"
         $filePath = "\\products\public\products\Applications\Server\Firewall Client for ISA Server\ISACLIENT-KB929556-ENU.EXE"
         $s = [Diagnostics.Process]::Start($filePath)
+    }
     $s.WaitForExit()
 }
 
 # Copy all of the keys to the home directory
-copy -re -fo (join-path $scritpPath ".ssh") $env:UserProfile
+copy -re -fo (join-path $scriptPath ".ssh") $env:UserProfile
 
 # Install Git if it's not already installed
-$gitExe = join-path (Get-ProgramFiles32) "Git\bin\git.exe")
+$gitExe = join-path (Get-ProgramFiles32) "Git\bin\git.exe"
 if ( -not (test-path $gitExe ) ) { 
     & (join-path $scriptPath "Git-Setup.exe")
     set-alias git $gitExe
