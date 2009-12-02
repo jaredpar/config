@@ -3,7 +3,7 @@ $script:product = get-wmiobject Win32_Product -ea SilentlyContinue |
     ? { $_.Name -like "ViEmu*" }
 
 function script:Has-Vs() {
-    $versions = "8","9.0","10.0"
+    $versions = "8","9.0"
     foreach ($v in $versions) {
         $p = join-path (Get-ProgramFiles32) "Microsoft Visual Studio $v"
         $p = join-path $p "Common7\ide\devenv.exe"
