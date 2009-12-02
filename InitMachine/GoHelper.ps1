@@ -1,6 +1,7 @@
 
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition 
 $setupDir = join-path ([IO.Path]::GetPathRoot($scriptPath)) "MachineSetup"
+$winconfigPath = join-path $env:UserProfile "winconfig" 
 
 # Load all of the library functions
 $libPath = join-path $scriptPath "LibraryCommon.ps1"
@@ -54,6 +55,14 @@ function EnableGit() {
 
 function CheckoutWinConfig() {
     pushd $env:UserProfile
+    
+    # Remove any old winconfig directory
+    if ( test-path "winconfig" ) {
+        $dest = "winconfig_" + [Guid]::NewGuid().ToString()
+        move "winconfig" $dest
+        gps LuaProcessMonitor  | kill -ErrorAction SilentlyContinue
+    }
+    
     git clone git@github.com:jaredpar/winconfig.git
     popd
 }
@@ -68,8 +77,7 @@ function RemoveFavorites() {
 }
 
 function RunConfiguration() {
-    $winconfigPath = resolve-path "winconfig" 
-    pushd winconfig
+    pushd $winconfigPath
     # Run the normal configuration scripts.  Load the profile script
     # so the environment is properly set
     . $(join-path $winconfigPath "PowerShell\Profile.ps1")
@@ -80,11 +88,18 @@ function RunConfiguration() {
     popd
 }
 
+# Enable various tools such as reflector
+function EnableTools() {
+    $reflector = join-path $setupDir "reflector.exe"
+    copy -fo $reflector (join-path $env:UserProfile "Desktop")
+}
+
 EnableScriptExecution
 ConfigureWorkMachine
 EnableSsh
 EnableGit
 CheckoutWinConfig
+EnableTools
 RemoveFavorites
 RunConfiguration
 
