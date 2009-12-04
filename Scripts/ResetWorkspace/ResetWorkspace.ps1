@@ -1,7 +1,14 @@
-param (
-    $userName = $("{0}\{1}" -f $env:UserDomain,$env:UserName) )
+param ( $userName = $("{0}\{1}" -f $env:UserDomain,$env:UserName) )
 
 $server = "http://vstfdevdiv:8080"
+
+# Make sure that TFS is available 
+if ($null -eq (get-command tf -ErrorAction SilentlyContinue)) {
+    write-host "Error: Could not find a TFS command line"
+    write-host "Try running this from a powershell enabled Razzle environment"
+    write-host "fb createshortcut PowerShell=true"
+    return
+}
 
 function script:New-Tuple()
 {
@@ -39,9 +46,9 @@ function script:Get-Workspaces() {
 write-host "Getting Workspaces for $userName"
 $workspaces = Get-Workspaces
 for ( $i = 0 ; $i -lt $workspaces.Count; $i++ ) {
-    write-host ("  {0}: {1}->{2}" -f $i,$workspaces[$i].Workspace,$workpaces[$i].Computer)
+    write-host ("  {0}: {1} from {2}" -f $i,$workspaces[$i].Workspace,$workspaces[$i].Computer)
 }
-$number = [int32](read-host "Which workspace to migrate: ")
+$number = [int32](read-host "Which workspace to migrate")
 $value = $workspaces[$number]
 & tf workspaces /s:$server /updateComputerName:$($value.Computer) $($value.Workspace)
 
