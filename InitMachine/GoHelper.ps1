@@ -11,11 +11,12 @@ $progPath = Get-ProgramFiles32
 
 # Make sure that PowerShell script execution is enabled on this machine
 function EnableScriptExecution() {
-    if ( (Get-ExecutionPolicy) -ne "RemoteSigned" ) {
+    if ( (Get-ExecutionPolicy -Scope LocalMachine) -ne "RemoteSigned" ) {
+        $cmd = "-NoProfile -Command Set-ExecutionPolicy RemoteSigned"
         if ( -not (Test-Admin) ) {
-            Invoke-Admin powershell "-Command Set-ExecutionPolicy RemoteSigned"
+            Invoke-Admin powershell $cmd
         } else {
-            Invoke-Admin powershell "-Command Set-ExecutionPolicy RemoteSigned"
+            powershell $cmd
         }
     }
 }
@@ -49,7 +50,7 @@ function EnableGit() {
         $setupPath = join-path $setupDir "Git-Setup.exe"
         $s = [Diagnostics.Process]::Start($setupPath) 
         $s.WaitForExit() 
-        set-alias git $gitExe
+        set-alias git $gitExe -Scope Script
     }
 }
 
