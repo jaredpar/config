@@ -9,6 +9,26 @@ $libPath = join-path $scriptPath "LibraryCommon.ps1"
 
 $progPath = Get-ProgramFiles32
 
+# Validate the status of the MachineSetup directory
+function ValidateMachineSetupDirectory() {
+    $list = @("Git-Setup.exe",".ssh","reflector.exe")
+    $ret = $true
+    foreach ($file in $list) {
+        $fullPath = join-path $setupDir $file
+        if ( -not (test-path $fullPath) ) { 
+            Write-Error "Missing: $fullPath"
+            $ret = $false
+        }
+    }
+    
+    $all = gci $setupDir
+    if ( $all.Count -ne $list.Count ) {
+        Write-Error "Unexpected files in $setupDir"
+        $ret = $false
+    }
+    $ret
+}
+
 # Make sure that PowerShell script execution is enabled on this machine
 function EnableScriptExecution() {
     if ( (Get-ExecutionPolicy -Scope LocalMachine) -ne "RemoteSigned" ) {
@@ -95,12 +115,16 @@ function EnableTools() {
     copy -fo $reflector (join-path $env:UserProfile "Desktop")
 }
 
+if ( -not (ValidateMachineSetupDirectory) ) {
+    write-error "Aborting Script"
+    return
+}
 EnableScriptExecution
 ConfigureWorkMachine
 EnableSsh
 EnableGit
-CheckoutWinConfig
 EnableTools
+CheckoutWinConfig
 RemoveFavorites
 RunConfiguration
 
