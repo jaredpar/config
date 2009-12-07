@@ -437,6 +437,7 @@ $Jsh.GoMap["lang"] = join-path $env:DepotRoot "vb\Language"
 $Jsh.GoMap["bin"] = join-path $env:_NTPOSTBLD "bin\i386"
 $Jsh.GoMap["suite"] = join-path $env:DepotRoot "ddsuites\src\vs\vb"
 
+set-alias sync-binaries function:\sync-build
 
 # Load the source depot commands
 . script sd
