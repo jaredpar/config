@@ -1,0 +1,4 @@
+Microsoft.VisualBasic.Editor
+Microsoft.VisualBasic.LanguageService
+Microsoft.VisualStudio.VisualBasic.LanguageService
+Microsoft.VisualStudio.VisualBasic.QuickSearch

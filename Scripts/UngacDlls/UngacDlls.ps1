@@ -3,13 +3,7 @@ $script = $MyInvocation.MyCommand.Definition
 $scriptPath = split-path -parent $script 
 . (join-path $scriptPath "LibraryCommon.ps1")
 
-$assemblies = @(
- "Microsoft.VisualBasic.Editor",
- "Microsoft.VisualBasic.LanguageService",
- "Microsoft.VisualStudio.VisualBasic.LanguageService",
- "Microsoft.VisualStudio.VisualBasic.QuickSearch")
-
-
+$assemblies = gc (join-path $scriptPath "DllList.txt")
 if ( -not (Test-Admin)) {
     write-host "Launching as an administrator"
     Invoke-ScriptAdmin $script "-ExecutionPolicy RemoteSigned" -waitForExit
