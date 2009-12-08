@@ -65,12 +65,21 @@ function EnableSsh() {
 
 function EnableGit() {
     # Install Git if it's not already installed
-    $gitExe = join-path $progPath "Git\bin\git.exe"
-    if ( -not (test-path $gitExe ) ) { 
-        $setupPath = join-path $setupDir "Git-Setup.exe"
-        $s = [Diagnostics.Process]::Start($setupPath) 
-        $s.WaitForExit() 
-        set-alias git $gitExe -Scope Script
+    $gitCommand = get-command git -ErrorAction SilentlyContinue
+    if ( $gitCommand -eq $null ) {
+        $gitExe = join-path $progPath "Git\bin\git.exe"
+        if ( -not (test-path $gitExe ) ) { 
+            $setupPath = join-path $setupDir "Git-Setup.exe"
+            $s = [Diagnostics.Process]::Start($setupPath) 
+            $s.WaitForExit() 
+            set-alias git $gitExe -Scope Script
+        } else {
+            # Sometimes I end up running this script multiple times in a row.  The
+            # second time will have git installed but the command won't be 
+            # available since the installer doesn't update the current path.  Instead 
+            # just add an alias
+            set-alias git $gitExe
+        }
     }
 }
 
