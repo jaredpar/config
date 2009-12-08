@@ -2,3 +2,6 @@ Microsoft.VisualBasic.Editor
 Microsoft.VisualBasic.LanguageService
 Microsoft.VisualStudio.VisualBasic.LanguageService
 Microsoft.VisualStudio.VisualBasic.QuickSearch
+Microsoft.VisualStudio.CSharp.Services.Language
+Microsoft.VisualStudio.CSharp.Services.Language.Features.QuickSearch
+Microsoft.VisualStudio.CSharp.SmartTags
