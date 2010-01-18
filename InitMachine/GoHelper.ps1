@@ -72,7 +72,7 @@ function EnableGit() {
             $setupPath = join-path $setupDir "Git-Setup.exe"
             $s = [Diagnostics.Process]::Start($setupPath) 
             $s.WaitForExit() 
-            set-alias git $gitExe -Scope Script
+            set-alias git $gitExe -Scope Global 
         } else {
             # Sometimes I end up running this script multiple times in a row.  The
             # second time will have git installed but the command won't be 
