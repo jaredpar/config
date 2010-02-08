@@ -61,6 +61,7 @@ function ConfigureWorkMachine() {
 function EnableSsh() {
     copy -re -fo (join-path $setupDir ".ssh") $env:UserProfile
     if ( test-path env:\home ) { rm env:\home }
+    $env:home = $env:UserProfile
 }
 
 function EnableGit() {
@@ -78,7 +79,7 @@ function EnableGit() {
             # second time will have git installed but the command won't be 
             # available since the installer doesn't update the current path.  Instead 
             # just add an alias
-            set-alias git $gitExe
+            set-alias git $gitExe -Scope Global
         }
     }
 }
