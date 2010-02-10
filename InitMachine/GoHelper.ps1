@@ -11,7 +11,7 @@ $progPath = Get-ProgramFiles32
 
 # Validate the status of the MachineSetup directory
 function ValidateMachineSetupDirectory() {
-    $list = @("Git-Setup.exe",".ssh","reflector.exe")
+    $list = @("Git-Setup.exe",".ssh")
     $ret = $true
     foreach ($file in $list) {
         $fullPath = join-path $setupDir $file
@@ -119,12 +119,6 @@ function RunConfiguration() {
     popd
 }
 
-# Enable various tools such as reflector
-function EnableTools() {
-    $reflector = join-path $setupDir "reflector.exe"
-    copy -fo $reflector (join-path $env:UserProfile "Desktop")
-}
-
 if ( -not (ValidateMachineSetupDirectory) ) {
     write-error "Aborting Script"
     return
@@ -133,7 +127,6 @@ EnableScriptExecution
 ConfigureWorkMachine
 EnableSsh
 EnableGit
-EnableTools
 CheckoutWinConfig
 RemoveFavorites
 RunConfiguration
