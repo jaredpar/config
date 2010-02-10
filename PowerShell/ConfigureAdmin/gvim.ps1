@@ -15,15 +15,9 @@ if ( test-path $oldPath) {
     & $oldPath
 }
 
-# Download the file and run it.
-$filePath = join-path $env:temp "gvim72.exe"
-if ( test-path $filePath ) {
-    del --force $filePath
-}
+# Run the file 
+$filePath = join-path $jsh.UtilsRawPath "gvim72.exe"
 
-write-host "Downloading setup file"
-wget http://rantpack.org/Drops/gvim72.exe $filePath
-
-write-host "Running setup"
+write-host "Running gvim setup"
 $s = [Diagnostics.Process]::Start($filePath)
 $s.WaitForExit()
