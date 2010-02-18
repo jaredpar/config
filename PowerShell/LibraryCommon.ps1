@@ -47,7 +47,7 @@ function Test-Win32() {
 }
 
 function Get-ProgramFiles32() {
-    if (Test-Win64 ) {
+    if (Test-Win64Machine ) {
         return ${env:ProgramFiles(x86)}
     }
     
@@ -156,6 +156,7 @@ function Invoke-Admin() {
 # Run the specified script as an administrator
 function Invoke-ScriptAdmin() {
     param ( [string]$scriptPath = $(throw "Please specify a script"),
+            [string]$psArgs = "",
             [switch]$waitForExit,
             [switch]$use32=$false )
 
@@ -167,7 +168,8 @@ function Invoke-ScriptAdmin() {
         }
     }
     
-    $p = "-Command & "
+    $p = $psArgs
+    $p += " -Command & "
     $p += resolve-path($scriptPath)
     $p += " $argString" 
 
