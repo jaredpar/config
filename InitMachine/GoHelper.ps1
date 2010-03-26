@@ -34,7 +34,7 @@ function EnableScriptExecution() {
     if ( (Get-ExecutionPolicy -Scope LocalMachine) -ne "RemoteSigned" ) {
         $cmd = "-NoProfile -Command Set-ExecutionPolicy RemoteSigned"
         if ( -not (Test-Admin) ) {
-            Invoke-Admin powershell $cmd
+            Invoke-Admin powershell.exe $cmd
         } else {
             powershell $cmd
         }
