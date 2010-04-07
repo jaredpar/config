@@ -1,6 +1,20 @@
 
 # Copy Reflector.exe to the desktop
 
-$source = join-path $jsh.UtilsRawPath "Reflector.exe"
 $dest = join-path $env:UserProfile "Desktop"
-copy -force $source $dest
+
+# First remove any old versions
+foreach ( $i in "Reflector.exe","Reflector.exe.config","Reflector.cfg") {
+    $old = join-path $dest $i
+    if ( test-path $old ) { 
+        rm $old 
+    }
+}
+
+# Copy the new one
+$source = join-path $jsh.UtilsRawPath "Reflector"
+$dest = join-path $dest "Reflector"
+if ( -not (test-path $dest ) ) { 
+    mkdir $dest | out-null
+}
+copy -force "$source\*" $dest
