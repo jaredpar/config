@@ -8,4 +8,3 @@ $midPath = ${env:MIDROOT}
 $winPath = join-path $midPath "Internal\Bin\Windows"
 
 set-alias jjpack (join-path $winPath "jjpack.exe") 
-
