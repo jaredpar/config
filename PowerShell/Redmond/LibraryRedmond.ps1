@@ -65,3 +65,19 @@ function Set-Razzle() {
     . (join-path $info.DepotPath "tools\razzle.ps1") $razzleArgs
 }	
 
+# Disable strong name verification on the machine
+function Disable-StrongName() {
+    $path = join-path (Get-ProgramFiles32) "Microsoft SDKS\Windows\v7.0A\Bin"
+    $sn = join-path $path "sn.exe"
+    $sn64 = join-path $path "x64\sn.exe" 
+
+    if ( -not (Test-Admin) ) {
+        write-error "Must be an admininstrator to run this"
+        return
+    }
+
+    & $sn -Vr *
+    & $sn64 -Vr *
+}
+
+

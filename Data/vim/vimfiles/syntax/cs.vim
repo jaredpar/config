@@ -62,8 +62,11 @@ syn cluster xmlTagHook add=csXmlTag
 
 syn match   csXmlCommentLeader	+\/\/\/+    contained
 syn match   csXmlComment	+\/\/\/.*$+ contains=csXmlCommentLeader,@csXml
+<<<<<<< HEAD
 "syntax include @csXml <sfile>:p:h/xml.vim
 "hi def link xmlRegion Comment
+=======
+>>>>>>> 1370e0a37092872cd0d37212d9980a9778e61f24
 
 
 " [1] 9.5 Pre-processing directives
