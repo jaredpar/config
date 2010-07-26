@@ -19,13 +19,13 @@ function Update-MidoriBin() {
     popd
 }
 
+function Update-Alias() { 
+    set-alias -Scope "Global" kdbridge (join-path $env:DevToolsDir "kdbridge.exe") 
+}
+
 set-alias sd \\ptt\Release\SD\Current\X86\sd.exe 
 
 # Notepad.exe was removed from c:\windows and sd.exe still looks there.  Redirect
 # it
 $env:SDFORMEDITOR = join-path $env:WINDIR "System32\notepad.exe"
-
-if ( test-path env:\DepotRoot ) {
-    set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinaries.cmd")
-}
 
