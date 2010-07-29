@@ -4,7 +4,7 @@ function Get-MidoriBuild() {
             [switch]$built = $true )
     $sourcePath = join-path "e:\dd\midori\branches" $branch
     if ( $built ) {
-        $sourcePath = join-path $sourcePath "Midori.obj\Windows\x86.Debug"
+        $sourcePath = join-path $sourcePath "Midori.obj\Apps\Debug.x64.Clr"
     }
     else {
         $sourcePath = join-path "e:\dd\midori\branches" $branch
