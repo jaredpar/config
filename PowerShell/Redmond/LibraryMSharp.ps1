@@ -24,3 +24,6 @@ if ( test-path env:\DepotRoot ) {
     set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinaries.cmd")
 }
 
+new-psdrive -name suites -PSProvider FileSystem -root (join-path $env:DepotRoot "ddsuites\src\vs\safec\compiler")
+new-psdrive -name msharp -PSProvider FileSystem -root (join-path $env:DepotRoot "csharp\LanguageAnalysis\Compiler")
+
