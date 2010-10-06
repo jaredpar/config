@@ -385,4 +385,15 @@ function Get-LocalDrive() {
         %{ $_.DeviceId }
 }
 
+#==============================================================================
+# Aliases 
+#==============================================================================
+
+set-alias gcid Get-ChildItemDirectory -Scope global
+set-alias wget Get-WebItem -Scope global
+set-alias ss select-string -Scope global
+set-alias ssr Select-StringRecurse -Scope global
+set-alias ia Invoke-Admin -Scope global
+set-alias ica Invoke-CommandAdmin -Scope global
+set-alias isa Invoke-ScriptAdmin -Scope global
 
