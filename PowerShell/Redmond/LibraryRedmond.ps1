@@ -45,7 +45,7 @@ function Set-Razzle() {
     # Build up the razzle arguments.  Don't run OACR unless we are in RET
     $razzleArgs = "{0} {1}" -f $arch,$flavor
     if ( $flavor -ne "ret" ) {
-        $razzleArgs += " No_OACR"
+        $razzleArgs += " No_OACR No_opt"
     }
 
     # If the custom setrazzle.ps1 command does not exist in the depot at this

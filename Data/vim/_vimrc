@@ -21,10 +21,6 @@ iabbrev #c //===================================================================
 " Filetype settings
 filetype plugin on
 filetype indent on
-set completeopt=menu,longest,preview
-
-" Key mappings
-imap <C-Space> <C-x><C-o>
 
 " Source a Couple of scripts
 source ~\vimfiles\matchit.vim
