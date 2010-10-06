@@ -16,59 +16,13 @@ $Jsh | add-member NoteProperty "IsTestMachine" $false
 
 #==============================================================================
 
+$script:scriptPath = $(split-path -parent $MyInvocation.MyCommand.Definition) 
+$env:PSModulePath = $env:PSModulePath = (resolve-path (join-path $scriptPath "Modules")) 
+import-module Common
+
 #==============================================================================
 # Functions 
 #==============================================================================
-
-# Load snapin's if they are available
-function Jsh.Load-Snapin([string]$name) {
-    $list = @( get-pssnapin | ? { $_.Name -eq $name })
-    if ( $list.Length -gt 0 ) {
-        return; 
-    }
-
-    $snapin = get-pssnapin -registered | ? { $_.Name -eq $name }
-    if ( $snapin -ne $null ) {
-        add-pssnapin $name
-    }
-}
-
-
-function Jsh.Push-Path([string] $location) { 
-    go $location $true 
-}
-
-function Jsh.Go-Path([string] $location, [bool]$push = $false) {
-    if ( $location -eq "" ) {
-        write-output $Jsh.GoMap
-    } elseif ( $Jsh.GoMap.ContainsKey($location) ) {
-        if ( $push ) {
-            push-location $Jsh.GoMap[$location]
-        } else {
-            set-location $Jsh.GoMap[$location]
-        }
-    } elseif ( test-path $location ) {
-        if ( $push ) {
-            push-location $location
-        } else {
-            set-location $location
-        }
-    } else {
-        write-output "$loctaion is not a valid go location"
-        write-output "Current defined locations"
-        write-output $Jsh.GoMap
-    }
-}
-
-function Jsh.Run-Script([string] $name) {
-    if ( $Jsh.ScriptMap.ContainsKey($name) ) {
-        . $Jsh.ScriptMap[$name]
-    } else {
-        write-output "$name is not a valid script location"
-        write-output $Jsh.ScriptMap
-    }
-}
-
 
 # Set the prompt
 function prompt() {
@@ -86,7 +40,6 @@ function prompt() {
 	' '
 }
 
-#==============================================================================
 
 #==============================================================================
 # Alias 
