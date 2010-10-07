@@ -22,7 +22,7 @@ function Copy-MidoriBuild() {
 #==============================================================================
 # Specialized razzle prompt 
 #==============================================================================
-function $global:prompt() {
+function prompt() {
     write-host -NoNewLine -ForegroundColor Red "Razzle $env:_BuildType "
 	write-host -NoNewLine -ForegroundColor Green $(get-location)
 	foreach ( $entry in (get-location -stack))

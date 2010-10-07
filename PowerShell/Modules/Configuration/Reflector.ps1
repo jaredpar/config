@@ -12,7 +12,7 @@ foreach ( $i in "Reflector.exe","Reflector.exe.config","Reflector.cfg") {
 }
 
 # Copy the new one
-$source = join-path $jsh.UtilsRawPath "Reflector"
+$source = join-path $PSScriptRoot "Reflector" 
 $dest = join-path $dest "Reflector"
 if ( -not (test-path $dest ) ) { 
     mkdir $dest | out-null

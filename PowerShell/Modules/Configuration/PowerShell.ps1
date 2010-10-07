@@ -16,7 +16,11 @@ if ( test-path $oldProfile )
     del $oldProfile
 }
 
-$cmd = ". `"" + $(join-path $Jsh.ScriptPath "Profile.ps1") + "`""
+$profile = split-path -parent $PSScriptRoot
+$profile = split-path -parent $profile
+$profile = join-path $profile "Profile.ps1"
+
+$cmd = ". `"" + $profile + "`""
 echo $cmd > profile.ps1 
 
 popd

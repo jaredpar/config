@@ -257,7 +257,7 @@ function Test-BinaryExtension() {
 
 function Test-BinaryFileName() { 
     param ( [string]$fileName = $(throw "Need a file Name") )
-    return (Is-BinaryExtension [IO.Path]::GetExtension($fileName))
+    return (Test-BinaryExtension [IO.Path]::GetExtension($fileName))
 }
 
 function Select-StringRecurse() {
@@ -268,7 +268,7 @@ function Select-StringRecurse() {
 
     gci -re -in $include | 
         ? { -not $_.PSIsContainer } | 
-        ? { ($all) -or (-not (Is-BinaryExtension $_.Extension)) } |
+        ? { ($all) -or (-not (Test-BinaryExtension $_.Extension)) } |
         % { write-debug "Considering: $($_.FullName)"; ss -CaseSensitive:$caseSensitive $text $_.FullName }
 }   
 

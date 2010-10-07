@@ -10,5 +10,5 @@ git config --global color.showbranch always
 git config --global color.status always
 
 
-$file = join-path $Jsh.ConfigPath Data\.gitignore
+$file = join-path $PSScriptRoot "git\.gitignore" 
 git config --global core.excludesfile "$file"

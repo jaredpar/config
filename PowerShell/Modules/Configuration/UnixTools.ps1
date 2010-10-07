@@ -10,7 +10,6 @@ $homePath = $env:UserProfile
 $curVal = $env:HOME
 if ( $curVal -ne $homePath )
 {
-    $envsetExe = join-path $Jsh.UtilsRawPath "envset.exe"
-    & $envsetExe /u HOME=$homePath
+    & .\envset.exe /u HOME=$homePath
     sc env:\HOME $homePath
 }
