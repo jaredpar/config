@@ -1,1 +1,0 @@
-#Edit to add login commands for REDMOND
