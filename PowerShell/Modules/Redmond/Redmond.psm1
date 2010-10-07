@@ -48,19 +48,6 @@ function Set-Razzle() {
         $razzleArgs += " No_OACR No_opt"
     }
 
-    # If the custom setrazzle.ps1 command does not exist in the depot at this
-    # location then generate it to call my command to load my razzle
-    # environment script
-    $setRazzle = join-path $info.DepotPath "developer\$($env:username)"
-    if ( -not (test-path $setRazzle) ) {
-        mkdir $setRazzle | out-null
-    }
-    $setRazzle = join-path $setRazzle "setrazzle.ps1"
-    remove-itemtest $setRazzle
-    $myRazzle = join-path $Jsh.ScriptPath "Redmond\LibraryRazzleEnv.ps1"
-    $command = '. "' + $myRazzle + '"'
-    sc $setRazzle $command
-
     # Actually start razzle
     . (join-path $info.DepotPath "tools\razzle.ps1") $razzleArgs
 }	
