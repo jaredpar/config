@@ -10,7 +10,8 @@ function Repair-Configuration() {
                 'Git.ps1', 
                 'PowerShell.ps1', 
                 'Reflector.ps1',
-                'UnixTools.ps1')
+                'UnixTools.ps1',
+                'PullTask.ps1')
     foreach ( $cur in $all ) {
         write-host "Running $cur"
         & (".\" + $cur) | %{ write-host ("`t{0}" -f $_) } 
