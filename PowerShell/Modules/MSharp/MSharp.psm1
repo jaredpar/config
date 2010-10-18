@@ -19,6 +19,45 @@ function Copy-MidoriBuild() {
     popd
 }
 
+
+#==============================================================================
+# Copy the M# build into the Midori branch 
+#==============================================================================
+function Publish-MsharpDrop() {
+    param ( $target = "E:\dd\midori\branches\framework\other\Ext-Tools\clr\v4.0.msharp",
+            [switch]$allCheck = $false )
+
+    if ( -not (test-path env:\BinaryRoot ) ) {
+        write-error "Must be run in a razzle window"
+        return
+    }
+
+    $retTarget = join-path $target "msharp.x86ret"
+    $chkTarget = join-path $target "msharp.x86chk" 
+    $retSource = join-path ${env:BinaryRoot} "x86ret\bin\i386"
+    $chkSource = join-path ${env:BinaryRoot} "x86chk\bin\i386"
+    if ( $allCheck ) { 
+        $retSource = $chkSource
+    }
+
+    if ( -not (test-path $retTarget) ) {
+        mkdir $retTarget;
+    }
+
+    if ( -not (test-path $chkTarget) ) {
+        mkdir $chkTarget;
+    }
+    copy (join-path $retSource "csc.exe") $retTarget
+    copy (join-path $retSource "csc.pdb") $retTarget
+    copy (join-path $retSource "cscui.dll") (join-path $retTarget "1033")
+    copy (join-path $retSource "csc.exe") $target
+    copy (join-path $retSource "csc.pdb") $target
+    copy (join-path $retSource "cscui.dll") (join-path $target "1033")
+    copy (join-path $chkSource "csc.exe") $chkTarget
+    copy (join-path $chkSource "csc.pdb") $chkTarget
+    copy (join-path $chkSource "cscui.dll") (join-path $chkTarget "1033")
+}
+
 #==============================================================================
 # Specialized razzle prompt 
 #==============================================================================
@@ -33,8 +72,15 @@ function prompt() {
 	' '
 }
 
-set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinaries.cmd") -scope Global
+function Set-MSharpLocation() { cd (join-path $env:DepotRoot "csharp") }
+function Set-SuitesLocation() { cd (join-path $env:DepotRoot "ddsuites\src\vs\safec\compiler\midori") }
+function Set-DepotLocation() { cd $env:DepotRoot }
 
-new-psdrive -name suites -PSProvider FileSystem -root (join-path $env:DepotRoot "ddsuites\src\vs\safec\compiler")
-new-psdrive -name msharp -PSProvider FileSystem -root (join-path $env:DepotRoot "csharp\LanguageAnalysis\Compiler")
+
+set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinaries.cmd") -scope Global
+set-alias dd Set-DepotLocation -scope Global
+set-alias msharp Set-MSharpLocation -scope Global
+set-alias csharp Set-MSharpLocation -scope Global
+set-alias suites Set-SuitesLocation -scope Global
+
 
