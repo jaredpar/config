@@ -24,9 +24,13 @@ function Copy-MidoriBuild() {
 # Copy the M# build into the Midori branch 
 #==============================================================================
 function Publish-MsharpDrop() {
-    param ( $target = "E:\dd\midori\branches\framework\other\Ext-Tools\clr\v4.0.msharp",
-            [switch]$allCheck = $false )
-
+    param ( $branch = "framework",
+            $midRoot = "e:\dd\midori",
+            [switch]$allCheck = $false)
+    $target = join-path $midRoot "branches"
+    $target = join-path $target $branch
+    $target = join-path $target "other\Ext-Tools\clr\v4.0.msharp"
+    write-host "Target: $target"
     if ( -not (test-path env:\BinaryRoot ) ) {
         write-error "Must be run in a razzle window"
         return
@@ -73,6 +77,8 @@ function prompt() {
 }
 
 function Set-MSharpLocation() { cd (join-path $env:DepotRoot "csharp") }
+function Set-LangLocation() { cd (join-path $env:DepotRoot "csharp\LanguageAnalysis") }
+function Set-CompilerLocation() { cd (join-path $env:DepotRoot "csharp\LanguageAnalysis\Compiler") }
 function Set-SuitesLocation() { cd (join-path $env:DepotRoot "ddsuites\src\vs\safec\compiler\midori") }
 function Set-DepotLocation() { cd $env:DepotRoot }
 
@@ -81,6 +87,8 @@ set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinari
 set-alias dd Set-DepotLocation -scope Global
 set-alias msharp Set-MSharpLocation -scope Global
 set-alias csharp Set-MSharpLocation -scope Global
+set-alias lang Set-LangLocation -scope Global
+set-alias compiler Set-CompilerLocation -scope Global
 set-alias suites Set-SuitesLocation -scope Global
 
 

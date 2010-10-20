@@ -23,7 +23,7 @@ function Update-Alias() {
     set-alias -Scope "Global" kdbridge (join-path $env:DevToolsDir "kdbridge.exe") 
 }
 
-set-alias sd \\ptt\Release\SD\Current\X86\sd.exe 
+set-alias sd \\ptt\Release\SD\Current\X86\sd.exe -scope Global
 
 # Notepad.exe was removed from c:\windows and sd.exe still looks there.  Redirect
 # it
