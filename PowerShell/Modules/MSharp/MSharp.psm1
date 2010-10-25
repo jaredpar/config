@@ -12,8 +12,8 @@ function Copy-MidoriBuild() {
     $devPath = (join-path $env:userprofile "Midori")
     pushd (join-path $env:DepotRoot "midori\assemblies")
     tf edit *
-    foreach ( $i in gci *) {
-        copy (join-path $sourcePath $i.Name) .
+    foreach ( $i in gci *.dll,*.pdb) {
+        copy (join-path $source $i.Name) .
         copy $i.FullName $devPath -force
     }
     popd
