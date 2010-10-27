@@ -5,16 +5,23 @@
 # it
 #==============================================================================
 function Repair-Configuration() { 
+    param ([string]$specific = "")
     pushd $PSScriptRoot
-    $all = @(   'Vim.ps1', 
-                'Git.ps1', 
-                'PowerShell.ps1', 
-                'Reflector.ps1',
-                'UnixTools.ps1',
-                'PullTask.ps1')
-    foreach ( $cur in $all ) {
-        write-host "Running $cur"
-        & (".\" + $cur) | %{ write-host ("`t{0}" -f $_) } 
+
+    if ( $specific -eq "" ) { 
+        $all = @(   'Vim.ps1', 
+                    'Git.ps1', 
+                    'PowerShell.ps1', 
+                    'Reflector.ps1',
+                    'UnixTools.ps1',
+                    'PullTask.ps1',
+                    'Console.ps1')
+        foreach ( $cur in $all ) {
+            write-host "Running $cur"
+            & (".\" + $cur) | %{ write-host ("`t{0}" -f $_) } 
+        }
+    } else { 
+        & $PSScriptRoot\$specific 
     }
     popd
 }

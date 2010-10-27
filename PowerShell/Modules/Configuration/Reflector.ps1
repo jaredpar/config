@@ -11,10 +11,8 @@ foreach ( $i in "Reflector.exe","Reflector.exe.config","Reflector.cfg") {
     }
 }
 
-# Copy the new one
+# Copy the new one and pin it to the task bar
 $source = join-path $PSScriptRoot "Reflector" 
 $dest = join-path $dest "Reflector"
-if ( -not (test-path $dest ) ) { 
-    mkdir $dest | out-null
-}
-copy -force "$source\*" $dest
+& $PSScriptRoot\SmartDeployDirectory.ps1 $source $dest 
+& $PSScriptRoot\PinToTaskbar.ps1 (join-path $dest "Reflector.exe")
