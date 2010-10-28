@@ -5,7 +5,7 @@ echo "Creating the logon task to pull git"
 # Delete the existing task
 schtasks /query /tn $name | out-null
 if ( $lastexitcode -eq 0 ) { 
-    schtasks /delete /tn $name
+    schtasks /delete /f /tn $name
 }
 
 $target = resolve-path "PullTask.cmd"
