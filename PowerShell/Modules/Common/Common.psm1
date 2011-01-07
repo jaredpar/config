@@ -251,7 +251,7 @@ function Get-Count() {
 function Test-BinaryExtension() {
     param ( [string]$extension = $(throw "Need an extension" ) ) 
 
-    $binRegex= "^(\.)?(lib|exe|obj|bin|tlb|pdb|doc|ncb|pch|dll|baml|resources)$"
+    $binRegex= "^(\.)?(lib|exe|obj|bin|tlb|pdb|doc|ncb|pch|dll|baml|resources|sdf|idb)$"
     return $extension -match $binRegex
 }
 

@@ -20,6 +20,15 @@ $script:scriptPath = $(split-path -parent $MyInvocation.MyCommand.Definition)
 $env:PSModulePath = $env:PSModulePath = (resolve-path (join-path $scriptPath "Modules")) 
 import-module Common
 
+# Setup the ability to launch devenv with the log parameter 
+function script:Launch-DevenvWithLog() {
+    $path = Get-ProgramFiles32
+    $path = join-path $path "Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe"
+    & $path /log
+}
+
+set-alias devenvl Launch-DevenvWithLog -Scope global
+
 #==============================================================================
 # Functions 
 #==============================================================================
