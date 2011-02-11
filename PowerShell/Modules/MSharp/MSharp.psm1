@@ -7,7 +7,7 @@ function Copy-MidoriBuild() {
             $midRoot = "e:\dd\midori" )
     $source = join-path $midRoot "branches"
     $source = join-path $source $branch
-    $source = join-path $source "Midori.obj\CIBTools"
+    $source = join-path $source "Midori.obj\BuildTools"
 
     $devPath = (join-path $env:userprofile "Midori")
     pushd (join-path $env:DepotRoot "midori\assemblies")

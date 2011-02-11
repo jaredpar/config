@@ -67,4 +67,5 @@ function Disable-StrongName() {
     & $sn64 -Vr *
 }
 
+set-alias odd \\midweb\scratch\jaredpar\tools\odd\odd.exe -scope Global
 
