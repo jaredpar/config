@@ -26,40 +26,35 @@ function Copy-MidoriBuild() {
 function Publish-MsharpDrop() {
     param ( $branch = "framework",
             $midRoot = "e:\dd\midori",
-            [switch]$allCheck = $false)
+            [switch]$noIde = $false,
+            [switch]$check = $false)
+
+
     $target = join-path $midRoot "branches"
     $target = join-path $target $branch
-    $target = join-path $target "other\Ext-Tools\clr\v4.0.msharp"
+    $target = join-path $target "Midori\Internal\Bin\Windows\clr"
     write-host "Target: $target"
     if ( -not (test-path env:\BinaryRoot ) ) {
         write-error "Must be run in a razzle window"
         return
     }
 
-    $retTarget = join-path $target "msharp.x86ret"
-    $chkTarget = join-path $target "msharp.x86chk" 
-    $retSource = join-path ${env:BinaryRoot} "x86ret\bin\i386"
-    $chkSource = join-path ${env:BinaryRoot} "x86chk\bin\i386"
-    if ( $allCheck ) { 
-        $retSource = $chkSource
+    if ($check) {
+        $source = join-path ${env:BinaryRoot} "x86chk\bin\i386"
+    } else {
+        $source = join-path ${env:BinaryRoot} "x86ret\bin\i386"
     }
+    copy (join-path $source "csc.exe") $target
+    copy (join-path $source "csc.pdb") $target
+    copy (join-path $source "cscui.dll") (join-path $target "1033")
 
-    if ( -not (test-path $retTarget) ) {
-        mkdir $retTarget;
+    if (-not $noIde) {
+        $target = join-path $midRoot "branches"
+        $target = join-path $target $branch
+        $target = join-path $target "Midori\Internal\Bin\Windows\MSharpIde"
+        $script = join-path $env:DepotRoot "Midori\Build\Scripts\Install\MakeDrop.ps1"
+        & $script $target
     }
-
-    if ( -not (test-path $chkTarget) ) {
-        mkdir $chkTarget;
-    }
-    copy (join-path $retSource "csc.exe") $retTarget
-    copy (join-path $retSource "csc.pdb") $retTarget
-    copy (join-path $retSource "cscui.dll") (join-path $retTarget "1033")
-    copy (join-path $retSource "csc.exe") $target
-    copy (join-path $retSource "csc.pdb") $target
-    copy (join-path $retSource "cscui.dll") (join-path $target "1033")
-    copy (join-path $chkSource "csc.exe") $chkTarget
-    copy (join-path $chkSource "csc.pdb") $chkTarget
-    copy (join-path $chkSource "cscui.dll") (join-path $chkTarget "1033")
 }
 
 #==============================================================================
