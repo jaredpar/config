@@ -58,6 +58,40 @@ function Publish-MsharpDrop() {
 }
 
 #==============================================================================
+# Copy a quick and dirty test drop  
+#==============================================================================
+function Publish-MsharpTestDrop() {
+    param ( $branch = "framework",
+            $midRoot = "e:\dd\midori" )
+
+    $target = join-path $midRoot "branches"
+    $target = join-path $target $branch
+    $target = join-path $target "Midori\Internal\Bin\Windows\clr"
+    write-host "Target: $target"
+    if ( -not (test-path env:\BinaryRoot ) ) {
+        write-error "Must be run in a razzle window"
+        return
+    }
+
+    $source = join-path $env:_NTPOSTBLD "bin\i386"
+    copy (join-path $source "csc.exe") $target
+    copy (join-path $source "csc.pdb") $target
+    copy (join-path $source "cscui.dll") (join-path $target "1033")
+}
+
+#==============================================================================
+# Build the resources DLL 
+#==============================================================================
+function Invoke-ResourceBuild()
+{
+    pushd (join-path $env:DepotRoot "csharp\inc")
+    build
+    cd (join-path $env:DepotRoot "csharp\LanguageAnalysis\Compiler\Resources")
+    build
+    popd
+}
+
+#==============================================================================
 # Start the ddsenv window 
 #==============================================================================
 
@@ -82,7 +116,6 @@ function Set-CompilerLocation() { cd (join-path $env:DepotRoot "csharp\LanguageA
 function Set-SuitesLocation() { cd (join-path $env:DepotRoot "ddsuites\src\vs\safec\compiler\midori") }
 function Set-DepotLocation() { cd $env:DepotRoot }
 
-
 set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinaries.cmd") -scope Global
 set-alias dd Set-DepotLocation -scope Global
 set-alias msharp Set-MSharpLocation -scope Global
@@ -90,5 +123,6 @@ set-alias csharp Set-MSharpLocation -scope Global
 set-alias lang Set-LangLocation -scope Global
 set-alias compiler Set-CompilerLocation -scope Global
 set-alias suites Set-SuitesLocation -scope Global
+set-alias resources Invoke-ResourceBuild -scope Global
 
 

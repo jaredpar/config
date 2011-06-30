@@ -25,13 +25,15 @@ function Update-Alias() {
 
 function dd { cd (split-path -parent $env:MidRoot) }
 function midori { cd $env:MidRoot }
-function platform { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Foundation") }
+function foundation { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Foundation") }
 function promises { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Promises") }
 function corlib { cd (join-path $env:MidRoot "System\Runtime\Corlib") }
+function promiseBench { cd (join-path $env:MidRoot "Internal\Benchmarks\PromiseBench") }
 
 set-alias sd $(resolve-path (join-path $env:MidRoot "Internal\Bin\Windows\sd.exe")) 
 
 # Notepad.exe was removed from c:\windows and sd.exe still looks there.  Redirect
 # it
 $env:SDFORMEDITOR = join-path $env:WINDIR "System32\notepad.exe"
+$env:SDEDITOR = join-path $env:WINDIR "System32\notepad.exe"
 
