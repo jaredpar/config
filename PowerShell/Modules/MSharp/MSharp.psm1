@@ -26,9 +26,7 @@ function Copy-MidoriBuild() {
 function Publish-MsharpDrop() {
     param ( $branch = "framework",
             $midRoot = "e:\dd\midori",
-            [switch]$noIde = $false,
-            [switch]$check = $false)
-
+            [switch]$noIde = $false )
 
     $target = join-path $midRoot "branches"
     $target = join-path $target $branch
@@ -39,15 +37,20 @@ function Publish-MsharpDrop() {
         return
     }
 
-    if ($check) {
-        $source = join-path ${env:BinaryRoot} "x86chk\bin\i386"
-    } else {
-        $source = join-path ${env:BinaryRoot} "x86ret\bin\i386"
-    }
+    # First publish the M# Retail compiler over 
+    $source = join-path ${env:BinaryRoot} "x86ret\bin\i386"
     copy (join-path $source "csc.exe") $target
     copy (join-path $source "csc.pdb") $target
     copy (join-path $source "cscui.dll") (join-path $target "1033")
 
+    # Next publish the M# check compiler
+    $source = join-path ${env:BinaryRoot} "x86chk\bin\i386"
+    $chkTarget = join-path $target "chk"
+    copy (join-path $source "csc.exe") $chkTarget
+    copy (join-path $source "csc.pdb") $chkTarget
+    copy (join-path $source "cscui.dll") $chkTarget
+
+    # Now deploy the IDE
     if (-not $noIde) {
         $target = join-path $midRoot "branches"
         $target = join-path $target $branch
