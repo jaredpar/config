@@ -7,7 +7,7 @@ $target = "hkcu:\software\microsoft\product studio\files"
 if ( test-path $target )
 {
     pushd $target
-    sp . -Name SearchPath -Value "\\vb\public\jaredpar\Query"
+    sp . -Name SearchPath -Value "C:\Users\jaredpar\Documents\Shared Documents\Work\Queries"
     popd
 }
 

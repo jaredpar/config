@@ -15,7 +15,8 @@ function Repair-Configuration() {
                     'Reflector.ps1',
                     'UnixTools.ps1',
                     'PullTask.ps1',
-                    'Console.ps1')
+                    'Console.ps1',
+                    'ProductStudio.ps1')
         foreach ( $cur in $all ) {
             write-host "Running $cur"
             & (".\" + $cur) | %{ write-host ("`t{0}" -f $_) } 
