@@ -5,13 +5,18 @@
 function Copy-MidoriBuild() {
     param ( $branch = "framework",
             $midRoot = "e:\dd\midori" )
+
+    if (-not (test-path env:\DepotRoot)) {
+        throw "Must be run under a razzle window";
+    }
+
     $source = join-path $midRoot "branches"
     $source = join-path $source $branch
     $source = join-path $source "Midori.obj\BuildTools"
 
     $devPath = (join-path $env:userprofile "Midori")
     pushd (join-path $env:DepotRoot "midori\assemblies")
-    tf edit *
+    sd edit *
     foreach ( $i in gci *.dll,*.pdb) {
         copy (join-path $source $i.Name) .
         copy $i.FullName $devPath -force
