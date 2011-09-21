@@ -66,6 +66,34 @@ function Publish-MsharpDrop() {
 }
 
 #==============================================================================
+# Publish a quick CHK drop for testing 
+#==============================================================================
+function Publish-CheckDrop() {
+    param ( $branch = "framework",
+            $midRoot = "e:\dd\midori")
+
+    $target = join-path $midRoot "branches"
+    $target = join-path $target $branch
+    $target = join-path $target "Midori\Internal\Bin\Windows\clr"
+    write-host "Target: $target"
+    if ( -not (test-path env:\BinaryRoot ) ) {
+        write-error "Must be run in a razzle window"
+        return
+    }
+
+    # Make sure we can copy over them
+    sd edit (join-path $target "csc.exe")
+    sd edit (join-path $target "csc.pdb")
+    sd edit (join-path $target "1033\cscui.dll")
+
+    # Publish the M# check compiler
+    $source = join-path ${env:BinaryRoot} "x86chk\bin\i386"
+    copy (join-path $source "csc.exe") $target
+    copy (join-path $source "csc.pdb") $target
+    copy (join-path $source "cscui.dll") $target
+}
+
+#==============================================================================
 # Copy a quick and dirty test drop  
 #==============================================================================
 function Publish-MsharpTestDrop() {
