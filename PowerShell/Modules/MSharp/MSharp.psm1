@@ -140,4 +140,5 @@ set-alias compiler Set-CompilerLocation -scope Global
 set-alias suites Set-SuitesLocation -scope Global
 set-alias resources Invoke-ResourceBuild -scope Global
 
+${env:SDEDITOR} = (join-path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
 

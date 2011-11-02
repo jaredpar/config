@@ -32,8 +32,7 @@ function promiseBench { cd (join-path $env:MidRoot "Internal\Benchmarks\PromiseB
 
 set-alias sd $(resolve-path (join-path $env:MidRoot "Internal\Bin\Windows\sd.exe")) 
 
-# Notepad.exe was removed from c:\windows and sd.exe still looks there.  Redirect
-# it
-$env:SDFORMEDITOR = join-path $env:WINDIR "System32\notepad.exe"
-$env:SDEDITOR = join-path $env:WINDIR "System32\notepad.exe"
+# Setup the SD editing functions
+$env:SDEDITOR = (join-path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
+$env:SDFORMEDITOR = (join-path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
 
