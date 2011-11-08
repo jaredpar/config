@@ -23,6 +23,14 @@ function Update-Alias() {
     set-alias -Scope "Global" kdbridge (join-path $env:DevToolsDir "kdbridge.exe") 
 }
 
+function Set-Env() {
+    param ( $distro = 'tiny' )
+
+    pushd $env:MidRoot
+    . .\setenv.ps1 /distro $distro /x64 /noselfhost /nocops /iso 
+    popd 
+}
+
 function dd { cd (split-path -parent $env:MidRoot) }
 function midori { cd $env:MidRoot }
 function foundation { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Foundation") }
