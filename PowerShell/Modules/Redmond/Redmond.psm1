@@ -52,6 +52,23 @@ function Set-Razzle() {
     . (join-path $info.DepotPath "tools\razzle.ps1") $razzleArgs
 }	
 
+# Method to startup a Midori environment
+function Set-Midori() {
+    param ( [string]$branch = $(throw "Pick a branch"))
+
+    $path = join-path 'e:\dd\midori\branches' $branch
+    if (-not (test-path $path)) {
+        write-error "Branch doesn't exist: $path"
+        return
+    }
+
+    cd $path
+    cd Midori
+    . .\setenv.ps1
+    import-module Midori
+    . set-env 
+}	
+
 # Disable strong name verification on the machine
 function Disable-StrongName() {
     $path = join-path (Get-ProgramFiles32) "Microsoft SDKS\Windows\v7.0A\Bin"

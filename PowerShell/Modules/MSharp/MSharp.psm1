@@ -42,6 +42,13 @@ function Publish-MsharpDrop() {
         return
     }
 
+    # Check out all of the destination files
+    pushd $target
+    sd edit csc*
+    sd edit chk\*
+    sd edit 1033\cscui.dll
+    popd
+
     # First publish the M# Retail compiler over 
     $source = join-path ${env:BinaryRoot} "x86ret\bin\i386"
     copy (join-path $source "csc.exe") $target
