@@ -4,6 +4,7 @@ set tabstop=4
 set shiftwidth=4
 set et
 set ignorecase
+set hlsearch
 
 set ai
 set ruler
