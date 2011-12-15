@@ -84,5 +84,22 @@ function Disable-StrongName() {
     & $sn64 -Vr *
 }
 
+function Set-Midori()
+{
+    param ( [string]$branch = 'framework')
+
+    $path = join-path 'e:\dd\midori\branches' $branch
+    $path = join-path $path 'Midori'
+    cd $path
+
+
+    . .\setenv.ps1
+    import-module Midori -Global
+    Set-Env
+}
+
+function Set-MidoriFramework() { Set-Midori 'framework' }
+
 set-alias odd \\midweb\scratch\jaredpar\tools\odd\odd.exe -scope Global
+set-alias midf Set-MidoriFramework -scope Global
 
