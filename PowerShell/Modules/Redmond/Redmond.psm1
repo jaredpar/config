@@ -21,8 +21,9 @@ function Set-MSharp() {
 
     # Build up the razzle arguments.  Don't run OACR unless we are in RET
     $razzleArgs = $flavor
+    $razzleArgs += " No_OACR"
     if ( $flavor -ne "ret" ) {
-        $razzleArgs += " No_OACR No_opt"
+        $razzleArgs += " No_opt"
     }
 
     # Actually start razzle

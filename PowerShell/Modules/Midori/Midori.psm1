@@ -31,9 +31,42 @@ function Set-Env() {
     popd 
 }
 
+function jb { 
+    param ( [string]$arg1 = "",
+            [string]$arg2 = "")
+
+    $log = join-path $env:MidRoot "log.txt"
+    msb /notools /log:$log $arg1 $arg1
+}
+
+function fsb {
+    param ( [string]$arg1 = "",
+            [string]$arg2 = "")
+
+    $log = join-path $env:MidRoot "log.txt"
+    msb /notools /nodepexe /log:$log $arg1 $arg1
+}
+
+function bmkpromise {
+    pushd $env:MidRoot
+    msb /w /notools Tools\Applications\MkPromise\MkPromise.csproj
+
+    $source = join-path $env:MidRoot "..\Midori.obj\Windows\AnyCPU.Debug\MkPromise.exe"
+    $dest =join-path $env:MidRoot "Internal\Bin\CIB\MkPromise.exe"
+    sd edit $dest
+    copy $source $dest
+}
+
+function pack {
+    param ( [string]$name = $(throw "Need a pack name")) 
+
+    jjpack pack (join-path "\\midweb\scratch\jaredpar\packs\" $name)
+}
+
 function dd { cd (split-path -parent $env:MidRoot) }
 function midori { cd $env:MidRoot }
 function foundation { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Foundation") }
+function lib { cd (join-path $env:MidRoot "System\Core\Libraries") }
 function promises { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Promises") }
 function corlib { cd (join-path $env:MidRoot "System\Runtime\Corlib") }
 function promiseBench { cd (join-path $env:MidRoot "Internal\Benchmarks\PromiseBench") }
