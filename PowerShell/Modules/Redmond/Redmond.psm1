@@ -36,9 +36,24 @@ function Set-MSharp() {
 function Set-Midori() {
     param ( [string]$branch = $(throw "Pick a branch"))
 
-    $path = join-path 'e:\dd\midori\branches' $branch
-    if (-not (test-path $path)) {
-        write-error "Branch doesn't exist: $path"
+    $path = $null;
+    foreach ($root in @('d:\dd', 'e:\dd')) {
+        $branchPath = join-path $root 'Midori\branches'
+        $branchPath = join-path $branchPath $branch
+        if (test-path $branchPath) {
+            $path = $branchPath
+            break;
+        }
+
+        $branchPath = join-path $root $branch
+        if (test-path $branchPath) {
+            $path= $branchPath
+            break;
+        }
+    }
+
+    if ($path -eq $null) {
+        write-error "Branch doesn't exist: $branch"
         return
     }
 
@@ -62,19 +77,6 @@ function Disable-StrongName() {
 
     & $sn -Vr *
     & $sn64 -Vr *
-}
-
-function Set-Midori() {
-    param ( [string]$branch = 'framework')
-
-    $path = join-path 'e:\dd\midori\branches' $branch
-    $path = join-path $path 'Midori'
-    cd $path
-
-
-    . .\setenv.ps1
-    import-module Midori -Global
-    Set-Env
 }
 
 function Set-MidoriFramework() { Set-Midori 'framework' }
