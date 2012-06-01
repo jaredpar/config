@@ -29,7 +29,7 @@ function Set-MSharp() {
     # Actually start razzle
     . (join-path $path "tools\razzle.ps1") $razzleArgs
 
-    import-module MSharp -Global
+    import-module MSharpExtra -Global
 }	
 
 # Method to startup a Midori environment

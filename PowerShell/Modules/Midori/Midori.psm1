@@ -23,6 +23,21 @@ function Update-Alias() {
     set-alias -Scope "Global" kdbridge (join-path $env:DevToolsDir "kdbridge.exe") 
 }
 
+function Update-MkPromise() {
+    pushd 
+
+    cd (join-path $env:MidRoot "Tools\Applications\MkPromise")
+    msb /w /notools
+    cd (join-path $env:MidRoot "Internal\Bin\CIB")
+    sd edit MkPromise*
+
+    $source = join-path $env:MidRoot "..\Midori.obj\Windows\x86.Debug"
+    copy (join-path $source "MkPromise.exe") .
+    copy (join-path $source "MkPromise.pdb") .
+
+    popd
+}
+
 function Set-Env() {
     param ( $distro = 'tiny' )
 
