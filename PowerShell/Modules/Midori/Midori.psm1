@@ -38,14 +38,6 @@ function Update-MkPromise() {
     popd
 }
 
-function Set-Env() {
-    param ( $distro = 'tiny' )
-
-    pushd $env:MidRoot
-    . .\setenv.ps1 /distro $distro /x64 /noselfhost /nocops /iso 
-    popd 
-}
-
 function jb { 
     param ( [string]$arg1 = "",
             [string]$arg2 = "")
@@ -72,12 +64,6 @@ function bmkpromise {
     copy $source $dest
 }
 
-function pack {
-    param ( [string]$name = $(throw "Need a pack name")) 
-
-    jjpack pack (join-path "\\midweb\scratch\jaredpar\packs\" $name)
-}
-
 #==============================================================================
 # Specialized M# prompt 
 #==============================================================================
@@ -102,16 +88,6 @@ function prompt()
 }
 
 function dd { cd (split-path -parent $env:MidRoot) }
-function midori { cd $env:MidRoot }
-function foundation { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Foundation") }
-function lib { cd (join-path $env:MidRoot "System\Core\Libraries") }
-function promises { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Promises") }
-function corlib { cd (join-path $env:MidRoot "System\Runtime\Corlib") }
 function promiseBench { cd (join-path $env:MidRoot "Internal\Benchmarks\PromiseBench") }
 
-set-alias sd $(resolve-path (join-path $env:MidRoot "Internal\Bin\Windows\sd.exe")) 
-
-# Setup the SD editing functions
-$env:SDEDITOR = (join-path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
-$env:SDFORMEDITOR = (join-path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
 

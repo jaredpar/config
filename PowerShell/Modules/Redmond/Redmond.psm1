@@ -42,6 +42,7 @@ function Set-MSharp() {
     cd Midori
     . .\setenv.ps1 /nocops /x86 /x86win /msharpPrebuilt=live /msharpCheck
     Import-Module (Join-Path $path "MSharp\Midori\psscripts\MSharp") -Global
+    Import-Module MidoriCommon -Global
     Import-Module MSharpExtra -Global
     csharp
 }	
@@ -60,6 +61,7 @@ function Set-Midori() {
     cd $path
     cd Midori
     . .\setenv.ps1
+    import-module MidoriCommon -Global
     import-module Midori -Global
     . set-env 
 }	
