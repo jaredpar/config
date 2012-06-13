@@ -1,39 +1,6 @@
 
-# Method to startup a PowerShell razzle environment
-function Set-MSharp() {
-    param ( [string]$branch = $(throw "Pick a branch"),
-            [string]$flavor = "chk" ) 
 
-    # Razzle won't run in a 64 bit shell or a non-admin
-    if ( (test-win64) -or (-not (test-admin))) {
-        write-host "Starting 32 bit admin shell"
-        Invoke-CommandAdmin "set-msharp $branch $flavor " -dotsource -use32
-        return
-    }
-
-    $path = join-path 'e:\dd\midori\branches' $branch
-    $path = join-path $path 'MSharp'
-    if ( -not (test-path $path)) {
-        write-output "Error: $name is not a valid razzle entry"
-        get-razzle
-        return
-    }
-
-    # Build up the razzle arguments.  Don't run OACR unless we are in RET
-    $razzleArgs = $flavor
-    $razzleArgs += " No_OACR"
-    if ( $flavor -ne "ret" ) {
-        $razzleArgs += " No_opt"
-    }
-
-    # Actually start razzle
-    . (join-path $path "tools\razzle.ps1") $razzleArgs
-
-    import-module MSharpExtra -Global
-}	
-
-# Method to startup a Midori environment
-function Set-Midori() {
+function Get-BranchPath() {
     param ( [string]$branch = $(throw "Pick a branch"))
 
     $path = $null;
@@ -47,10 +14,43 @@ function Set-Midori() {
 
         $branchPath = join-path $root $branch
         if (test-path $branchPath) {
-            $path= $branchPath
+            $path = $branchPath
             break;
         }
     }
+
+    if ($path -eq $null) {
+        write-error "Branch doesn't exist: $branch"
+    }
+
+    return $path
+}	
+
+# Method to startup a PowerShell razzle environment
+function Set-MSharp() {
+    param ( [string]$branch = $(throw "Pick a branch"),
+            [string]$flavor = "chk" ) 
+
+    $path = Get-BranchPath $branch
+
+    if ($path -eq $null) {
+        write-error "Branch doesn't exist: $branch"
+        return
+    }
+
+    cd $path
+    cd Midori
+    . .\setenv.ps1 /nocops /x86 /x86win /msharpPrebuilt=live /msharpCheck
+    Import-Module (Join-Path $path "MSharp\Midori\psscripts\MSharp") -Global
+    Import-Module MSharpExtra -Global
+    csharp
+}	
+
+# Method to startup a Midori environment
+function Set-Midori() {
+    param ( [string]$branch = $(throw "Pick a branch"))
+
+    $path = Get-BranchPath $branch
 
     if ($path -eq $null) {
         write-error "Branch doesn't exist: $branch"

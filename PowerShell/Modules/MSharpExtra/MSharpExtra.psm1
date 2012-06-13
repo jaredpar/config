@@ -56,14 +56,40 @@ function Invoke-CompilerBuild()
     popd
 }
 
+function Set-Env() 
+{
+    param ( [switch]$live=$false,
+            [switch]$chk=$false )
+
+    $setenv = Join-Path ${env:MidRoot} "setenv.ps1"
+    if ($live -and $chk) {
+        . $setenv /msharpPrebuilt=live /msharpCheck
+    } elseif ($live) {
+        . $setenv /msharpPrebuilt=live /nomsharpCheck
+    } elseif ($chk) { 
+        . $setenv /msharpPrebuilt=default /msharpCheck
+    } else { 
+        . $setenv /msharpPrebuilt=default /nomsharpCheck
+        write-host "Nothing"
+    }
+}
+
 #==============================================================================
 # Specialized razzle prompt 
 #==============================================================================
 function prompt() {
-    write-host -NoNewLine -ForegroundColor Red "Razzle $env:_BuildType "
+    write-host -NoNewLine -ForegroundColor Red "M# "
+    if (${env:MSHARP_PREBUILT_ARG} -eq "live") {
+        write-host -NoNewLine -ForegroundColor Red "Live "
+    }
+
+    if (${env:MIDORI_MSHARP_CHECK} -eq "true") {
+        write-host -NoNewLine -ForegroundColor Red "Check "
+    }
+
 	write-host -NoNewLine -ForegroundColor Green $(get-location)
-	foreach ($entry in (get-location -stack))
-	{
+
+	foreach ($entry in (get-location -stack)) {
 		write-host -NoNewLine -ForegroundColor Red '+';
 	}
 	write-host -NoNewLine -ForegroundColor Green '>'
@@ -76,7 +102,6 @@ function Set-CompilerLocation() { cd (join-path $env:DepotRoot "csharp\LanguageA
 function Set-SuitesLocation() { cd (join-path $env:DepotRoot "ddsuites\src\vs\safec\compiler\midori") }
 function Set-DepotLocation() { cd $env:DepotRoot }
 
-set-alias updatebin (join-path $env:DepotRoot "midori\build\scripts\updatebinaries.cmd") -scope Global
 set-alias dd Set-DepotLocation -scope Global
 set-alias msharp Set-MSharpLocation -scope Global
 set-alias csharp Set-MSharpLocation -scope Global
@@ -86,5 +111,6 @@ set-alias suites Set-SuitesLocation -scope Global
 set-alias resources Invoke-ResourceBuild -scope Global
 set-alias compiler Invoke-CompilerBuild -scope Global
 
+${env:DepotRoot} = Resolve-Path (Join-Path ${env:MidRoot} "..\MSharp")
 ${env:SDEDITOR} = (join-path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
 

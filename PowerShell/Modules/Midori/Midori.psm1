@@ -78,6 +78,29 @@ function pack {
     jjpack pack (join-path "\\midweb\scratch\jaredpar\packs\" $name)
 }
 
+#==============================================================================
+# Specialized M# prompt 
+#==============================================================================
+function prompt() 
+{
+    write-host -NoNewLine -ForegroundColor Red "Midori "
+    if (${env:MSHARP_PREBUILT_ARG} -eq "live") {
+        write-host -NoNewLine -ForegroundColor Red "M# Live "
+    }
+
+    if (${env:MIDORI_MSHARP_CHECK} -eq "true") {
+        write-host -NoNewLine -ForegroundColor Red "Check "
+    }
+
+	write-host -NoNewLine -ForegroundColor Green $(get-location)
+
+	foreach ($entry in (get-location -stack)) {
+		write-host -NoNewLine -ForegroundColor Red '+';
+	}
+	write-host -NoNewLine -ForegroundColor Green '>'
+	' '
+}
+
 function dd { cd (split-path -parent $env:MidRoot) }
 function midori { cd $env:MidRoot }
 function foundation { cd (join-path $env:MidRoot "System\Core\Libraries\Platform-Foundation") }
