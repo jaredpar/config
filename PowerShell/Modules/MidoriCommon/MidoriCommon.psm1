@@ -28,14 +28,20 @@ function Set-Env() {
 #
 #==============================================================================
 function New-Pack {
-    param ( [string]$name = $(throw "Need a pack name"),
+    param ( [string]$packName = $(throw "Need a pack name"),
             [string]$cl = "default") 
 
+    $sharePath = "\\midweb\scratch\jaredpar\packs\" 
+    
     $suffix = [DateTime]::Now.ToString("yyyy-mm-dd-ss");
-    $name = "{0}-{1}.jjp" -f $name, $suffix
-    $target = Join-Path "\\midweb\scratch\jaredpar\packs\" $name
+    $name = "{0}-{1}.jjp" -f $packName, $suffix
+    $target = Join-Path $sharePath $name
     jjpack pack $target -c $cl
     Write-Host $target
+
+    $name = "{0}-latest.jjp" -f $packName
+    $latest = Join-Path $sharePath $name
+    copy $target $latest
 }
 
 function Set-MSharpLocation() { cd (Join-Path $env:MSHARPROOT "csharp") }

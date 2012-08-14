@@ -60,7 +60,7 @@ function Set-Midori() {
 
     cd $path
     cd Midori
-    . .\setenv.ps1
+    . .\setenv.ps1 /x64 /iso
     import-module MidoriCommon -Global
     import-module Midori -Global
     . set-env 
