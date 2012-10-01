@@ -44,6 +44,7 @@ function Set-MSharp() {
     Import-Module (Join-Path $path "MSharp\Midori\psscripts\MSharp") -Global
     Import-Module MidoriCommon -Global
     Import-Module MSharpExtra -Global
+    $Host.UI.RawUI.WindowTitle = "M#"
     csharp
 }	
 
@@ -64,6 +65,7 @@ function Set-Midori() {
     import-module MidoriCommon -Global
     import-module Midori -Global
     . set-env 
+    $Host.UI.RawUI.WindowTitle = "Midori"
 }	
 
 # Disable strong name verification on the machine
@@ -81,8 +83,20 @@ function Disable-StrongName() {
     & $sn64 -Vr *
 }
 
+# Search for types
+function Select-StringRecurseType() {
+    param ( [string]$name = $(throw "Need text to search for"),
+            [string[]]$include = "*",
+            [switch]$all= $false,
+            [switch]$caseSensitive=$false)
+
+    $text = "(class|struct|interface)\s*\b" + $name + "\b"
+    Select-StringRecurse $text $include $all $caseSensitive
+}   
+
 function Set-MidoriFramework() { Set-Midori 'framework' }
 
 set-alias odd \\midweb\scratch\jaredpar\tools\odd\odd.exe -scope Global
 set-alias midf Set-MidoriFramework -scope Global
+set-alias ssrt Select-StringRecurseType -Scope global
 
