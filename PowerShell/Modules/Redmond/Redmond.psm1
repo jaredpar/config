@@ -40,7 +40,7 @@ function Set-MSharp() {
 
     cd $path
     cd Midori
-    . .\setenv.ps1 /nocops /x86 /x86win /msharpPrebuilt=live /msharpCheck
+    . .\setenv.ps1 /nocops /x86 /x86win /msharpCheck
     Import-Module (Join-Path $path "MSharp\Midori\psscripts\MSharp") -Global
     Import-Module MidoriCommon -Global
     Import-Module MSharpExtra -Global
@@ -60,6 +60,11 @@ function Set-Midori() {
     }
 
     cd $path
+    $other = Join-Path $path Other
+    if (-not (Test-Path $other)) {
+        ${env:OTHERROOT} = "e:\dd\framework\Other"
+    }
+
     cd Midori
     . .\setenv.ps1 /x64 /iso
     import-module MidoriCommon -Global

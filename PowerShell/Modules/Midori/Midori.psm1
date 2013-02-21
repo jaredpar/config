@@ -70,10 +70,6 @@ function bmkpromise {
 function prompt() 
 {
     write-host -NoNewLine -ForegroundColor Red "Midori "
-    if (${env:MSHARP_PREBUILT_ARG} -eq "live") {
-        write-host -NoNewLine -ForegroundColor Red "M# Live "
-    }
-
     if (${env:MIDORI_MSHARP_CHECK} -eq "true") {
         write-host -NoNewLine -ForegroundColor Red "Check "
     }

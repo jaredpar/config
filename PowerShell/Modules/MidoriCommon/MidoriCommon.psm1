@@ -1,22 +1,18 @@
 
+
 #==============================================================================
 #
 # Handy function for changing common environment settings
 #
 #==============================================================================
 function Set-Env() {
-    param ( [switch]$live=$false,
-            [switch]$chk=$false )
+    param ( [switch]$chk=$false )
     
     $setenv = Join-Path ${env:MidRoot} "setenv.ps1"
-    if ($live -and $chk) {
-        . $setenv /msharpPrebuilt=live /msharpCheck
-    } elseif ($live) {
-        . $setenv /msharpPrebuilt=live /nomsharpCheck
-    } elseif ($chk) { 
-        . $setenv /msharpPrebuilt=default /msharpCheck
+    if ($chk) { 
+        . $setenv /msharpCheck
     } else { 
-        . $setenv /msharpPrebuilt=default /nomsharpCheck
+        . $setenv /nomsharpCheck
         write-host "Nothing"
     }
 }
@@ -54,6 +50,10 @@ function Set-FoundationLocation { cd (Join-Path $env:MIDROOT "System\Core\Librar
 function Set-LibLocation { cd (Join-Path $env:MIDROOT "System\Core\Libraries") }
 function Set-PromisesLocation { cd (Join-Path $env:MIDROOT "System\Core\Libraries\Platform-Promises") }
 function Set-CorlibLocation { cd (Join-Path $env:MIDROOT "System\Runtime\Corlib") }
+
+function tb { msb -fg:tse -notools -nostatus -log:e:\dd\build.log} 
+function rb { msb -notools -nostatus -log:e:\dd\build.log} 
+function ib { msb -fg:il -notools -nostatus -log:e:\dd\build.log}
 
 Set-Alias dd Set-DepotLocation -scope Global
 Set-Alias msharp Set-MSharpLocation -scope Global
