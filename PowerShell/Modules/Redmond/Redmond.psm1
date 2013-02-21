@@ -4,7 +4,7 @@ function Get-BranchPath() {
     param ( [string]$branch = $(throw "Pick a branch"))
 
     $path = $null;
-    foreach ($root in @('d:\dd', 'e:\dd')) {
+    foreach ($root in @('c:\dd', 'd:\dd', 'e:\dd')) {
         $branchPath = join-path $root 'Midori\branches'
         $branchPath = join-path $branchPath $branch
         if (test-path $branchPath) {
