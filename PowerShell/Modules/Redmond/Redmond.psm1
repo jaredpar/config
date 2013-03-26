@@ -38,6 +38,11 @@ function Set-MSharp() {
         return
     }
 
+    $other = Join-Path $path "Other\devdiv\readme.txt"
+    if (-not (Test-Path $other)) {
+        ${env:OTHERROOT} = "e:\dd\framework\Other"
+    }
+
     cd $path
     cd Midori
     . .\setenv.ps1 /nocops /x86 /x86win /msharpCheck
@@ -59,12 +64,12 @@ function Set-Midori() {
         return
     }
 
-    cd $path
-    $other = Join-Path $path Other
+    $other = Join-Path $path "Other\devdiv\readme.txt"
     if (-not (Test-Path $other)) {
         ${env:OTHERROOT} = "e:\dd\framework\Other"
     }
 
+    cd $path
     cd Midori
     . .\setenv.ps1 /x64 /iso
     import-module MidoriCommon -Global
