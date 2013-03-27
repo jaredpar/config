@@ -26,33 +26,6 @@ function Get-BranchPath() {
     return $path
 }	
 
-# Method to startup a PowerShell razzle environment
-function Set-MSharp() {
-    param ( [string]$branch = $(throw "Pick a branch"),
-            [string]$flavor = "chk" ) 
-
-    $path = Get-BranchPath $branch
-
-    if ($path -eq $null) {
-        write-error "Branch doesn't exist: $branch"
-        return
-    }
-
-    $other = Join-Path $path "Other\devdiv\readme.txt"
-    if (-not (Test-Path $other)) {
-        ${env:OTHERROOT} = "e:\dd\framework\Other"
-    }
-
-    cd $path
-    cd Midori
-    . .\setenv.ps1 /nocops /x86 /x86win /msharpCheck
-    Import-Module (Join-Path $path "MSharp\Midori\psscripts\MSharp") -Global
-    Import-Module MidoriCommon -Global
-    Import-Module MSharpExtra -Global
-    $Host.UI.RawUI.WindowTitle = "M#"
-    csharp
-}	
-
 # Method to startup a Midori environment
 function Set-Midori() {
     param ( [string]$branch = $(throw "Pick a branch"))
@@ -72,7 +45,6 @@ function Set-Midori() {
     cd $path
     cd Midori
     . .\setenv.ps1 /x64 /iso
-    import-module MidoriCommon -Global
     import-module Midori -Global
     . set-env 
     $Host.UI.RawUI.WindowTitle = "Midori"
@@ -104,9 +76,6 @@ function Select-StringRecurseType() {
     Select-StringRecurse $text $include $all $caseSensitive
 }   
 
-function Set-MidoriFramework() { Set-Midori 'framework' }
-
 set-alias odd \\midweb\scratch\jaredpar\tools\odd\odd.exe -scope Global
-set-alias midf Set-MidoriFramework -scope Global
 set-alias ssrt Select-StringRecurseType -Scope global
 
