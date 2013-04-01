@@ -5,6 +5,10 @@ function Get-BranchPath() {
 
     $path = $null;
     foreach ($root in @('c:\dd', 'd:\dd', 'e:\dd')) {
+        if (-not (test-path $root)) {
+            continue;
+        }
+
         $branchPath = join-path $root 'Midori\branches'
         $branchPath = join-path $branchPath $branch
         if (test-path $branchPath) {
