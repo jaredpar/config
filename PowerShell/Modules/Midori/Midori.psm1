@@ -83,6 +83,6 @@ Set-Alias corlib Set-CorlibLocation -scope Global
 Set-Alias pack New-Pack -Scope Global
 
 # Setup gvim as the sd editor for clients, change lists and merge conflicts
-${env:SDEDITOR} = (Join-Path (Get-ProgramFiles32) "Vim\vim72\gvim.exe") + " --nofork"
+${env:SDEDITOR} = (Join-Path (Get-ProgramFiles32) "Vim\vim72\vim.exe") + " --nofork"
 
 

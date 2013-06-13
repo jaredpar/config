@@ -43,7 +43,7 @@ function Set-Midori() {
 
     $other = Join-Path $path "Other\devdiv\readme.txt"
     if (-not (Test-Path $other)) {
-        ${env:OTHERROOT} = "e:\dd\framework\Other"
+        ${env:OTHERROOT} = "e:\dd\tools\Other"
     }
 
     cd $path
