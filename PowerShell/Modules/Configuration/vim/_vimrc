@@ -14,11 +14,13 @@ set dir=$temp       " Make swap live in the %TEMP% directory
 syn on
 
 " Load the color scheme
-if has("gui_running")
+if has('gui_running')
     colo inkpot
 else    
     colo default
+    hi Normal ctermbg=black ctermfg=white
 endif
+
 
 " Setup some common abbreviations 
 iabbrev #c //==============================================================================
