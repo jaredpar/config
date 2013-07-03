@@ -40,6 +40,31 @@ function New-Pack {
 }
 
 #==============================================================================
+#
+# Copy the binaries the M# compiler uses into the test directory
+#
+#==============================================================================
+function Copy-Build { 
+
+    $destPath = "c:\users\jaredpar\Midori"
+    $sourcePath = Join-Path ${env:MIDORI_OBJROOT} "BuildTools"
+    pushd $sourcePath
+
+    copy "Corlib.dll" $destPath
+    copy "CorlibHelper.dll" $destPath
+    copy "Platform-Foundation.dll" $destPath
+    copy "Platform-Promises.dll" $destPath
+    copy "Platform-Processes.dll" $destPath
+    copy "Platform-Messaging.dll" $destPath
+    copy "Platform-Instrumentation.dll" $destPath
+    copy "Platform-SharedData.dll" $destPath
+    copy "Platform-TodoScheduling.dll" $destPath
+    copy "Platform-Scheduling.dll" $destPath
+
+    popd
+}
+
+#==============================================================================
 # Specialized M# prompt 
 #==============================================================================
 function prompt() 
