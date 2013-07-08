@@ -43,7 +43,14 @@ function Set-Midori() {
 
     $other = Join-Path $path "Other\devdiv\readme.txt"
     if (-not (Test-Path $other)) {
-        ${env:OTHERROOT} = "e:\dd\tools\Other"
+        $choices = @('e:\dd\tools', 'e:\dd\framework')
+        foreach ($choice in $choices) { 
+            $choice = Join-Path $choice "Other"
+            if (Test-Path (Join-Path $choice "DevDiv\readme.txt")) {
+                ${env:OTHERROOT} = $choice;
+                break;
+            }
+        }
     }
 
     cd $path
