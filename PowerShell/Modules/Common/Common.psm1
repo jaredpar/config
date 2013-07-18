@@ -134,7 +134,6 @@ function Read-While() {
 # End LINQ like functions
 #==============================================================================
 
-
 function Invoke-Admin() {
     param ( [string]$program = $(throw "Please specify a program" ),
             [string]$argumentString = "",
@@ -369,7 +368,7 @@ function New-Tuple() {
 
 function Get-Ternary() {
     param ( [bool]$condition = $(throw "Need a conditional"),
-            $valueTrue = $(thràow "Need a value for the true condition"),
+            $valueTrue = $(throw "Need a value for the true condition"),
             $valueFalse = $(throw "Need a value for the false condition") )
     if ( $condition ) {
         return $valueTrue
@@ -423,6 +422,16 @@ function Set-DevEnvironment() {
     . Import-Environment $target
 }
 
+#==============================================================================
+# Delete a directory fast
+#==============================================================================
+function Remove-Directory() { 
+    param ( [string]$path = $(throw "Need a path"))
+
+    $name = [Guid]::NewGuid().ToString()
+    move $path $name
+    rm -re -fo $name
+}
 
 #==============================================================================
 # Aliases 
@@ -435,4 +444,5 @@ set-alias ssr Select-StringRecurse -Scope global
 set-alias ia Invoke-Admin -Scope global
 set-alias ica Invoke-CommandAdmin -Scope global
 set-alias isa Invoke-ScriptAdmin -Scope global
+set-alias rdir Remove-Directory -Scope global
 
