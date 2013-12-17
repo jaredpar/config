@@ -17,7 +17,7 @@ $Jsh | add-member NoteProperty "IsTestMachine" $false
 #==============================================================================
 
 $script:scriptPath = $(split-path -parent $MyInvocation.MyCommand.Definition) 
-$env:PSModulePath = $env:PSModulePath = (resolve-path (join-path $scriptPath "Modules")) 
+$env:PSModulePath = (resolve-path (join-path $scriptPath "Modules")) 
 import-module Common
 
 # Setup the ability to launch devenv with the log parameter 
