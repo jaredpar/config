@@ -58,7 +58,6 @@ function Copy-Build {
     copy "Platform-Messaging.dll" $destPath
     copy "Platform-Instrumentation.dll" $destPath
     copy "Platform-SharedData.dll" $destPath
-    copy "Platform-TodoScheduling.dll" $destPath
     copy "Platform-Scheduling.dll" $destPath
 
     popd

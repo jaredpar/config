@@ -43,7 +43,7 @@ function Set-Midori() {
 
     $other = Join-Path $path "Other\devdiv\readme.txt"
     if (-not (Test-Path $other)) {
-        $choices = @('e:\dd\tools', 'e:\dd\framework')
+        $choices = @('e:\dd\kernel', 'e:\dd\tools', 'e:\dd\framework')
         foreach ($choice in $choices) { 
             $choice = Join-Path $choice "Other"
             if (Test-Path (Join-Path $choice "DevDiv\readme.txt")) {
@@ -55,7 +55,7 @@ function Set-Midori() {
 
     cd $path
     cd Midori
-    . .\setenv.ps1 /x64 /iso
+    . .\setenv.ps1 /x64 /iso /nocops
     import-module Midori -Global
     . set-env 
     $Host.UI.RawUI.WindowTitle = "Midori"
