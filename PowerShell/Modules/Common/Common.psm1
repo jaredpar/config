@@ -437,16 +437,21 @@ function Remove-Directory() {
 # Aliases 
 #==============================================================================
 
-set-alias gcid Get-ChildItemDirectory -Scope global
-set-alias ss select-string -Scope global
-set-alias ssr Select-StringRecurse -Scope global
-set-alias ia Invoke-Admin -Scope global
-set-alias ica Invoke-CommandAdmin -Scope global
-set-alias isa Invoke-ScriptAdmin -Scope global
-set-alias rdir Remove-Directory -Scope global
+set-alias gcid Get-ChildItemDirectory 
+set-alias ss select-string 
+set-alias ssr Select-StringRecurse
+set-alias ia Invoke-Admin 
+set-alias ica Invoke-CommandAdmin
+set-alias isa Invoke-ScriptAdmin
+set-alias rdir Remove-Directory
 
 # In newer versions of Windows and Powershell there is already a wget command
 # so we can just use this one instead of the custom one that we defined
 if ($null -eq (get-command wget -ea silentlycontinue)) {
-    set-alias wget Get-WebItem -Scope global
+    set-alias wget Get-WebItem 
 }
+
+# Need to run this command to actually export the aliases 
+Export-ModuleMember -function * -alias * 
+
+
