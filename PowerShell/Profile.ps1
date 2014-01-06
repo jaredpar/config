@@ -62,3 +62,10 @@ if ($env:UserDomain -eq "Redmond" ) {
     import-module Redmond
 }
 
+# Delete the scheduled task I used to install on every machine.  This 
+# code should be deleted in a few months once every machine is cleared up
+$name = "\jaredpar\winconfig\pull"
+schtasks /query /tn $name 2>&1 | out-null
+if ( $lastexitcode -eq 0 ) { 
+    schtasks /delete /f /tn $name
+}
