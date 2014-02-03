@@ -47,7 +47,7 @@ function New-Pack {
 function Copy-Build { 
 
     $destPath = "c:\users\jaredpar\Midori"
-    $sourcePath = Join-Path ${env:MIDORI_OBJROOT} "BuildTools"
+    $sourcePath = Join-Path ${env:MIDORI_OUTPUTDIR} "BuildTools"
     pushd $sourcePath
 
     copy "Corlib.dll" $destPath
@@ -80,6 +80,13 @@ function prompt()
 	}
 	write-host -NoNewLine -ForegroundColor Green '>'
 	' '
+}
+
+function Stop-Suite()
+{
+    gps ptrun | kill
+    gps trun | kill
+    gps csc | kill
 }
 
 function Set-MSharpLocation() { cd (Join-Path $env:MSHARPROOT "csharp") }
