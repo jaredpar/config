@@ -14,15 +14,6 @@ if ($isWin64) {
     & $psExe32 -Command ". set-executionpolicy -scope CurrentUser remotesigned"
 }
 
-# Run all of the admin configuration scripts.  Do this as a separate script
-# so we can elevate here
-$psi = new-object "Diagnostics.ProcessStartInfo"
-$psi.FileName = $psExe
-$psi.Arguments = "-File " + $(join-path $scriptPath "ConfigureAdmin.ps1")
-$psi.Verb = "runas"
-$proc = [Diagnostics.Process]::Start($psi)
-$proc.WaitForExit();
-
 # Now run the standard configuration scripts
 . $(join-path $scriptPath "..\Powershell\Profile.ps1")
 import-module configuration
