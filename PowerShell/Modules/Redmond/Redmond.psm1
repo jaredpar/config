@@ -87,6 +87,5 @@ function Select-StringRecurseType() {
     Select-StringRecurse $text $include $all $caseSensitive
 }   
 
-set-alias odd \\midweb\scratch\jaredpar\tools\odd\odd.exe -scope Global
 set-alias ssrt Select-StringRecurseType -Scope global
 

@@ -115,6 +115,6 @@ Set-Alias pack New-Pack -Scope Global
 Set-Alias msc (Join-Path $env:MIDORI_BASEROOT "MsharpDebug\csc.exe") -Scope Global
 
 # Setup gvim as the sd editor for clients, change lists and merge conflicts
-${env:SDEDITOR} = (Join-Path (Get-ProgramFiles32) "Vim\vim72\vim.exe") + " --nofork"
+${env:SDEDITOR} = (Join-Path (Get-ProgramFiles32) "Vim\vim74\vim.exe") + " --nofork"
 
 

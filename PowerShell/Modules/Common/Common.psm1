@@ -452,7 +452,7 @@ if ($null -eq (get-command wget -ea silentlycontinue)) {
 }
 
 # Create an alias for every version of Visual Studio installed on the machine 
-foreach ($i in @("10", "11", "12")) {
+foreach ($i in @("10", "11", "12", "14")) {
     $path = join-path (Get-ProgramFiles32) "Microsoft Visual Studio $i.0\Common7\IDE\devenv.com"
     if (test-path $path) { 
         $name = "devenv$i"
