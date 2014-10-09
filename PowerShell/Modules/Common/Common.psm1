@@ -417,8 +417,11 @@ function Import-Environment() {
     Remove-Item $tempFile
 }
 
-function Set-DevEnvironment() { 
-    $target = join-path (Get-ProgramFiles32) "Microsoft Visual Studio 10.0\VC\vcvarsall.bat"
+function Set-DevEnvironment() {
+    param ( [string]$version = $(throw "Need a VS version"))
+
+    $vsPath = "Microsoft Visual Studio $version.0\VC\vcvarsall.bat"
+    $target = join-path (Get-ProgramFiles32) $vsPath
     . Import-Environment $target
 }
 
