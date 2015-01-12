@@ -16,10 +16,7 @@ if ( test-path $oldProfile )
     del $oldProfile
 }
 
-$profile = split-path -parent $PSScriptRoot
-$profile = split-path -parent $profile
-$profile = join-path $profile "Profile.ps1"
-
+$profile = join-path (split-path -parent $PSScriptRoot) "Powershell\Profile.ps1"
 $cmd = ". `"" + $profile + "`""
 echo $cmd > profile.ps1 
 

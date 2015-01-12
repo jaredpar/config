@@ -14,8 +14,17 @@ if ($isWin64) {
     & $psExe32 -Command ". set-executionpolicy -scope CurrentUser remotesigned"
 }
 
-# Now run the standard configuration scripts
+# Get the profile into a known state which includes a lot of 
+# helper modules 
 . $(join-path $scriptPath "..\Powershell\Profile.ps1")
-import-module configuration
-repair-configuration
+
+# Now run the configurations
+$all = @(   'Vim.ps1', 
+            'PowerShell.ps1', 
+            'UnixTools.ps1')
+
+foreach ( $cur in $all ) {
+    write-host "Running $cur"
+    & (".\" + $cur) | %{ write-host ("`t{0}" -f $_) } 
+}
 
