@@ -22,7 +22,6 @@ else
     hi Normal ctermbg=black ctermfg=white
 endif
 
-
 " Setup some common abbreviations 
 iabbrev #c //==============================================================================
 
