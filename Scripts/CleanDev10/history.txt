@@ -1,2 +1,0 @@
-use \\ddrelqa\tools\misc\msiinv.exe to find the msi inventory
-
