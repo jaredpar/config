@@ -11,7 +11,7 @@ set ai
 set ruler
 set showcmd
 set incsearch
-set dir=$temp       " Make swap live in the %TEMP% directory
+set dir=/tmp       " Make swap live in the %TEMP% directory
 syn on
 
 " Load the color scheme
@@ -28,8 +28,4 @@ iabbrev #c //===================================================================
 " Filetype settings
 filetype plugin on
 filetype indent on
-
-" Source a Couple of scripts
-source ~\vimfiles\matchit.vim
-source ~\vimfiles\plugin\fswitch.vim
 
