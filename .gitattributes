@@ -1,1 +1,3 @@
-* -text
+# Default behavior is to normalize line endings
+* text=auto encoding=UTF-8
+
