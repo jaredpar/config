@@ -17,7 +17,7 @@ syn on
 " Disable the sh.vim plugin from modifying the iskeyword setting
 let g:sh_noisk=1
 
-colo koehler
+colo desert
 
 function SetMarkdown()
     set filetype=markdown
