@@ -21,7 +21,8 @@ if ($isWin64) {
 # Now run the configurations
 $all = @(   'Vim.ps1', 
             'PowerShell.ps1', 
-            'UnixTools.ps1')
+            'UnixTools.ps1',
+            'git.ps1')
 
 foreach ( $cur in $all ) {
     write-host "Running $cur"
