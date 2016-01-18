@@ -26,3 +26,4 @@ function SetMarkdown()
 endfunction
 
 au BufRead,BufNewFile *.md call SetMarkdown()
+

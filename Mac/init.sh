@@ -1,8 +1,10 @@
 
 #!/bin/bash
 
-ln -sf ~/Documents/config/Mac/.vimrc ~/.vimrc
-cp ~/Documents/config/Mac/.inputrc ~/.inputrc
+SOURCE=~/code/config/Mac
+
+ln -sf $SOURCE/.vimrc ~/.vimrc
+cp $SOURCE/.inputrc ~/.inputrc
 
 git config --global user.email "jaredpparsons@gmail.com"
 git config --global user.name "Jared Parsons"
