@@ -14,16 +14,16 @@ import-module Common
 # Set the prompt
 function prompt() {
 
-    if ( Test-Wow64 ) {
+    if (test-wow64) {
         write-host -NoNewLine "Wow64 "
     }
 
-    if ( Test-Admin ) { 
+    if (test-admin) { 
         write-host -NoNewLine -f red "Admin "
     }
 
-	  write-host -NoNewLine -ForegroundColor Green $(get-location)
-    foreach ( $entry in (get-location -stack)) {
+    write-host -NoNewLine -ForegroundColor Green $(get-location)
+    foreach ($entry in (get-location -stack)) {
         write-host -NoNewLine -ForegroundColor Red '+';
     }
 
@@ -33,8 +33,14 @@ function prompt() {
 
 # Setup the Console look and feel
 $host.UI.RawUI.ForegroundColor = "Yellow"
-if ( Test-Admin ) {
+if (test-admin) {
 	$title = "Administrator Shell - {0}" -f $host.UI.RawUI.WindowTitle
 	$host.UI.RawUI.WindowTitle = $title;
+}
+
+# Import Github for Desktop scripts if they exist
+$script:gitTools = "~\AppData\Local\GitHub\shell.ps1"
+if (test-path $gitTools) {
+    . $gitTools -ErrorAction SilentlyContinue
 }
 
