@@ -13,6 +13,7 @@ set showcmd
 set incsearch
 set dir=$temp       " Make swap live in the %TEMP% directory
 syn on
+set guifont=Lucida_Console:h10:cANSI:qDRAFT
 
 " Load the color scheme
 if has('gui_running')
