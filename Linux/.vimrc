@@ -6,6 +6,7 @@ set shiftwidth=4
 set et
 set ignorecase
 set hlsearch
+set nowrap
 
 set ai
 set ruler
