@@ -1,5 +1,6 @@
 set nobackup 
 set nocp
+set noeol
 set softtabstop=4
 set tabstop=4
 set shiftwidth=4

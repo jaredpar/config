@@ -4,7 +4,7 @@
 Write-Host "Configuring Git"
 $vimFilePath = "C:\Program Files (x86)\Vim\vim80\vim.exe"
 $gitEditor = if (Test-Path $vimFilePath) { $vimFilePath } else { "notepad.exe" }
-& git config --global core.editor "'$vimPath'"
+& git config --global core.editor "'$gitEditor'"
 & git config --global user.name "Jared Parsons"
 & git config --global user.email "jaredpparsons@gmail.com"
 
