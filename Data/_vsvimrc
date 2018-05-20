@@ -6,3 +6,5 @@ set ignorecase
 set hlsearch
 set incsearch
 set ai
+
+:nmap <F1> :vsc Build.BuildSelection<CR>
