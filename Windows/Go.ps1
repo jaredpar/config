@@ -21,6 +21,7 @@ function Get-VimFilePath() {
     return $null
 }
 
+# Configure both the vim and vsvim setup
 function Configure-Vim() { 
     if ($vimFilePath -eq $null) {
         Write-Host "Skipping vim configuration"
@@ -28,7 +29,7 @@ function Configure-Vim() {
     }
 
     Write-Host "Configuring Vim"
-    Write-Host "`tLocation: $vimFilePath"
+    Write-Host "`tLocation: `"$vimFilePath`""
 
     Write-Host "`tGenerating _vsvimrc"
     $realFilePath = Join-Path $commonDataDir "_vsvimrc"
@@ -43,6 +44,29 @@ function Configure-Vim() {
     Write-Host "`tCopying VimFiles" 
     $sourceDir = Join-Path $commonDataDir "vim\vimfiles"
     Copy-Item -re -fo $sourceDir $env:UserProfile
+}
+
+function Configure-PowerShell() { 
+    Write-Host "Configuring PowerShell"
+
+    $docDir = $([Environment]::GetFolderPath("MyDocuments"))
+    Push-Location $docDir
+    try {
+
+        Create-Directory "WindowsPowerShell"
+        cd WindowsPowerShell
+
+        $oldProfile = "Microsoft.PowerShell_profile.ps1" 
+        if (Test-Path $oldProfile ) {
+            Remove-Item $oldProfile
+        }
+
+        $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
+        Write-Output ". `"$realProfileFilePath`"" | Out-File -encoding ASCII "profile.ps1"
+    }
+    finally {
+        Pop-Location
+    }
 }
 
 try {
@@ -63,6 +87,7 @@ try {
     $vimFilePath = Get-VimFilePath
 
     Configure-Vim
+    Configure-PowerShell
 
     exit 0
 }
