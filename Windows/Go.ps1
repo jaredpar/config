@@ -21,9 +21,18 @@ function Get-VimFilePath() {
     return $null
 }
 
+function Get-GitFilePath() { 
+    $g = Get-Command "git" -ErrorAction SilentlyContinue
+    if ($g -eq $null) { 
+        return $null
+    }
+
+    return $g.Path
+}
+
 # Configure both the vim and vsvim setup
 function Configure-Vim() { 
-    if ($vimFilePath -eq $null) {
+    if (-not (Test-Path $vimFilePath)) {
         Write-Host "Skipping vim configuration"
         return
     }
@@ -69,6 +78,44 @@ function Configure-PowerShell() {
     }
 }
 
+function Configure-Git() { 
+    if (-not (Test-Path $gitFilePath)) {
+        Write-Host "Skipping git configuration"
+        return
+    }
+
+    Write-Host "Configuring Git"
+    Write-Host "`tLocation: $gitFilePath"
+
+    Write-Host "`tStandard Setup"
+    $gitEditor = if (Test-Path $vimFilePath) { $vimFilePath } else { "notepad.exe" }
+    Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
+    Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
+    Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
+
+    # Setup signing policy.
+    $gpgFilePath = "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
+    if (Test-Path $gpgFilePath) { 
+        Write-Host "`tConfiguring GPG"
+        Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
+        Exec-Console $gitFilePath "config --global commit.gpgsign true"
+        Exec-Console $gitFilePath "config --global user.signkey 06EDAA3E3C0AF8841559"
+    }
+    else { 
+        Write-Host "Skipped configuring GPG as it's not found $gpgFilePath"
+    }
+}
+
+function Configure-VSCode() { 
+    Write-Host "Configuring VS Code"
+
+    $settingsFilePath = Join-Path $dataDir "settings.json"
+    $content = Get-Content -Raw $settingsFilePath
+    $content = "// Actual settings file stored at: $settingsFilePath" + [Environment]::NewLine + $content
+    $destFilePath = Join-Path ${env:APPDATA} "Code\User\settings.json"
+    Write-Output $content | Out-File -encoding ASCII $destFilePath
+}
+
 try {
     . (Join-Path $PSScriptRoot "PowerShell\Common-Utils.ps1")
     Push-Location $PSScriptRoot
@@ -85,9 +132,12 @@ try {
     $commonDataDir = Join-Path $repoDir "CommonData"
     $dataDir = Join-Path $PSScriptRoot "Data"
     $vimFilePath = Get-VimFilePath
+    $gitFilePath = Get-GitFilePath
 
     Configure-Vim
     Configure-PowerShell
+    Configure-Git
+    Configure-VSCode
 
     exit 0
 }
