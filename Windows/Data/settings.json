@@ -1,0 +1,7 @@
+{
+    "editor.wordWrap": "off",
+    "[markdown]": {
+      "editor.wordWrap": "off",
+      "editor.rulers": [100]
+    }
+}
