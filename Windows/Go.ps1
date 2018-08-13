@@ -61,7 +61,7 @@ function Configure-PowerShell() {
     $docDir = $([Environment]::GetFolderPath("MyDocuments"))
     Push-Location $docDir
     try {
-
+        Write-Host "`tProfile"
         Create-Directory "WindowsPowerShell"
         cd WindowsPowerShell
 
@@ -72,6 +72,10 @@ function Configure-PowerShell() {
 
         $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
         Write-Output ". `"$realProfileFilePath`"" | Out-File -encoding ASCII "profile.ps1"
+
+        Write-Host "`tScript Execution"
+        Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
     }
     finally {
         Pop-Location
