@@ -30,10 +30,20 @@ function Get-GitFilePath() {
     return $g.Path
 }
 
+function Get-GpgFilePath() {
+    $gpgFilePath = "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
+    if (Test-Path $gpgFilePath) { 
+        return $gpgFilePath
+    }
+
+    return $null
+}
+
+
 # Configure both the vim and vsvim setup
 function Configure-Vim() { 
     if ($vimFilePath -eq $null) {
-        Write-Host "Skipping vim configuration"
+        Write-Host "SKIP vim configuration"
         return
     }
 
@@ -84,7 +94,7 @@ function Configure-PowerShell() {
 
 function Configure-Git() { 
     if ($gitFilePath -eq $null) {
-        Write-Host "Skipping git configuration"
+        Write-Host "SKIP git configuration"
         return
     }
 
@@ -96,18 +106,27 @@ function Configure-Git() {
     Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
     Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
     Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
+}
 
-    # Setup signing policy.
-    $gpgFilePath = "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
-    if (Test-Path $gpgFilePath) {
-        Write-Host "`tConfiguring GPG"
+function Configure-Gpg() { 
+    if ($gpgFilePath -eq $null) { 
+        Write-Host "SKIP gpg configuration"
+        return
+    }
+
+    Write-Host "Configuring GPG"
+    if ($gitFilePath -ne $null) {
+        Write-Host "`tGit"
         Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
         Exec-Console $gitFilePath "config --global commit.gpgsign true"
+        # Need to execute this manually
         # Exec-Console $gitFilePath "config --global user.signkey 06EDAA3E3C0AF8841559"
     }
-    else { 
-        Write-Host "Skipped configuring GPG as it's not found $gpgFilePath"
-    }
+
+    Write-Host "`tgpg.conf"
+    $sourceFilePath = Join-Path $dataDir "gpg.conf"
+    $destDir = Join-Path ${env:APPDATA} "gnupg"
+    Copy-Item -Force $sourceFilePath $destDir
 }
 
 function Configure-VSCode() { 
@@ -138,10 +157,12 @@ try {
     $dataDir = Join-Path $PSScriptRoot "Data"
     $vimFilePath = Get-VimFilePath
     $gitFilePath = Get-GitFilePath
+    $gpgfilePath = Get-GpgFilePath
 
     Configure-Vim
     Configure-PowerShell
     Configure-Git
+    Configure-Gpg
     Configure-VSCode
 
     exit 0
