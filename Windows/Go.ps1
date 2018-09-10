@@ -4,10 +4,32 @@
 #
 ####
 [CmdletBinding(PositionalBinding=$false)]
-param ([parameter(ValueFromRemainingArguments=$true)] $badArgs)
+param (
+    [switch]$force = $false,
+    [parameter(ValueFromRemainingArguments=$true)] $badArgs)
 
 Set-StrictMode -version 2.0
 $ErrorActionPreference = "Stop"
+
+# Copy a configuration file from this repository into a location on
+# the machine that is outside this repository. This will warn if the 
+# destination file exists but has different content. Makes it so I 
+# don't silently erase changes.
+function Copy-ConfigFile($sourceFilePath, $destFilePath) {
+    if (-not $force -and (Test-Path $destFilePath)) {
+        $destHash = (Get-FileHash -Path $destFilePath -Algorithm SHA256).Hash
+        $sourceHash = (Get-FileHash -Path $sourceFilePath -Algorithm SHA256).Hash
+        if ($destHash -ne $sourceHash) {
+            Write-Host "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
+            Write-Host "`tSource hash: $sourceHash"
+            Write-Host "`tDestination hash: $destHash"
+            return
+        }
+    }
+
+    Create-Directory (Split-Path -Parent $destFilePath)
+    Copy-Item $sourceFilePath $destFilePath -force
+}
 
 function Get-VimFilePath() {
     $all = @("vim81", "vim80", "vim74")
@@ -38,7 +60,6 @@ function Get-GpgFilePath() {
 
     return $null
 }
-
 
 # Configure both the vim and vsvim setup
 function Configure-Vim() { 
@@ -125,8 +146,8 @@ function Configure-Gpg() {
 
     Write-Host "`tgpg.conf"
     $sourceFilePath = Join-Path $dataDir "gpg.conf"
-    $destDir = Join-Path ${env:APPDATA} "gnupg"
-    Copy-Item -Force $sourceFilePath $destDir
+    $destFilePath = (Join-Path (Join-Path ${env:APPDATA} "gnupg") "gpg.conf")
+    Copy-ConfigFile $sourceFilePath $destFilePath
 }
 
 function Configure-VSCode() { 
@@ -136,8 +157,7 @@ function Configure-VSCode() {
     $content = Get-Content -Raw $settingsFilePath
     $content = "// Actual settings file stored at: $settingsFilePath" + [Environment]::NewLine + $content
     $destFilePath = Join-Path ${env:APPDATA} "Code\User\settings.json"
-    Create-Directory (Split-Path -parent $destFilePath)
-    Write-Output $content | Out-File -encoding ASCII $destFilePath
+    Copy-ConfigFile $settingsFilePath $destFilePath
 }
 
 try {
