@@ -127,6 +127,7 @@ function Configure-Git() {
     Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
     Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
     Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
+    Exec-Console $gitFilePath "config --global fetch.prune true"
 }
 
 function Configure-Gpg() { 
