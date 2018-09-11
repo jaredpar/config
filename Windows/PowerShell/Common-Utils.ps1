@@ -22,7 +22,7 @@ function Exec-Block([scriptblock]$cmd) {
     } 
 }
 
-function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true) {
+function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true, [switch]$checkFailure = $true) {
     $startInfo = New-Object System.Diagnostics.ProcessStartInfo
     $startInfo.FileName = $command
     $startInfo.Arguments = $commandArgs
@@ -59,7 +59,7 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
         }
 
         $finished = $true
-        if ($process.ExitCode -ne 0) { 
+        if ($checkFailure -and ($process.ExitCode -ne 0)) { 
             throw "Command failed to execute: $command $commandArgs" 
         }
     }
@@ -82,7 +82,7 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
 #   Exec-Command $msbuild $args
 # 
 function Exec-Command([string]$command, [string]$commandArgs) {
-    Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false
+    Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false 
 }
 
 # Functions exactly like Exec-Command but lets the process re-use the current 

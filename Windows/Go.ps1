@@ -23,6 +23,7 @@ function Copy-ConfigFile($sourceFilePath, $destFilePath) {
             Write-Host "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
             Write-Host "`tSource hash: $sourceHash"
             Write-Host "`tDestination hash: $destHash"
+            Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
             return
         }
     }
