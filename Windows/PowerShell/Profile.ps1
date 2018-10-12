@@ -39,7 +39,7 @@ if (test-admin) {
 }
 
 # Load machine specific profile if it exists
-$script:machineProfile = Join-Path ${env:USERPROFILE} "machine-profile.ps1s"
+$script:machineProfile = Join-Path ${env:USERPROFILE} "machine-profile.ps1"
 if (test-path $machineProfile) {
     . $machineProfile
 }

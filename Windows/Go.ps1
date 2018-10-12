@@ -108,7 +108,7 @@ function Configure-PowerShell() {
         $realProfileContent = @"
 # This is a generated file. Do not edit. Instead put machine customizations into 
 # $machineProfileFilePath
-`"$realProfileFilePath`"
+. `"$realProfileFilePath`"
 "@
         Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
         
