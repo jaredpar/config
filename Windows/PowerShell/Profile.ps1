@@ -38,4 +38,8 @@ if (test-admin) {
 	$host.UI.RawUI.WindowTitle = $title;
 }
 
-    
+# Load machine specific profile if it exists
+$script:machineProfile = Join-Path ${env:USERPROFILE} "machine-profile.ps1s"
+if (test-path $machineProfile) {
+    . $machineProfile
+}

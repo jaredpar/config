@@ -102,8 +102,19 @@ function Configure-PowerShell() {
             Remove-Item $oldProfile
         }
 
+        $machineProfileFileName = "machine-profile.ps1"
+        $machineProfileFilePath = Join-Path ${env:USERPROFILE} $machineProfileFileName
         $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
-        Write-Output ". `"$realProfileFilePath`"" | Out-File -encoding ASCII "profile.ps1"
+        $realProfileContent = @"
+# This is a generated file. Do not edit. Instead put machine customizations into 
+# $machineProfileFilePath
+`"$realProfileFilePath`"
+"@
+        Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
+        
+        if (-not (Test-Path $machineProfileFilePath)) {
+            Copy-Item (Join-Path $dataDir $machineProfileFileName) ${env:USERPROFILE}
+        }
 
         Write-Host "`tScript Execution"
         Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
