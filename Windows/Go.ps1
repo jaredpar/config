@@ -107,7 +107,6 @@ function Configure-PowerShell() {
 
         Write-Host "`tScript Execution"
         Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-
     }
     finally {
         Pop-Location

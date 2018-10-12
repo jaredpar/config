@@ -38,9 +38,4 @@ if (test-admin) {
 	$host.UI.RawUI.WindowTitle = $title;
 }
 
-# Import Github for Desktop scripts if they exist
-$script:gitTools = "~\AppData\Local\GitHub\shell.ps1"
-if (test-path $gitTools) {
-    . $gitTools -ErrorAction SilentlyContinue
-}
-
+    
