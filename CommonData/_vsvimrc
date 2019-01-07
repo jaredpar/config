@@ -8,3 +8,4 @@ set incsearch
 set ai
 
 :nmap <F1> :vsc Build.BuildSelection<CR>
+:nmap <C-T> :vsc Edit.GoToAll<CR>
