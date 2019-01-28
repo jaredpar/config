@@ -153,6 +153,7 @@ function Configure-Gpg() {
         Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
         Exec-Console $gitFilePath "config --global commit.gpgsign true"
         # Need to execute this manually
+        # Get a new sub-key https://wiki.debian.org/Subkeys?action=show&redirect=subkeys
         # Exec-Console $gitFilePath "config --global user.signkey 06EDAA3E3C0AF8841559"
     }
 
