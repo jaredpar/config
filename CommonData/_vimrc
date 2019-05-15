@@ -35,10 +35,16 @@ filetype indent on
 source ~\vimfiles\matchit.vim
 source ~\vimfiles\plugin\fswitch.vim
 
-
 function SetPowershellOptions()
     set softtabstop=2
     set tabstop=2
     set shiftwidth=2
 endfunction
 au FileType ps1 call SetPowershellOptions()
+
+function SetYamlOptions()
+    set softtabstop=2
+    set tabstop=2
+    set shiftwidth=2
+endfunction
+au FileType yaml call SetYamlOptions()
