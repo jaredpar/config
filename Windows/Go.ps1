@@ -173,6 +173,23 @@ function Configure-VSCode() {
   Copy-ConfigFile $settingsFilePath $destFilePath
 }
 
+# Used to add a startup.cmd file that does actions like map drives
+function Configure-Startup() {
+  Write-Host "Configuring Startup"
+  $startupFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.cmd"
+  $codeDir = Join-Path ${env:USERPROFILE} "code"
+  $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Tools"
+
+  $startupContent = @"
+# This is a generated file. Do not edit. Instead put machine customizations into 
+# $PSCommandPath
+subst p: $codeDir
+subst t: $toolsDir
+"@
+  
+  Write-Output $startupContent | Out-File -encoding ASCII $startupFilePath
+}
+
 try {
   . (Join-Path $PSScriptRoot "PowerShell\Common-Utils.ps1")
   Push-Location $PSScriptRoot
@@ -188,10 +205,12 @@ try {
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
+
   $vimFilePath = Get-VimFilePath
   $gitFilePath = Get-GitFilePath
   $gpgfilePath = Get-GpgFilePath
 
+  Configure-Startup
   Configure-Vim
   Configure-PowerShell
   Configure-Git
