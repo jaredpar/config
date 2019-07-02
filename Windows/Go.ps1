@@ -95,27 +95,19 @@ function Configure-PowerShell() {
   try {
     Write-Host "`tProfile"
     Create-Directory "WindowsPowerShell"
-    cd WindowsPowerShell
+    Set-Location "WindowsPowerShell"
 
     $oldProfile = "Microsoft.PowerShell_profile.ps1" 
     if (Test-Path $oldProfile ) {
       Remove-Item $oldProfile
     }
 
-    $machineProfileFileName = "machine-profile.ps1"
-    $machineProfileFilePath = Join-Path ${env:USERPROFILE} $machineProfileFileName
     $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
     $realProfileContent = @"
-# This is a generated file. Do not edit. Instead put machine customizations into 
-# $machineProfileFilePath
+# This is a generated file. Do not edit. 
 . `"$realProfileFilePath`"
 "@
     Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
-    
-    if (-not (Test-Path $machineProfileFilePath)) {
-      Copy-Item (Join-Path $dataDir $machineProfileFileName) ${env:USERPROFILE}
-    }
-
     Write-Host "`tScript Execution"
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
   }
@@ -176,18 +168,25 @@ function Configure-VSCode() {
 # Used to add a startup.cmd file that does actions like map drives
 function Configure-Startup() {
   Write-Host "Configuring Startup"
-  $startupFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.cmd"
+  $startupFilePath = Join-Path $generatedDir "startup.cmd"
+  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
   $codeDir = Join-Path ${env:USERPROFILE} "code"
   $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Tools"
 
   $startupContent = @"
-# This is a generated file. Do not edit. Instead put machine customizations into 
-# $PSCommandPath
+@echo off
+REM This is a generated file. Do not edit. Instead put machine customizations into 
+REM $PSCommandPath
 subst p: $codeDir
 subst t: $toolsDir
 "@
   
   Write-Output $startupContent | Out-File -encoding ASCII $startupFilePath
+
+  $objShell = New-Object -ComObject ("WScript.Shell")
+  $objShortCut = $objShell.CreateShortcut($shortcutFilePath)
+  $objShortCut.TargetPath = $startupFilePath
+  $objShortCut.Save()
 }
 
 try {
@@ -205,6 +204,8 @@ try {
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
+  $generatedDir = Join-Path $PSScriptRoot "Generated"
+  Create-Directory $generatedDir
 
   $vimFilePath = Get-VimFilePath
   $gitFilePath = Get-GitFilePath
