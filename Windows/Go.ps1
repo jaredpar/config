@@ -207,6 +207,7 @@ function Configure-Drive() {
 @echo off
 REM This is a generated file. Do not edit. Instead put machine customizations into 
 REM $PSCommandPath
+
 "@
 
   $codeDir = Join-Path ${env:USERPROFILE} "code"
