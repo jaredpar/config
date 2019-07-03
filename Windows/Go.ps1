@@ -231,6 +231,9 @@ REM $PSCommandPath
     $startupContent += "subst t: $toolsDir"
     $startupContent += [Environment]::NewLine
   }
+  else {
+    Write-HostWarning "$toolsDir does not exist"
+  }
 
   $startupFilePath = Join-Path $generatedDir "startup.cmd"
   $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
