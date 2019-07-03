@@ -202,14 +202,14 @@ function Configure-Snapshot() {
     Write-Host "`tSKIP: OneDrive not available at $oneDriveDir"
   }
 
-  if ($PSScriptRoot.Contains("OneDrive")) {
-    Write-Host "`tSKIP: Running from OneDrive already"
+  if (-not $isRunFromGit) {
+    Write-Host "`tSKIP: Not running from Git"
   }
 
   $snapshotDir = Join-Path $oneDriveDir "Snapshot"
   Create-Directory $snapshotDir
 
-  & robocopy "$repoDir" "$snapshotDir" /E /PURGE | Out-Null
+  & robocopy "$repoDir" "$snapshotDir" /E /PURGE /XD ".git" | Out-Null
 }
 
 try {
@@ -226,6 +226,7 @@ try {
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
   $generatedDir = Join-Path $PSScriptRoot "Generated"
+  $isRunFromGit = Test-Path (Join-Path $repoDir ".git")
   Create-Directory $generatedDir
 
   $vimFilePath = Get-VimFilePath
