@@ -11,6 +11,14 @@ param (
 Set-StrictMode -version 2.0
 $ErrorActionPreference = "Stop"
 
+function Write-HostWarning([string]$message) {
+  Write-Host -ForegroundColor Yellow "WARN: $message"
+}
+
+function Write-HostError([string]$message) {
+  Write-Host -ForegroundColor Yellow "ERROR: $message"
+}
+
 # Copy a configuration file from this repository into a location on
 # the machine that is outside this repository. This will warn if the 
 # destination file exists but has different content. Makes it so I 
@@ -60,6 +68,26 @@ function Get-GpgFilePath() {
   }
 
   return $null
+}
+
+function Get-ToolsDir() {
+  # When running from Git then the Tools directory isn't in a sibling directory to the 
+  # configuration scripts. Can only come from a OneDrive installation
+  if ($isRunFromGit) {
+    $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
+  }
+  else {
+    $toolsDir = Split-Path -Parent $PSScriptRoot
+    $toolsDir = Split-Path -Parent $toolsDir
+    $toolsDir = Join-Path $toolsDir "Tools"
+  }
+
+  if (Test-Path $toolsDir) {
+    return $toolsDir
+  }
+  else {
+    return $null    
+  }
 }
 
 # Configure both the vim and vsvim setup
@@ -168,22 +196,43 @@ function Configure-VSCode() {
   Copy-ConfigFile $settingsFilePath $destFilePath
 }
 
-# Used to add a startup.cmd file that does actions like map drives
-function Configure-Startup() {
-  Write-Host "Configuring Startup"
-  $startupFilePath = Join-Path $generatedDir "startup.cmd"
-  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
-  $codeDir = Join-Path ${env:USERPROFILE} "code"
-  $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Tools"
+# The goal of this function is to ensure the following drive mappings exist at this moment and 
+# whenever logging onto the machine
+#   p:\ - root git enlistment for my projects
+#   t:\ - tools directory 
+function Configure-Drive() {
+  Write-Host "Configuring Drives"
 
   $startupContent = @"
 @echo off
 REM This is a generated file. Do not edit. Instead put machine customizations into 
 REM $PSCommandPath
-subst p: $codeDir
-subst t: $toolsDir
 "@
-  
+
+  $codeDir = Join-Path ${env:USERPROFILE} "code"
+  if (Test-Path $codeDir) {
+    if (-not (Test-Path "p:\")) {
+      Exec-Command "subst" "p: $codeDir"
+    }
+
+    $startupContent += "subst p: $codeDir"
+    $startupContent += [Environment]::NewLine
+  }
+  else {
+    Write-HostWarning "$codeDir does not exist"
+  }
+
+  if (Test-Path $toolsDir) {
+    if (-not (Test-Path "t:\")) {
+      Exec-command "subst t: $toolsDir"
+    }
+
+    $startupContent += "subst t: $toolsDir"
+    $startupContent += [Environment]::NewLine
+  }
+
+  $startupFilePath = Join-Path $generatedDir "startup.cmd"
+  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
   Write-Output $startupContent | Out-File -encoding ASCII $startupFilePath
 
   $objShell = New-Object -ComObject ("WScript.Shell")
@@ -225,15 +274,17 @@ try {
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
-  $generatedDir = Join-Path $PSScriptRoot "Generated"
   $isRunFromGit = Test-Path (Join-Path $repoDir ".git")
+
+  $generatedDir = Join-Path $PSScriptRoot "Generated"
   Create-Directory $generatedDir
 
   $vimFilePath = Get-VimFilePath
   $gitFilePath = Get-GitFilePath
   $gpgfilePath = Get-GpgFilePath
+  $toolsDir = Get-ToolsDir
 
-  Configure-Startup
+  Configure-Drive
   Configure-Vim
   Configure-PowerShell
   Configure-Git
