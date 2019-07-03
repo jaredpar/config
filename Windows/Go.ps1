@@ -192,6 +192,26 @@ subst t: $toolsDir
   $objShortCut.Save()
 }
 
+# This will update the snapshot in the OneDrive Config folder if OneDrive is syncing on
+# this machine.
+function Configure-Snapshot() {
+  Write-Host "Configuring OneDrive Snapshot"
+
+  $oneDriveDir = Join-Path ${env:USERPROFILE} "OneDrive\Config"
+  if (-not (Test-Path $oneDriveDir)) {
+    Write-Host "`tSKIP: OneDrive not available at $oneDriveDir"
+  }
+
+  if ($PSScriptRoot.Contains("OneDrive")) {
+    Write-Host "`tSKIP: Running from OneDrive already"
+  }
+
+  $snapshotDir = Join-Path $oneDriveDir "Snapshot"
+  Create-Directory $snapshotDir
+
+  & robocopy "$repoDir" "$snapshotDir" /E /PURGE | Out-Null
+}
+
 try {
   . (Join-Path $PSScriptRoot "PowerShell\Common-Utils.ps1")
   Push-Location $PSScriptRoot
@@ -218,6 +238,7 @@ try {
   Configure-Git
   Configure-Gpg
   Configure-VSCode
+  Configure-Snapshot
 
   exit 0
 }
