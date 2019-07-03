@@ -3,9 +3,7 @@
 #==============================================================================
 #==============================================================================
 
-$script:scriptPath = $(split-path -parent $MyInvocation.MyCommand.Definition) 
-$env:PSModulePath = (resolve-path (join-path $scriptPath "Modules")) 
-import-module Common
+. (Join-Path $PSScriptRoot "Common-Utils.ps1")
 
 #==============================================================================
 # Functions 
@@ -14,27 +12,29 @@ import-module Common
 # Set the prompt
 function prompt() {
 
-    if (test-wow64) {
-        write-host -NoNewLine "Wow64 "
+    if (([IntPtr]::size -eq 4) -and (test-path env:\PROCESSOR_ARCHITEW6432)) {
+        Write-Host -NoNewLine "Wow64 "
     }
 
-    if (test-admin) { 
-        write-host -NoNewLine -f red "Admin "
+    if (Test-Admin) { 
+        Write-Host -NoNewLine -f red "Admin "
     }
 
-    write-host -NoNewLine -ForegroundColor Green $(get-location)
-    foreach ($entry in (get-location -stack)) {
-        write-host -NoNewLine -ForegroundColor Red '+';
+    Write-Host -NoNewLine -ForegroundColor Green $(get-location)
+    foreach ($entry in (Get-Location -stack)) {
+        Write-Host -NoNewLine -ForegroundColor Red '+';
     }
 
-    write-host -NoNewLine -ForegroundColor Green '>'
+    Write-Host -NoNewLine -ForegroundColor Green '>'
     ' '
 }
 
 # Setup the Console look and feel
 $host.UI.RawUI.ForegroundColor = "Yellow"
-if (test-admin) {
+if (Test-Admin) {
 	$title = "Administrator Shell - {0}" -f $host.UI.RawUI.WindowTitle
 	$host.UI.RawUI.WindowTitle = $title;
 }
 
+Set-Alias ss Select-String
+Set-Alias ssr Select-StringRecurse
