@@ -72,6 +72,8 @@ function Configure-Vim() {
   Write-Host "Configuring Vim"
   Write-Host "`tLocation: `"$vimFilePath`""
 
+  # Add the _vimrc file to the %HOME% path which just calls the real 
+  # one I have in data\vim
   Write-Host "`tGenerating _vsvimrc"
   $realFilePath = Join-Path $commonDataDir "_vsvimrc"
   $destFilePath = Join-Path $env:UserProfile "_vsvimrc"
@@ -144,6 +146,7 @@ function Configure-Gpg() {
     Write-Host "`tGit"
     Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
     Exec-Console $gitFilePath "config --global commit.gpgsign true"
+
     # Need to execute this manually
     # Get a new sub-key https://wiki.debian.org/Subkeys?action=show&redirect=subkeys
     # Exec-Console $gitFilePath "config --global user.signkey 06EDAA3E3C0AF8841559"  
@@ -199,8 +202,6 @@ try {
     exit 1
   }
 
-  # Add the _vimrc file to the %HOME% path which just calls the real 
-  # one I have in data\vim
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
