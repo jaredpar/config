@@ -28,9 +28,9 @@ function Copy-ConfigFile($sourceFilePath, $destFilePath) {
     $destHash = (Get-FileHash -Path $destFilePath -Algorithm SHA256).Hash
     $sourceHash = (Get-FileHash -Path $sourceFilePath -Algorithm SHA256).Hash
     if ($destHash -ne $sourceHash) {
-      Write-Host "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
-      Write-Host "`tSource hash: $sourceHash"
-      Write-Host "`tDestination hash: $destHash"
+      Write-HostWarning "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
+      Write-HostWarning "`tSource hash: $sourceHash"
+      Write-HostWarning "`tDestination hash: $destHash"
       Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
       return
     }
@@ -98,21 +98,21 @@ function Configure-Vim() {
   }
 
   Write-Host "Configuring Vim"
-  Write-Host "`tLocation: `"$vimFilePath`""
+  Write-Verbose "Location: `"$vimFilePath`""
 
   # Add the _vimrc file to the %HOME% path which just calls the real 
   # one I have in data\vim
-  Write-Host "`tGenerating _vsvimrc"
+  Write-Verbose "Generating _vsvimrc"
   $realFilePath = Join-Path $commonDataDir "_vsvimrc"
   $destFilePath = Join-Path $env:UserProfile "_vsvimrc"
   Write-Output ":source $realFilePath" | Out-File -encoding ASCII $destFilePath
 
-  Write-Host "`tGenerating _vimrc"
+  Write-Verbose "Generating _vimrc"
   $realFilePath = Join-Path $commonDataDir "_vimrc"
   $destFilePath = Join-Path $env:UserProfile "_vimrc"
   Write-Output ":source $realFilePath" | Out-File -encoding ASCII $destFilePath
 
-  Write-Host "`tCopying VimFiles" 
+  Write-Verbose "Copying VimFiles" 
   $sourceDir = Join-Path $commonDataDir "vim\vimfiles"
   Copy-Item -re -fo $sourceDir $env:UserProfile
 }
@@ -123,7 +123,7 @@ function Configure-PowerShell() {
   $docDir = $([Environment]::GetFolderPath("MyDocuments"))
   Push-Location $docDir
   try {
-    Write-Host "`tProfile"
+    Write-Verbose "Profile"
     Create-Directory "WindowsPowerShell"
     Set-Location "WindowsPowerShell"
 
@@ -138,7 +138,7 @@ function Configure-PowerShell() {
 . `"$realProfileFilePath`"
 "@
     Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
-    Write-Host "`tScript Execution"
+    Write-Verbose "Script Execution"
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
   }
   finally {
@@ -148,14 +148,14 @@ function Configure-PowerShell() {
 
 function Configure-Git() { 
   if ($gitFilePath -eq $null) {
-    Write-Host "SKIP git configuration"
+    Write-Verbose "Skip git configuration because git isn't installed"
     return
   }
 
   Write-Host "Configuring Git"
-  Write-Host "`tLocation: $gitFilePath"
+  Write-Verbose "Location: $gitFilePath"
 
-  Write-Host "`tStandard Setup"
+  Write-Verbose "Standard Setup"
   $gitEditor = if ($vimFilePath -ne $null) { $vimFilePath } else { "notepad.exe" }
   Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
   Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
@@ -165,13 +165,13 @@ function Configure-Git() {
 
 function Configure-Gpg() { 
   if ($gpgFilePath -eq $null) { 
-    Write-Host "SKIP gpg configuration"
+    Write-Verbose "Skip gpg configuration because gpg isn't installed"
     return
   }
 
   Write-Host "Configuring GPG"
   if ($gitFilePath -ne $null) {
-    Write-Host "`tGit"
+    Write-Verbose "Git"
     Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
     Exec-Console $gitFilePath "config --global commit.gpgsign true"
 
@@ -180,7 +180,7 @@ function Configure-Gpg() {
     # Exec-Console $gitFilePath "config --global user.signkey 06EDAA3E3C0AF8841559"  
   }
 
-  Write-Host "`tgpg.conf"
+  Write-Verbose "gpg.conf"
   $sourceFilePath = Join-Path $dataDir "gpg.conf"
   $destFilePath = (Join-Path (Join-Path ${env:APPDATA} "gnupg") "gpg.conf")
   Copy-ConfigFile $sourceFilePath $destFilePath
@@ -244,15 +244,16 @@ REM $PSCommandPath
 # This will update the snapshot in the OneDrive Config folder if OneDrive is syncing on
 # this machine.
 function Configure-Snapshot() {
+  if (-not $isRunFromGit) {
+    Write-Verbose "Not configuring snapshot because not running from Git"
+  }
+
   Write-Host "Configuring OneDrive Snapshot"
 
   $oneDriveDir = Join-Path ${env:USERPROFILE} "OneDrive\Config"
   if (-not (Test-Path $oneDriveDir)) {
-    Write-Host "`tSKIP: OneDrive not available at $oneDriveDir"
-  }
-
-  if (-not $isRunFromGit) {
-    Write-Host "`tSKIP: Not running from Git"
+    Write-HostWarning "OneDrive not available at $oneDriveDir"
+    return
   }
 
   $snapshotDir = Join-Path $oneDriveDir "Snapshot"
