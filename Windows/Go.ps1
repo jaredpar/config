@@ -6,6 +6,7 @@
 [CmdletBinding(PositionalBinding=$false)]
 param (
   [switch]$force = $false,
+  [switch]$refreshConfig = $false,
   [parameter(ValueFromRemainingArguments=$true)] $badArgs)
 
 Set-StrictMode -version 2.0
@@ -28,11 +29,17 @@ function Copy-ConfigFile($sourceFilePath, $destFilePath) {
     $destHash = (Get-FileHash -Path $destFilePath -Algorithm SHA256).Hash
     $sourceHash = (Get-FileHash -Path $sourceFilePath -Algorithm SHA256).Hash
     if ($destHash -ne $sourceHash) {
-      Write-HostWarning "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
-      Write-HostWarning "`tSource hash: $sourceHash"
-      Write-HostWarning "`tDestination hash: $destHash"
-      Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
-      return
+      if ($refreshConfig) {
+        Copy-Item $destFilePath $sourceFilePath
+      }
+      else {
+        Write-HostWarning "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
+        Write-HostWarning "`tSource hash: $sourceHash"
+        Write-HostWarning "`tDestination hash: $destHash"
+        Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
+        Write-HostWarning "Use -refreshConfig option to update checked in copy"
+        return
+      }
     }
   }
 

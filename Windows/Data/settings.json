@@ -3,5 +3,9 @@
     "[markdown]": {
       "editor.wordWrap": "off",
       "editor.rulers": [80]
+    },
+    "[powershell]": {
+      "editor.tabSize": 2,
+      "editor.insertSpaces": true
     }
 }
