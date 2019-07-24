@@ -3,6 +3,7 @@
 # Configure the Windows environment based on the script contents
 #
 ####
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function', Target='*')]
 [CmdletBinding(PositionalBinding=$false)]
 param (
   [switch]$force = $false,
@@ -61,7 +62,7 @@ function Get-VimFilePath() {
 
 function Get-GitFilePath() { 
   $g = Get-Command "git" -ErrorAction SilentlyContinue
-  if ($g -eq $null) { 
+  if ($null -eq $g) { 
     return $null
   }
 
@@ -99,7 +100,7 @@ function Get-ToolsDir() {
 
 # Configure both the vim and vsvim setup
 function Configure-Vim() { 
-  if ($vimFilePath -eq $null) {
+  if ($null -eq $vimFilePath) {
     Write-Host "SKIP vim configuration"
     return
   }
@@ -154,7 +155,7 @@ function Configure-PowerShell() {
 }
 
 function Configure-Git() { 
-  if ($gitFilePath -eq $null) {
+  if ($null -eq $gitFilePath) {
     Write-Verbose "Skip git configuration because git isn't installed"
     return
   }
@@ -163,7 +164,7 @@ function Configure-Git() {
   Write-Verbose "Location: $gitFilePath"
 
   Write-Verbose "Standard Setup"
-  $gitEditor = if ($vimFilePath -ne $null) { $vimFilePath } else { "notepad.exe" }
+  $gitEditor = if ($null -ne $vimFilePath) { $vimFilePath } else { "notepad.exe" }
   Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
   Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
   Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
@@ -171,13 +172,13 @@ function Configure-Git() {
 }
 
 function Configure-Gpg() { 
-  if ($gpgFilePath -eq $null) { 
+  if ($null -eq $gpgFilePath) { 
     Write-Verbose "Skip gpg configuration because gpg isn't installed"
     return
   }
 
   Write-Host "Configuring GPG"
-  if ($gitFilePath -ne $null) {
+  if ($null -ne $gitFilePath) {
     Write-Verbose "Git"
     Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
     Exec-Console $gitFilePath "config --global commit.gpgsign true"
@@ -277,7 +278,7 @@ try {
   . (Join-Path $PSScriptRoot "PowerShell\Common-Utils.ps1")
   Push-Location $PSScriptRoot
 
-  if ($badArgs -ne $null) {
+  if ($null -ne $badArgs) {
     Write-Host "Unsupported argument $badArgs"
     Print-Usage
     exit 1
