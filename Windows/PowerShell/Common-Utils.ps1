@@ -1,4 +1,8 @@
 
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function', Target='*')]
+[System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidDefaultValueSwitchParameter', '', Scope='Function', Target='*')]
+param()
+
 Set-StrictMode -version 2.0
 $ErrorActionPreference="Stop"
 
@@ -141,9 +145,9 @@ function Select-StringRecurse(
   }
 
   Get-ChildItem -re -in $include | 
-    ? { -not $_.PSIsContainer } | 
-    ? { ($all) -or (-not (Test-BinaryExtension $_.Extension)) } |
-    % { Write-Verbose "Considering: $($_.FullName)"; ss -CaseSensitive:$caseSensitive $text $_.FullName }
+    Where-Object { -not $_.PSIsContainer } | 
+    Where-Object { ($all) -or (-not (Test-BinaryExtension $_.Extension)) } |
+    Where-Object { Write-Verbose "Considering: $($_.FullName)"; ss -CaseSensitive:$caseSensitive $text $_.FullName }
 }   
 
 # Author: Marcel
@@ -161,7 +165,7 @@ function Get-MD5($filePath = $(throw "Path to file")) {
   # We have to be sure that we close the file stream if any exceptions are 
   # thrown.
   try {
-    if ($stream -ne $null) {
+    if ($null -ne $stream) {
         $stream.Close();
     }
   }
