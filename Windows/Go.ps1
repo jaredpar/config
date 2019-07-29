@@ -225,7 +225,7 @@ REM $PSCommandPath
 
   if (Test-Path $codeDir) {
     if (-not (Test-Path "p:\")) {
-      Exec-Command "subst" "p: $codeDir"
+      Exec-Command "c:\windows\system32\subst.exe" "p: $codeDir"
     }
 
     $startupContent += "subst p: $codeDir"
@@ -237,7 +237,7 @@ REM $PSCommandPath
 
   if ($null -ne $toolsDir) {
     if (-not (Test-Path "t:\")) {
-      Exec-command "subst t: $toolsDir"
+      Exec-Command "c:\windows\system32\subst.exe" "t: $toolsDir"
     }
 
     $startupContent += "subst t: $toolsDir"
