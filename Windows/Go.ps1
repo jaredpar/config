@@ -218,7 +218,11 @@ REM $PSCommandPath
 
 "@
 
-  $codeDir = Join-Path ${env:USERPROFILE} "code"
+  $codeDir = switch (${env:COMPUTERNAME}) {
+    "JAREDPAR05" { "e:\code" }
+    default { Join-Path ${env:USERPROFILE} "code" }
+  }
+
   if (Test-Path $codeDir) {
     if (-not (Test-Path "p:\")) {
       Exec-Command "subst" "p: $codeDir"
@@ -231,7 +235,7 @@ REM $PSCommandPath
     Write-HostWarning "$codeDir does not exist"
   }
 
-  if (Test-Path $toolsDir) {
+  if ($null -ne $toolsDir) {
     if (-not (Test-Path "t:\")) {
       Exec-command "subst t: $toolsDir"
     }
@@ -240,7 +244,7 @@ REM $PSCommandPath
     $startupContent += [Environment]::NewLine
   }
   else {
-    Write-HostWarning "$toolsDir does not exist"
+    Write-HostWarning "Could not locate a Tools directory"
   }
 
   $startupFilePath = Join-Path $generatedDir "startup.cmd"
