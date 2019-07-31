@@ -140,10 +140,24 @@ function Configure-PowerShell() {
       Remove-Item $oldProfile
     }
 
+    $machineProfileFilePath = Join-Path $generatedDir "machine-profile.ps1"
+    if (-not (Test-Path $machineProfileFilePath)) {
+      $machineProfileContent = @"
+# Place all machine profile customizations into this file. It will not be 
+# overwritten by future calls to Go.ps1
+"@
+      Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
+    }
+
     $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
     $realProfileContent = @"
 # This is a generated file. Do not edit. 
 . `"$realProfileFilePath`"
+
+# Place all machine customizations into this file
+if (Test-Path '$machineProfileFilePath') {
+  . '$machineProfileFilePath'
+}
 "@
     Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
     Write-Verbose "Script Execution"
@@ -220,6 +234,7 @@ REM $PSCommandPath
 
   $codeDir = switch (${env:COMPUTERNAME}) {
     "JAREDPAR05" { "e:\code" }
+    "JAREDPAR06" { "e:\code" }
     default { Join-Path ${env:USERPROFILE} "code" }
   }
 
