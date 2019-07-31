@@ -147,7 +147,7 @@ function Select-StringRecurse(
   Get-ChildItem -re -in $include | 
     Where-Object { -not $_.PSIsContainer } | 
     Where-Object { ($all) -or (-not (Test-BinaryExtension $_.Extension)) } |
-    Where-Object { Write-Verbose "Considering: $($_.FullName)"; ss -CaseSensitive:$caseSensitive $text $_.FullName }
+    ForEach-Object { Select-String -CaseSensitive:$caseSensitive $text $_.FullName }
 }   
 
 # Author: Marcel
