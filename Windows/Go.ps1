@@ -69,15 +69,6 @@ function Get-GitFilePath() {
   return $g.Path
 }
 
-function Get-GpgFilePath() {
-  $gpgFilePath = "C:\Program Files (x86)\GnuPG\bin\gpg.exe"
-  if (Test-Path $gpgFilePath) { 
-    return $gpgFilePath
-  }
-
-  return $null
-}
-
 function Get-ToolsDir() {
   # When running from Git then the Tools directory isn't in a sibling directory to the 
   # configuration scripts. Can only come from a OneDrive installation
@@ -183,29 +174,7 @@ function Configure-Git() {
   Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
   Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
   Exec-Console $gitFilePath "config --global fetch.prune true"
-}
-
-function Configure-Gpg() { 
-  if ($null -eq $gpgFilePath) { 
-    Write-Verbose "Skip gpg configuration because gpg isn't installed"
-    return
-  }
-
-  Write-Host "Configuring GPG"
-  if ($null -ne $gitFilePath) {
-    Write-Verbose "Git"
-    Exec-Console $gitFilePath "config --global gpg.program `"$gpgFilePath`""     
-    Exec-Console $gitFilePath "config --global commit.gpgsign true"
-
-    # Need to execute this manually
-    # Get a new sub-key https://wiki.debian.org/Subkeys?action=show&redirect=subkeys
-    # Exec-Console $gitFilePath "config --global user.signkey 06EDAA3E3C0AF8841559"  
-  }
-
-  Write-Verbose "gpg.conf"
-  $sourceFilePath = Join-Path $dataDir "gpg.conf"
-  $destFilePath = (Join-Path (Join-Path ${env:APPDATA} "gnupg") "gpg.conf")
-  Copy-ConfigFile $sourceFilePath $destFilePath
+  Exec-Console $gitFilePath "config --global commit.gpgsign false"
 }
 
 function Configure-VSCode() { 
@@ -313,14 +282,12 @@ try {
 
   $vimFilePath = Get-VimFilePath
   $gitFilePath = Get-GitFilePath
-  $gpgfilePath = Get-GpgFilePath
   $toolsDir = Get-ToolsDir
 
   Configure-Drive
   Configure-Vim
   Configure-PowerShell
   Configure-Git
-  Configure-Gpg
   Configure-VSCode
   Configure-Snapshot
 
