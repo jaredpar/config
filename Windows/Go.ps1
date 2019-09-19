@@ -187,6 +187,18 @@ function Configure-VSCode() {
   Copy-ConfigFile $settingsFilePath $destFilePath
 }
 
+# Ensure that p:\nuget is setup as the package cache for the machine.
+function Configure-NuGet() {
+  Write-Host "Configuring NuGet cache"
+  $cacheDir = "p:\nuget"
+  $value = Get-ChildItem env:NUGET_PACKAGES -ErrorAction SilentlyContinue
+  if ($value -ne $cacheDir)
+  {
+      $null = & setx NUGET_PACKAGES $cacheDir 
+      $env:NUGET_PACKAGES = $cacheDir
+  }
+}
+
 # The goal of this function is to ensure the following drive mappings exist at this moment and 
 # whenever logging onto the machine
 #   p:\ - root git enlistment for my projects
@@ -289,6 +301,7 @@ try {
   Configure-PowerShell
   Configure-Git
   Configure-VSCode
+  Configure-NuGet
   Configure-Snapshot
 
   exit 0
