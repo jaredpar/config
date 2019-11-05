@@ -143,7 +143,12 @@ function Configure-PowerShell() {
     $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
     $realProfileContent = @"
 # This is a generated file. Do not edit. 
-. `"$realProfileFilePath`"
+
+# The real profile can be missing when we're under an elevated prompt because it doesn't 
+# inherit all of our subst commands
+if (Test-Path $realProfileFilePath) {
+  . `"$realProfileFilePath`"
+}
 
 # Place all machine customizations into this file
 if (Test-Path '$machineProfileFilePath') {
