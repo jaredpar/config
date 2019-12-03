@@ -1,5 +1,5 @@
 {
-    "editor.wordWrap": "off",
+    "editor.wordWrap": "on",
     "[markdown]": {
       "editor.wordWrap": "off",
       "editor.rulers": [80]
@@ -12,5 +12,6 @@
       "editor.tabSize": 2,
       "editor.insertSpaces": true
     },
-    "git.enableSmartCommit": true
+    "git.enableSmartCommit": true,
+    "editor.renderWhitespace": "all"
 }

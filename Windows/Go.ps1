@@ -39,6 +39,7 @@ function Copy-ConfigFile($sourceFilePath, $destFilePath) {
         Write-HostWarning "`tDestination hash: $destHash"
         Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
         Write-HostWarning "Use -refreshConfig option to update checked in copy"
+        Write-HostWarning "Use -force option to update machine copy"
         return
       }
     }
