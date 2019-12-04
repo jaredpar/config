@@ -193,6 +193,16 @@ function Configure-VSCode() {
   Copy-ConfigFile $settingsFilePath $destFilePath
 }
 
+function Configure-Terminal() {
+  Write-Host "Configuring Terminal"
+
+  $destFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\profiles.json" 
+  if (Test-Path $destFilePath) {
+      $profileFilePath = Join-Path $dataDir "profiles.json"
+      Copy-ConfigFile $profileFilePath $destFilePath
+  }
+}
+
 # Ensure that p:\nuget is setup as the package cache for the machine.
 function Configure-NuGet() {
   Write-Host "Configuring NuGet cache"
@@ -307,6 +317,7 @@ try {
   Configure-PowerShell
   Configure-Git
   Configure-VSCode
+  Configure-Terminal
   Configure-NuGet
   Configure-Snapshot
 
