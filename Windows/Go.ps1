@@ -6,7 +6,7 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function', Target='*')]
 [CmdletBinding(PositionalBinding=$false)]
 param (
-  [switch]$force = $false,
+  [switch]$refreshMachine = $false,
   [switch]$refreshConfig = $false,
   [parameter(ValueFromRemainingArguments=$true)] $badArgs)
 
@@ -26,7 +26,7 @@ function Write-HostError([string]$message) {
 # destination file exists but has different content. Makes it so I 
 # don't silently erase changes.
 function Copy-ConfigFile($sourceFilePath, $destFilePath) {
-  if (-not $force -and (Test-Path $destFilePath)) {
+  if (-not $refreshMachine -and (Test-Path $destFilePath)) {
     $destHash = (Get-FileHash -Path $destFilePath -Algorithm SHA256).Hash
     $sourceHash = (Get-FileHash -Path $sourceFilePath -Algorithm SHA256).Hash
     if ($destHash -ne $sourceHash) {
@@ -38,8 +38,8 @@ function Copy-ConfigFile($sourceFilePath, $destFilePath) {
         Write-HostWarning "`tSource hash: $sourceHash"
         Write-HostWarning "`tDestination hash: $destHash"
         Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
+        Write-HostWarning "Use -refreshMachine option to update machine copy"
         Write-HostWarning "Use -refreshConfig option to update checked in copy"
-        Write-HostWarning "Use -force option to update machine copy"
         return
       }
     }
