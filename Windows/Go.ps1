@@ -192,6 +192,11 @@ function Configure-VSCode() {
   $content = "// Actual settings file stored at: $settingsFilePath" + [Environment]::NewLine + $content
   $destFilePath = Join-Path ${env:APPDATA} "Code\User\settings.json"
   Copy-ConfigFile $settingsFilePath $destFilePath
+
+  $keybindingsFilePath = Join-Path $dataDir "keybindings.json"
+  $destFilePath = Join-Path ${env:APPDATA} "Code\User\keybindings.json"
+  Copy-ConfigFile $keyBindingsFilePath $destFilePath
+
 }
 
 function Configure-Terminal() {

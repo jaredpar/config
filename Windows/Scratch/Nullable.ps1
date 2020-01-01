@@ -2,6 +2,7 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function', Target='*')]
 param (
   [string]$directory = $null,
+  [switch]$showMissing = $false,
   [parameter(ValueFromRemainingArguments=$true)] $badArgs)
 
 Set-StrictMode -version 2.0
@@ -26,29 +27,65 @@ function Test-Nullable([string]$filePath) {
   return $found
 }
 
-function Print-All([string]$directory, [string]$indent) {
-  $fileCount = 0;
-  $enableCount = 0;
-
+function Get-All([string]$directory) {
+  $localFileCount = 0;
+  $localEnabledCount = 0;
+  $missing = @()
   foreach ($file in Get-ChildItem $directory | ?{ -not $_.PSIsContainer }) {
-    $fileCount++
+    $localFileCount++
     if (Test-Nullable $file.FullName) {
-      $enableCount++
+      $localEnabledCount++
+    }
+    else {
+      $missing += $file.FullName
     }
   }
 
-  $name = Split-Path -Leaf $directory
-  Write-Host "$($indent)$name $enableCount/$fileCount"
-
+  $children = @()
+  $childFileCount = 0;
+  $childEnabledCount = 0;
   foreach ($childDirectory in Get-ChildItem $directory | ?{ $_.PSIsContainer}) {
-    Print-All $childDirectory.FullName ($indent + "  ")
+    $child = Get-All $childDirectory.FullName
+    $children += $child
+    $childFileCount += $child.TotalFileCount
+    $childEnabledCount += $child.TotalEnabledCount
   }
+
+  $name = Split-Path -Leaf $directory
+  return @{
+    Name = $name;
+    Children = $children;
+    LocalFileCount = $localFileCount;
+    LocalEnableCount = $localEnabledCount;
+    TotalFileCount = $localFileCount + $childFileCount;
+    TotalEnabledCount = $localEnabledCount + $childEnabledCount
+  }
+}
+
+function Print-All($node, [string]$indent) {
+  $name = $node.Name;
+  $localFile = $node.LocalFileCount;
+  $localEnabled = $node.LocalEnableCount;
+  $totalFile = $node.TotalFileCount
+  $totalEnabled = $node.totalEnabledCount;
+
+  if ($node.Children.Count -eq 0) {
+    Write-Host "$($indent)$name ($localEnabled/$localFile)"
+  }
+  else {
+    Write-Host "$($indent)$name ($localEnabled/$localFile) ($totalEnabled/$totalFile)"
+    foreach ($child in $node.Children) {
+      Print-All $child ($indent + "  ")
+    }
+  }
+
 }
 
 try {
   . (Join-Path $PSScriptRoot "..\PowerShell\Common-Utils.ps1")
 
-  Print-All $directory
+  $node = Get-All $directory
+  Print-All $node ""
   exit 0
 }
 catch {
