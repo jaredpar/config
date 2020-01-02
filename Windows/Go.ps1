@@ -6,6 +6,7 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function', Target='*')]
 [CmdletBinding(PositionalBinding=$false)]
 param (
+  [switch]$latest = $false,
   [switch]$refreshMachine = $false,
   [switch]$refreshConfig = $false,
   [parameter(ValueFromRemainingArguments=$true)] $badArgs)

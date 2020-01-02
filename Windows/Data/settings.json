@@ -14,5 +14,6 @@
     },
     "git.enableSmartCommit": true,
     "editor.renderWhitespace": "all",
-    "explorer.confirmDragAndDrop": false
+    "explorer.confirmDragAndDrop": false,
+    "files.enableTrash": false
 }
