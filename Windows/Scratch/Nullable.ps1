@@ -49,6 +49,7 @@ function Get-All([string]$directory) {
     $children += $child
     $childFileCount += $child.TotalFileCount
     $childEnabledCount += $child.TotalEnabledCount
+    $missing += $child.Missing
   }
 
   $name = Split-Path -Leaf $directory
@@ -58,7 +59,8 @@ function Get-All([string]$directory) {
     LocalFileCount = $localFileCount;
     LocalEnableCount = $localEnabledCount;
     TotalFileCount = $localFileCount + $childFileCount;
-    TotalEnabledCount = $localEnabledCount + $childEnabledCount
+    TotalEnabledCount = $localEnabledCount + $childEnabledCount;
+    Missing = $missing
   }
 }
 
@@ -78,7 +80,6 @@ function Print-All($node, [string]$indent) {
       Print-All $child ($indent + "  ")
     }
   }
-
 }
 
 try {
@@ -86,6 +87,14 @@ try {
 
   $node = Get-All $directory
   Print-All $node ""
+
+  if ($showMissing) {
+    Write-Host "Missing"
+    foreach ($file in $node.Missing) {
+      Write-Host $file
+    }
+  }
+
   exit 0
 }
 catch {
