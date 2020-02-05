@@ -51,7 +51,7 @@ function Copy-ConfigFile($sourceFilePath, $destFilePath) {
 }
 
 function Get-VimFilePath() {
-  $all = @("vim81", "vim80", "vim74")
+  $all = @("vim82", "vim81", "vim80", "vim74")
   foreach ($version in $all) { 
     $p = "C:\Program Files (x86)\Vim\$($version)\vim.exe"
     if (Test-Path $p) { 
