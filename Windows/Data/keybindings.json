@@ -3,5 +3,13 @@
     {
         "key": "ctrl+shift+t",
         "command": "workbench.action.terminal.focus"
+    },
+    {
+        "key": "ctrl+shift+c",
+        "command": "workbench.action.showCommands"
+    },
+    {
+        "key": "ctrl+shift+p",
+        "command": "-workbench.action.showCommands"
     }
 ]
