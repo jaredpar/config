@@ -1,3 +1,1 @@
-
-LS_COLORS='di=0;35'
-export LS_COLORS
+export PS1='\e[34;1m\u@\h: \e[32m\W\e[0m\$ '
