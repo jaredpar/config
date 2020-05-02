@@ -1,5 +1,22 @@
 {
     "editor.wordWrap": "on",
+    "editor.renderWhitespace": "all",
+    "editor.suggestSelection": "first",
+    "explorer.confirmDelete": false,
+    "explorer.confirmDragAndDrop": false,
+    "git.enableSmartCommit": true,
+    "remote.SSH.remotePlatform": {
+      "40.112.168.56": "linux",
+      "jaredpar-dtl-ubuntu": "linux",
+      "jaredpar-github1": "linux"
+    },
+    "vim.handleKeys": {
+      "<C-t>": false,
+      "<C-n>": false
+    },
+    "vsonline.authentication.accountProvider": "Microsoft",
+    "vsonline.planFilter": "",
+    "workbench.colorTheme": "Visual Studio Dark",
     "[markdown]": {
       "editor.wordWrap": "off",
       "editor.rulers": [80]
@@ -12,7 +29,4 @@
       "editor.tabSize": 2,
       "editor.insertSpaces": true
     },
-    "git.enableSmartCommit": true,
-    "editor.renderWhitespace": "all",
-    "explorer.confirmDragAndDrop": false
 }
