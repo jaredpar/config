@@ -87,7 +87,7 @@ function Get-ToolsDir() {
     return $toolsDir
   }
   else {
-    return $null    
+    return $null
   }
 }
 
@@ -142,7 +142,7 @@ function Configure-PowerShell() {
       Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
     }
 
-    $realProfileFilePath = Join-Path $PSScriptroot "PowerShell\Profile.ps1"
+    $realProfileFilePath = Join-Path $PSScriptroot "Profile.ps1"
     $realProfileContent = @"
 # This is a generated file. Do not edit. 
 
@@ -297,7 +297,7 @@ function Configure-Snapshot() {
 }
 
 try {
-  . (Join-Path $PSScriptRoot "PowerShell\Common-Utils.ps1")
+  . (Join-Path $PSScriptRoot "Common-Utils.ps1")
   Push-Location $PSScriptRoot
 
   if ($null -ne $badArgs) {
