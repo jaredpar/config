@@ -8,5 +8,5 @@ set incsearch
 set ai
 
 :nmap <F1> :vsc Build.BuildSelection<CR>
-:nmap <C-S-T> :vsc View.Terminal<CR>
-:inmap <C-S-T> <Esc>:vsc View.Terminal<CR>
+:nmap <C-L> :vsc View.Terminal<CR>
+:imap <C-L> <Esc>:vsc View.Terminal<CR>
