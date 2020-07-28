@@ -10,3 +10,5 @@ set ai
 :nmap <F1> :vsc Build.BuildSelection<CR>
 :nmap <C-L> :vsc View.Terminal<CR>
 :imap <C-L> <Esc>:vsc View.Terminal<CR>
+:nmap <C-T> :vsc Edit.GoToAll<CR>
+:imap <C-T> <Esc>:vsc Edit.GoToAll<CR>

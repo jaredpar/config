@@ -29,4 +29,10 @@
       "editor.tabSize": 2,
       "editor.insertSpaces": true
     },
+    "cSpell.userWords": [
+      "Triaging"
+    ],
+    "vsonline.accountProvider": "Microsoft",
+    "codespaces.accountProvider": "Microsoft",
+    "debug.onTaskErrors": "showErrors",
 }
