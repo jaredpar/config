@@ -181,6 +181,7 @@ function Configure-Git() {
   Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
   Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
   Exec-Console $gitFilePath "config --global fetch.prune true"
+  Exec-Console $gitFilePath "config --global push.default current"
   Exec-Console $gitFilePath "config --global commit.gpgsign false"
 }
 
