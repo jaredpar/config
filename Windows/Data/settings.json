@@ -35,4 +35,5 @@
     "vsonline.accountProvider": "Microsoft",
     "codespaces.accountProvider": "Microsoft",
     "debug.onTaskErrors": "showErrors",
+    "csharp.semanticHighlighting.enabled": true,
 }

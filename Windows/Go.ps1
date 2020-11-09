@@ -212,68 +212,63 @@ function Configure-Terminal() {
 
 # Ensure that p:\nuget is setup as the package cache for the machine.
 function Configure-NuGet() {
+  $cacheDir = $script:settings.nugetDir
   Write-Host "Configuring NuGet cache"
-  $cacheDir = "p:\nuget"
-  $value = Get-ChildItem env:NUGET_PACKAGES -ErrorAction SilentlyContinue
-  if ($value -ne $cacheDir)
-  {
-      $null = & setx NUGET_PACKAGES $cacheDir 
-      $env:NUGET_PACKAGES = $cacheDir
-  }
+  $null = & setx NUGET_PACKAGES $cacheDir 
+  $env:NUGET_PACKAGES = $cacheDir
 }
 
 # The goal of this function is to ensure the following drive mappings exist at this moment and 
 # whenever logging onto the machine
 #   p:\ - root git enlistment for my projects
 #   t:\ - tools directory 
-function Configure-Drive() {
-  Write-Host "Configuring Drives"
+function Configure-MappedDrive() {
+  $startupFilePath = Join-Path $generatedDir "startup.cmd"
+  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
+  if ($script:settings.mapDrives) {
+    Write-Host "Configuring Mapped Drives"
 
-  $startupContent = @"
+    $startupContent = @"
 @echo off
 REM This is a generated file. Do not edit. Instead put machine customizations into 
 REM $PSCommandPath
 
 "@
 
-  $codeDir = switch (${env:COMPUTERNAME}) {
-    "JAREDPAR05" { "e:\code" }
-    "JAREDPAR06" { "e:\code" }
-    default { Join-Path ${env:USERPROFILE} "code" }
-  }
-
-  if (Test-Path $codeDir) {
+    $codeDir = $script:settings.codeDir
+    Create-Directory $codeDir
     if (-not (Test-Path "p:\")) {
       Exec-Command "c:\windows\system32\subst.exe" "p: $codeDir"
     }
 
     $startupContent += "subst p: $codeDir"
     $startupContent += [Environment]::NewLine
-  }
-  else {
-    Write-HostWarning "$codeDir does not exist"
-  }
 
-  if ($null -ne $toolsDir) {
-    if (-not (Test-Path "t:\")) {
-      Exec-Command "c:\windows\system32\subst.exe" "t: $toolsDir"
+    if ($null -ne $toolsDir) {
+      if (-not (Test-Path "t:\")) {
+        Exec-Command "c:\windows\system32\subst.exe" "t: $toolsDir"
+      }
+
+      $startupContent += "subst t: $toolsDir"
+      $startupContent += [Environment]::NewLine
+    }
+    else {
+      Write-HostWarning "Could not locate a Tools directory"
     }
 
-    $startupContent += "subst t: $toolsDir"
-    $startupContent += [Environment]::NewLine
+    Write-Output $startupContent | Out-File -encoding ASCII $startupFilePath
+
+    $objShell = New-Object -ComObject ("WScript.Shell")
+    $objShortCut = $objShell.CreateShortcut($shortcutFilePath)
+    $objShortCut.TargetPath = $startupFilePath
+    $objShortCut.Save()
   }
   else {
-    Write-HostWarning "Could not locate a Tools directory"
+    Write-Host "Configuring Unmapped drives"
+    if (Test-Path $shortcutFilePath) {
+      Remove-Item $shortcutFilePath
+    }
   }
-
-  $startupFilePath = Join-Path $generatedDir "startup.cmd"
-  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
-  Write-Output $startupContent | Out-File -encoding ASCII $startupFilePath
-
-  $objShell = New-Object -ComObject ("WScript.Shell")
-  $objShortCut = $objShell.CreateShortcut($shortcutFilePath)
-  $objShortCut.TargetPath = $startupFilePath
-  $objShortCut.Save()
 }
 
 # This will update the snapshot in the OneDrive Config folder if OneDrive is syncing on
@@ -297,6 +292,37 @@ function Configure-Snapshot() {
   & robocopy "$repoDir" "$snapshotDir" /E /PURGE /XD ".git" | Out-Null
 }
 
+function Load-Settings() {
+  $script:settings = @{
+    codeDir = Join-Path ${env:USERPROFILE} "code";
+    nugetDir = Join-Path ${env:USERPROFILE} ".nuget";
+    mapDrives = $true;
+  }
+
+  switch -Wildcard ("${env:COMPUTERNAME}\${env:USERNAME}") {
+    "JAREDPAR03\*" { 
+      $script:settings.codeDir = "e:\code"
+      $script:settings.nugetDir = "p:\nuget"
+      break;
+    }
+    "JAREDPAR05\*" { 
+      $script:settings.codeDir = "e:\code"
+      $script:settings.nugetDir = "p:\nuget"
+      break;
+    }
+    "JAREDPAR06\*" { 
+      $script:settings.codeDir = "e:\code"
+      $script:settings.nugetDir = "p:\nuget"
+      break;
+    }
+    "*\vsonline" { 
+      $script:settings.mapDrives = $false
+      break;
+    }
+    default { }
+  }
+}
+
 try {
   . (Join-Path $PSScriptRoot "Common-Utils.ps1")
   Push-Location $PSScriptRoot
@@ -306,6 +332,13 @@ try {
     Print-Usage
     exit 1
   }
+
+  Load-Settings
+
+  Write-Host "Map Drives: $($settings.mapDrives)"
+  Write-Host "Code Directory: $($settings.codeDir)"
+  Write-Host "Nuget Directory: $($settings.nugetDir)"
+  Write-Host ""
 
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
@@ -319,7 +352,7 @@ try {
   $gitFilePath = Get-GitFilePath
   $toolsDir = Get-ToolsDir
 
-  Configure-Drive
+  Configure-MappedDrive
   Configure-Vim
   Configure-PowerShell
   Configure-Git
