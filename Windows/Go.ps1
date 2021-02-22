@@ -71,26 +71,6 @@ function Get-GitFilePath() {
   return $g.Path
 }
 
-function Get-ToolsDir() {
-  # When running from Git then the Tools directory isn't in a sibling directory to the 
-  # configuration scripts. Can only come from a OneDrive installation
-  if ($isRunFromGit) {
-    $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
-  }
-  else {
-    $toolsDir = Split-Path -Parent $PSScriptRoot
-    $toolsDir = Split-Path -Parent $toolsDir
-    $toolsDir = Join-Path $toolsDir "Tools"
-  }
-
-  if (Test-Path $toolsDir) {
-    return $toolsDir
-  }
-  else {
-    return $null
-  }
-}
-
 # Configure both the vim and vsvim setup
 function Configure-Vim() { 
   if ($null -eq $vimFilePath) {
@@ -210,66 +190,48 @@ function Configure-Terminal() {
   }
 }
 
-# Ensure that p:\nuget is setup as the package cache for the machine.
-function Configure-NuGet() {
-  $cacheDir = $script:settings.nugetDir
-  Write-Host "Configuring NuGet cache"
-  $null = & setx NUGET_PACKAGES $cacheDir 
-  $env:NUGET_PACKAGES = $cacheDir
-}
-
-# The goal of this function is to ensure the following drive mappings exist at this moment and 
-# whenever logging onto the machine
-#   p:\ - root git enlistment for my projects
-#   t:\ - tools directory 
-function Configure-MappedDrive() {
-  $startupFilePath = Join-Path $generatedDir "startup.cmd"
-  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
-  if ($script:settings.mapDrives) {
-    Write-Host "Configuring Mapped Drives"
-
-    $startupContent = @"
-@echo off
-REM This is a generated file. Do not edit. Instead put machine customizations into 
-REM $PSCommandPath
-
-"@
-
-    $codeDir = $script:settings.codeDir
-    Create-Directory $codeDir
-    if (-not (Test-Path "p:\")) {
-      Exec-Command "c:\windows\system32\subst.exe" "p: $codeDir"
+# The goal of this function is to ensure that standard directories, like 
+# code, tools or nuget, is in the same location on every machine. If the 
+# real directories differ then create a junction to make it real
+function Configure-Junctions() {
+  function Configure-One($junctionDir, $realDir) {
+    if ($junctionDir -eq $realDir) {
+      $null = Create-Directory $junctionDir
+      return
     }
 
-    $startupContent += "subst p: $codeDir"
-    $startupContent += [Environment]::NewLine
+    # If the destination directory exists but is empty then we can just delete 
+    # and create the junction
+    if (Test-Path $junctionDir) {
+      $i = Get-Item $junctionDir
+      if ($i.LinkType -eq "Junction") {
+        if ($i.Target -eq $realDir) {
+          return
+        }
 
-    if ($null -ne $toolsDir) {
-      if (-not (Test-Path "t:\")) {
-        Exec-Command "c:\windows\system32\subst.exe" "t: $toolsDir"
+        Write-HostError "Junction $junctionDir points to wrong source directory: $($i.Target)"
+        return
       }
 
-      $startupContent += "subst t: $toolsDir"
-      $startupContent += [Environment]::NewLine
-    }
-    else {
-      Write-HostWarning "Could not locate a Tools directory"
+      $c = @(Get-ChildItem $junctionDir).Length
+      if ($c -eq 0) {
+        Remove-Item $junctionDir  
+      }
+      else {
+        Write-HostError "Junction source directory not empty: $junctionDir"
+        return
+      }
     }
 
-    Write-Output $startupContent | Out-File -encoding ASCII $startupFilePath
+    Write-Host "`tCreating junction from $junctionDir to $realDir"
+    Exec-Command "cmd" "/C mklink /J $junctionDir $realDir"
+  }
 
-    $objShell = New-Object -ComObject ("WScript.Shell")
-    $objShortCut = $objShell.CreateShortcut($shortcutFilePath)
-    $objShortCut.TargetPath = $startupFilePath
-    $objShortCut.Save()
-  }
-  else {
-    Write-Host "Configuring Unmapped drives"
-    if (Test-Path $shortcutFilePath) {
-      Remove-Item $shortcutFilePath
-    }
-  }
+  Configure-One $codeDir $script:settings.codeDir
+  Configure-One $nugetDir $script:settings.nugetDir
+  Configure-One $toolsDir $script:settings.toolsDir
 }
+
 
 # This will update the snapshot in the OneDrive Config folder if OneDrive is syncing on
 # this machine.
@@ -293,10 +255,20 @@ function Configure-Snapshot() {
 }
 
 function Load-Settings() {
-  $script:settings = @{
-    codeDir = Join-Path ${env:USERPROFILE} "code";
-    nugetDir = Join-Path ${env:USERPROFILE} ".nuget";
-    mapDrives = $true;
+  $realCodeDir = $codeDir
+  $realNuGetDir = $nugetDir
+  $realToolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
+
+  # When running as a snapshot the Tools directory will be a sibling of the current 
+  # directory.
+  if (-not (Test-Path $realToolsDir)) {
+    $realToolsDir = Split-Path -Parent $PSScriptRoot
+    $realToolsDir = Split-Path -Parent $realToolsDir
+    $realToolsDir = Join-Path $realToolsDir "Tools"
+
+    if (-not (Test-Path $realToolsDir)) {
+      $realToolsDir = $realDir
+    }
   }
 
   switch -Wildcard ("${env:COMPUTERNAME}\${env:USERNAME}") {
@@ -310,11 +282,36 @@ function Load-Settings() {
       $script:settings.nugetDir = Join-Path $codeDir "nuget"
       break;
     }
-    "*\vsonline" { 
-      $script:settings.mapDrives = $false
-      break;
-    }
     default { }
+  }
+
+  $script:settings = @{
+    codeDir = $realCodeDir
+    nugetDir = $realNugetDir
+    toolsDir = $realToolsDir
+  }
+}
+
+# Delete legacy settings and infra
+function Configure-Legacy() {
+  Write-Host "Configuring Legacy Items"
+
+  if (Test-Path $env:NUGET_PACKAGES) {
+    Remove-Item env:\NUGET_PACKAGES
+    Exec-Console "setx" 'NUGET_PACKAGES ""'
+  }
+
+  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
+  if (Test-Path $shortcutFilePath) {
+    Remove-Item $shortcutFilePath
+  }
+
+  if (Test-Path "p:\") {
+    Exec-Console "subst" "p: /D"
+  }
+
+  if (Test-Path "t:\") {
+    Exec-Console "subst" "t: /D"
   }
 }
 
@@ -328,33 +325,34 @@ try {
     exit 1
   }
 
-  Load-Settings
-
-  Write-Host "Map Drives: $($settings.mapDrives)"
-  Write-Host "Code Directory: $($settings.codeDir)"
-  Write-Host "Nuget Directory: $($settings.nugetDir)"
-  Write-Host ""
-
+  # Setup the directories referenced in the script
+  $codeDir = Join-Path ${env:USERPROFILE} "code";
+  $nugetDir = Join-Path ${env:USERPROFILE} ".nuget";
+  $toolsDir = Join-Path ${env:USERPROFILE} "tools";
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
   $isRunFromGit = Test-Path (Join-Path $repoDir ".git")
-
   $generatedDir = Join-Path $PSScriptRoot "Generated"
   Create-Directory $generatedDir
 
+  Load-Settings
+  Write-Host "Data Source Directories"
+  Write-Host "`tCode Directory: $($settings.codeDir)"
+  Write-Host "`tNuget Directory: $($settings.nugetDir)"
+  Write-Host "`tTools Directory: $($settings.toolsDir)"
+
   $vimFilePath = Get-VimFilePath
   $gitFilePath = Get-GitFilePath
-  $toolsDir = Get-ToolsDir
 
-  Configure-MappedDrive
+  Configure-Junctions
   Configure-Vim
   Configure-PowerShell
   Configure-Git
   Configure-VSCode
   Configure-Terminal
-  Configure-NuGet
   Configure-Snapshot
+  Configure-Legacy
 
   exit 0
 }
