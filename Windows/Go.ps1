@@ -273,13 +273,13 @@ function Load-Settings() {
 
   switch -Wildcard ("${env:COMPUTERNAME}\${env:USERNAME}") {
     "JAREDPAR05\*" { 
-      $script:settings.codeDir = "e:\code"
-      $script:settings.nugetDir = Join-Path $codeDir "nuget"
+      $realCodeDir = "e:\code"
+      $realNuGetDir = "e:\nuget"
       break;
     }
     "JAREDPAR06\*" { 
-      $script:settings.codeDir = "e:\code"
-      $script:settings.nugetDir = Join-Path $codeDir "nuget"
+      $realCodeDir = "e:\code"
+      $realNuGetDir = "e:\nuget"
       break;
     }
     default { }
