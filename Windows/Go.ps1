@@ -267,7 +267,9 @@ function Load-Settings() {
     $realToolsDir = Join-Path $realToolsDir "Tools"
 
     if (-not (Test-Path $realToolsDir)) {
-      $realToolsDir = $realDir
+      $realToolsDir = Join-Path ${env:USERPROFILE} "Tools"
+      Write-HostWarning "Can't find any tools directory using empty $realToolsDir"
+      Create-Directory $realToolsDir
     }
   }
 
@@ -296,7 +298,7 @@ function Load-Settings() {
 function Configure-Legacy() {
   Write-Host "Configuring Legacy Items"
 
-  if (Test-Path $env:NUGET_PACKAGES) {
+  if (($env:NUGET_PACKAGES -ne $null) -and (Test-Path $env:NUGET_PACKAGES)) {
     Remove-Item env:\NUGET_PACKAGES
     Exec-Console "setx" 'NUGET_PACKAGES ""'
   }
