@@ -1,6 +1,5 @@
 {
-    "editor.wordWrap": "bounded",
-    "editor.renderWhitespace": "all",
+  "editor.renderWhitespace": "all",
     "editor.suggestSelection": "first",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,

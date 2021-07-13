@@ -105,14 +105,6 @@ function Configure-PowerShell() {
   Push-Location $docDir
   try {
     Write-Verbose "Profile"
-    Create-Directory "WindowsPowerShell"
-    Set-Location "WindowsPowerShell"
-
-    $oldProfile = "Microsoft.PowerShell_profile.ps1" 
-    if (Test-Path $oldProfile ) {
-      Remove-Item $oldProfile
-    }
-
     $machineProfileFilePath = Join-Path $generatedDir "machine-profile.ps1"
     if (-not (Test-Path $machineProfileFilePath)) {
       $machineProfileContent = @"
@@ -137,7 +129,20 @@ if (Test-Path '$machineProfileFilePath') {
   . '$machineProfileFilePath'
 }
 "@
-    Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
+
+    foreach ($d in @("WindowsPowerShell", "PowerShell")) {
+      Create-Directory $d
+      Set-Location $d
+
+      $oldProfile = "Microsoft.PowerShell_profile.ps1" 
+      if (Test-Path $oldProfile ) {
+        Remove-Item $oldProfile
+      }
+
+      Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
+      Set-Location ..
+    }
+
     Write-Verbose "Script Execution"
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
   }
