@@ -22,32 +22,12 @@ function Write-HostError([string]$message) {
   Write-Host -ForegroundColor Yellow "ERROR: $message"
 }
 
-# Copy a configuration file from this repository into a location on
-# the machine that is outside this repository. This will warn if the 
-# destination file exists but has different content. Makes it so I 
-# don't silently erase changes.
-function Copy-ConfigFile($sourceFilePath, $destFilePath) {
-  if (-not $refreshMachine -and (Test-Path $destFilePath)) {
-    $destHash = (Get-FileHash -Path $destFilePath -Algorithm SHA256).Hash
-    $sourceHash = (Get-FileHash -Path $sourceFilePath -Algorithm SHA256).Hash
-    if ($destHash -ne $sourceHash) {
-      if ($refreshConfig) {
-        Copy-Item $destFilePath $sourceFilePath
-      }
-      else {
-        Write-HostWarning "Can't copy $sourceFilePath to $destFilePath as there are changes in the destination"
-        Write-HostWarning "`tSource hash: $sourceHash"
-        Write-HostWarning "`tDestination hash: $destHash"
-        Exec-CommandCore "cmd" "/c fc /l `"$destFilePath`" `"$sourceFilePath`"" -checkFailure:$false -useConsole:$true
-        Write-HostWarning "Use -refreshMachine option to update machine copy"
-        Write-HostWarning "Use -refreshConfig option to update checked in copy"
-        return
-      }
-    }
-  }
-
+function Link-ConfigFile($sourceFilePath, $destFilePath) {
   Create-Directory (Split-Path -Parent $destFilePath)
-  Copy-Item $sourceFilePath $destFilePath -force
+  if (Test-Path $destFilePath) {
+    Remove-Item $destFilePath
+  }
+  Exec-Command "cmd" "/C mklink /h $destFilePath $sourceFilePath" | Out-Null
 }
 
 function Get-VimFilePath() {
@@ -174,24 +154,24 @@ function Configure-VSCode() {
   Write-Host "Configuring VS Code"
 
   $settingsFilePath = Join-Path $dataDir "settings.json"
-  $content = Get-Content -Raw $settingsFilePath
-  $content = "// Actual settings file stored at: $settingsFilePath" + [Environment]::NewLine + $content
   $destFilePath = Join-Path ${env:APPDATA} "Code\User\settings.json"
-  Copy-ConfigFile $settingsFilePath $destFilePath
+  Link-ConfigFile $settingsFilePath $destFilePath
 
   $keybindingsFilePath = Join-Path $dataDir "keybindings.json"
   $destFilePath = Join-Path ${env:APPDATA} "Code\User\keybindings.json"
-  Copy-ConfigFile $keyBindingsFilePath $destFilePath
-
+  Link-ConfigFile $keyBindingsFilePath $destFilePath
 }
 
 function Configure-Terminal() {
   Write-Host "Configuring Terminal"
 
-  $destFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\profiles.json" 
+  $destFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
   if (Test-Path $destFilePath) {
-      $profileFilePath = Join-Path $dataDir "profiles.json"
-      Copy-ConfigFile $profileFilePath $destFilePath
+    $profileFilePath = Join-Path $dataDir "terminal-settings.json"
+    Link-ConfigFile $profileFilePath $destFilePath
+  }
+  else {
+    Write-Host "Did not find windows terminal"
   }
 }
 
