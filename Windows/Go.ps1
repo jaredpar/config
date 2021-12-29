@@ -7,8 +7,6 @@
 [CmdletBinding(PositionalBinding=$false)]
 param (
   [switch]$latest = $false,
-  [switch]$refreshMachine = $false,
-  [switch]$refreshConfig = $false,
   [parameter(ValueFromRemainingArguments=$true)] $badArgs)
 
 Set-StrictMode -version 2.0
