@@ -6,7 +6,6 @@
 [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Scope='Function', Target='*')]
 [CmdletBinding(PositionalBinding=$false)]
 param (
-  [switch]$latest = $false,
   [parameter(ValueFromRemainingArguments=$true)] $badArgs)
 
 Set-StrictMode -version 2.0
@@ -17,15 +16,54 @@ function Write-HostWarning([string]$message) {
 }
 
 function Write-HostError([string]$message) {
-  Write-Host -ForegroundColor Yellow "ERROR: $message"
+  Write-Host -ForegroundColor Red "ERROR: $message"
 }
 
-function Link-ConfigFile($sourceFilePath, $destFilePath) {
-  Create-Directory (Split-Path -Parent $destFilePath)
-  if (Test-Path $destFilePath) {
-    Remove-Item $destFilePath
+function Link-File($linkFilePath, $targetFilePath) {
+  $null = Create-Directory (Split-Path -Parent $linkFilePath)
+  if (Test-Path $linkFilePath) {
+    Remove-Item $linkFilePath
   }
-  Exec-Command "cmd" "/C mklink /h $destFilePath $sourceFilePath" | Out-Null
+
+  Write-Verbose "`tCreating link from $linkFilePath to $targetFilePath"
+  Exec-Command "cmd" "/C mklink /h $linkFilePath $targetFilePath" | Out-Null
+}
+
+# Ensure the $targetDir points to the $destDir on the machine. Will
+# error if existing files in the directory
+function Link-Directory($linkDir, $targetDir) {
+  if ($targetDir -eq $targetDir) {
+    $null = Create-Directory $targetDir
+    return
+  }
+
+  # If the destination directory exists but is empty then we can just delete 
+  # and create the junction
+  if (Test-Path $linkDir) {
+    $i = Get-Item $linkDir
+    if ($i.LinkType -eq "Junction") {
+      if ($i.Target -eq $destDir) {
+        return
+      }
+
+      Write-HostError "Junction $linkDir points to wrong source directory: $($i.Target)"
+      return
+    }
+
+    $c = @(Get-ChildItem $linkDir).Length
+    if ($c -eq 0) {
+      Write-Verbose "Removing old empty directory"
+      Remove-Item $linkDir  
+    }
+    else {
+      Write-HostError "Junction source directory not empty: $linkDir"
+      return
+    }
+  }
+
+  $null = Create-Directory (Split-Path -Parent $linkDir)
+  Write-Verbose "`tCreating junction from $linkDir to $targetDir"
+  Exec-Command "cmd" "/C mklink /J $linkDir $targetDir"
 }
 
 function Get-VimFilePath() {
@@ -62,18 +100,13 @@ function Configure-Vim() {
   # Add the _vimrc file to the %HOME% path which just calls the real 
   # one I have in data\vim
   Write-Verbose "Generating _vsvimrc"
-  $realFilePath = Join-Path $commonDataDir "_vsvimrc"
-  $destFilePath = Join-Path $env:UserProfile "_vsvimrc"
-  Write-Output ":source $realFilePath" | Out-File -encoding ASCII $destFilePath
+  Link-File (Join-Path $env:UserProfile "_vsvimrc") (Join-Path $commonDataDir "_vsvimrc")
 
   Write-Verbose "Generating _vimrc"
-  $realFilePath = Join-Path $commonDataDir "_vimrc"
-  $destFilePath = Join-Path $env:UserProfile "_vimrc"
-  Write-Output ":source $realFilePath" | Out-File -encoding ASCII $destFilePath
+  Link-File (Join-Path $env:UserProfile "_vimrc") (Join-Path $commonDataDir "_vimrc")
 
   Write-Verbose "Copying VimFiles" 
-  $sourceDir = Join-Path $commonDataDir "vim\vimfiles"
-  Copy-Item -re -fo $sourceDir $env:UserProfile
+  Link-Directory (Join-Path $env:UserProfile "vimfiles") (Join-Path $commonDataDir "vim\vimfiles")
 }
 
 function Configure-PowerShell() { 
@@ -116,6 +149,7 @@ if (Test-Path '$machineProfileFilePath') {
   . '$machineProfileFilePath'
 }
 "@
+    }
 
     foreach ($d in @("WindowsPowerShell", "PowerShell")) {
       Create-Directory $d
@@ -157,25 +191,12 @@ function Configure-Git() {
   Exec-Console $gitFilePath "config --global commit.gpgsign false"
 }
 
-function Configure-VSCode() { 
-  Write-Host "Configuring VS Code"
-
-  $settingsFilePath = Join-Path $dataDir "settings.json"
-  $destFilePath = Join-Path ${env:APPDATA} "Code\User\settings.json"
-  Link-ConfigFile $settingsFilePath $destFilePath
-
-  $keybindingsFilePath = Join-Path $dataDir "keybindings.json"
-  $destFilePath = Join-Path ${env:APPDATA} "Code\User\keybindings.json"
-  Link-ConfigFile $keyBindingsFilePath $destFilePath
-}
-
 function Configure-Terminal() {
   Write-Host "Configuring Terminal"
 
-  $destFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
-  if (Test-Path $destFilePath) {
-    $profileFilePath = Join-Path $dataDir "terminal-settings.json"
-    Link-ConfigFile $profileFilePath $destFilePath
+  $linkFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json" 
+  if (Test-Path $linkFilePath) {
+    Link-File $linkFilePath (Join-Path $dataDir "terminal-settings.json")
   }
   else {
     Write-Host "Did not find windows terminal"
@@ -186,44 +207,10 @@ function Configure-Terminal() {
 # code, tools or nuget, is in the same location on every machine. If the 
 # real directories differ then create a junction to make it real
 function Configure-Junctions() {
-  function Configure-One($junctionDir, $realDir) {
-    if ($junctionDir -eq $realDir) {
-      $null = Create-Directory $junctionDir
-      return
-    }
-
-    # If the destination directory exists but is empty then we can just delete 
-    # and create the junction
-    if (Test-Path $junctionDir) {
-      $i = Get-Item $junctionDir
-      if ($i.LinkType -eq "Junction") {
-        if ($i.Target -eq $realDir) {
-          return
-        }
-
-        Write-HostError "Junction $junctionDir points to wrong source directory: $($i.Target)"
-        return
-      }
-
-      $c = @(Get-ChildItem $junctionDir).Length
-      if ($c -eq 0) {
-        Remove-Item $junctionDir  
-      }
-      else {
-        Write-HostError "Junction source directory not empty: $junctionDir"
-        return
-      }
-    }
-
-    Write-Host "`tCreating junction from $junctionDir to $realDir"
-    Exec-Command "cmd" "/C mklink /J $junctionDir $realDir"
-  }
-
-  Configure-One $codeDir $script:settings.codeDir
-  Configure-One $nugetDir $script:settings.nugetDir
-  Configure-One $toolsDir $script:settings.toolsDir
+  Link-Directory $codeDir $script:settings.codeDir
+  Link-Directory $nugetDir $script:settings.nugetDir
+  Link-Directory $toolsDir $script:settings.toolsDir
 }
-
 
 # This will update the snapshot in the OneDrive Config folder if OneDrive is syncing on
 # this machine.
@@ -286,29 +273,6 @@ function Load-Settings() {
   }
 }
 
-# Delete legacy settings and infra
-function Configure-Legacy() {
-  Write-Host "Configuring Legacy Items"
-
-  if (($env:NUGET_PACKAGES -ne $null) -and (Test-Path $env:NUGET_PACKAGES)) {
-    Remove-Item env:\NUGET_PACKAGES
-    Exec-Console "setx" 'NUGET_PACKAGES ""'
-  }
-
-  $shortcutFilePath = Join-Path ${env:USERPROFILE} "AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\startup.lnk"
-  if (Test-Path $shortcutFilePath) {
-    Remove-Item $shortcutFilePath
-  }
-
-  if (Test-Path "p:\") {
-    Exec-Console "subst" "p: /D"
-  }
-
-  if (Test-Path "t:\") {
-    Exec-Console "subst" "t: /D"
-  }
-}
-
 try {
   . (Join-Path $PSScriptRoot "Common-Utils.ps1")
   Push-Location $PSScriptRoot
@@ -343,10 +307,8 @@ try {
   Configure-Vim
   Configure-PowerShell
   Configure-Git
-  Configure-VSCode
   Configure-Terminal
   Configure-Snapshot
-  Configure-Legacy
 
   exit 0
 }
