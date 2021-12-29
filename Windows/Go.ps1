@@ -94,8 +94,17 @@ function Configure-PowerShell() {
       Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
     }
 
-    $realProfileFilePath = Join-Path $PSScriptroot "Profile.ps1"
-    $realProfileContent = @"
+    foreach ($name in @("WindowsPowerShell", "PowerShell")) {
+      Create-Directory $name
+      Set-Location $name
+
+      $oldProfile = "Microsoft.PowerShell_profile.ps1" 
+      if (Test-Path $oldProfile ) {
+        Remove-Item $oldProfile
+      }
+
+      $realProfileFilePath = Join-Path $PSScriptroot "Profile.ps1"
+      $realProfileContent = @"
 # This is a generated file. Do not edit. 
 
 # The real profile can be missing when we're under an elevated prompt because it doesn't 
