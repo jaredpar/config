@@ -18,8 +18,8 @@
     "vsonline.planFilter": "",
     "workbench.colorTheme": "Visual Studio Dark",
     "[markdown]": {
-      "editor.wordWrap": "off",
-      "editor.rulers": [80]
+      "editor.wordWrap": "bounded",
+      "editor.wordWrapColumn": 100,
     },
     "[powershell]": {
       "editor.tabSize": 2,

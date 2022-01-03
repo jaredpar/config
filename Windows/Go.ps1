@@ -20,18 +20,19 @@ function Write-HostError([string]$message) {
 }
 
 function Link-File($linkFilePath, $targetFilePath) {
+  Write-Verbose "Creating link from $linkFilePath to $targetFilePath"
   $null = Create-Directory (Split-Path -Parent $linkFilePath)
   if (Test-Path $linkFilePath) {
     Remove-Item $linkFilePath
   }
 
-  Write-Verbose "`tCreating link from $linkFilePath to $targetFilePath"
   Exec-Command "cmd" "/C mklink /h $linkFilePath $targetFilePath" | Out-Null
 }
 
 # Ensure the $targetDir points to the $destDir on the machine. Will
 # error if existing files in the directory
 function Link-Directory($linkDir, $targetDir) {
+  Write-Verbose "Creating junction from $linkDir to $targetDir"
   if ($targetDir -eq $targetDir) {
     $null = Create-Directory $targetDir
     return
@@ -62,7 +63,6 @@ function Link-Directory($linkDir, $targetDir) {
   }
 
   $null = Create-Directory (Split-Path -Parent $linkDir)
-  Write-Verbose "`tCreating junction from $linkDir to $targetDir"
   Exec-Command "cmd" "/C mklink /J $linkDir $targetDir"
 }
 
@@ -97,15 +97,8 @@ function Configure-Vim() {
   Write-Host "Configuring Vim"
   Write-Verbose "Location: `"$vimFilePath`""
 
-  # Add the _vimrc file to the %HOME% path which just calls the real 
-  # one I have in data\vim
-  Write-Verbose "Generating _vsvimrc"
   Link-File (Join-Path $env:UserProfile "_vsvimrc") (Join-Path $commonDataDir "_vsvimrc")
-
-  Write-Verbose "Generating _vimrc"
   Link-File (Join-Path $env:UserProfile "_vimrc") (Join-Path $commonDataDir "_vimrc")
-
-  Write-Verbose "Copying VimFiles" 
   Link-Directory (Join-Path $env:UserProfile "vimfiles") (Join-Path $commonDataDir "vim\vimfiles")
 }
 
