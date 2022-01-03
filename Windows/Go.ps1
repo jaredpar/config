@@ -109,51 +109,17 @@ function Configure-PowerShell() {
   Push-Location $docDir
   try {
     Write-Verbose "Profile"
-    $machineProfileFilePath = Join-Path $generatedDir "machine-profile.ps1"
-    if (-not (Test-Path $machineProfileFilePath)) {
-      $machineProfileContent = @"
-# Place all machine profile customizations into this file. It will not be 
-# overwritten by future calls to Go.ps1
-"@
-      Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
-    }
+    $realProfileFilePath = Join-Path $PSScriptroot "Profile.ps1"
 
-    foreach ($name in @("WindowsPowerShell", "PowerShell")) {
-      Create-Directory $name
-      Set-Location $name
-
-      $oldProfile = "Microsoft.PowerShell_profile.ps1" 
-      if (Test-Path $oldProfile ) {
-        Remove-Item $oldProfile
-      }
-
-      $realProfileFilePath = Join-Path $PSScriptroot "Profile.ps1"
-      $realProfileContent = @"
+    foreach ($dirName in @("WindowsPowerShell", "PowerShell")) {
+      Create-Directory $dirName
+      Set-Location $dirName
+      $profileContent = @"
 # This is a generated file. Do not edit. 
-
-# The real profile can be missing when we're under an elevated prompt because it doesn't 
-# inherit all of our subst commands
-if (Test-Path $realProfileFilePath) {
-  . `"$realProfileFilePath`"
-}
-
-# Place all machine customizations into this file
-if (Test-Path '$machineProfileFilePath') {
-  . '$machineProfileFilePath'
-}
+. `"$realProfileFilePath`"
 "@
-    }
 
-    foreach ($d in @("WindowsPowerShell", "PowerShell")) {
-      Create-Directory $d
-      Set-Location $d
-
-      $oldProfile = "Microsoft.PowerShell_profile.ps1" 
-      if (Test-Path $oldProfile ) {
-        Remove-Item $oldProfile
-      }
-
-      Write-Output $realProfileContent | Out-File -encoding ASCII "profile.ps1"
+      Write-Output $profileContent | Out-File -encoding ASCII "profile.ps1"
       Set-Location ..
     }
 

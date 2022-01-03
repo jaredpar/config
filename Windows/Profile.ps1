@@ -38,3 +38,17 @@ if (Test-Admin) {
 
 Set-Alias ss Select-String
 Set-Alias ssr Select-StringRecurse
+
+# Load machine specific customizations. Any customization which is machine specific 
+# should go into this file as it's not tracked in Git
+$script:machineProfileFilePath = Join-Path $PSScriptRoot "Generated\machine-profile.ps1"
+if (-not (Test-Path $machineProfileFilePath)) {
+    $machineProfileContent = @"
+# Place all machine profile customizations into this file. It will not be 
+# overwritten by future calls to Go.ps1
+"@
+    Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
+} else {
+    . $machineProfileFilePath
+}
+
