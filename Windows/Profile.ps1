@@ -43,10 +43,7 @@ Set-Alias ssr Select-StringRecurse
 # should go into this file as it's not tracked in Git
 $script:machineProfileFilePath = Join-Path $PSScriptRoot "Generated\machine-profile.ps1"
 if (-not (Test-Path $machineProfileFilePath)) {
-    $machineProfileContent = @"
-# Place all machine profile customizations into this file. It will not be 
-# overwritten by future calls to Go.ps1
-"@
+    $machineProfileContent = "# Machine specific profile code"
     Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
 } else {
     . $machineProfileFilePath
