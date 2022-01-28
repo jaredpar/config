@@ -19,6 +19,7 @@ function Write-HostError([string]$message) {
   Write-Host -ForegroundColor Red "ERROR: $message"
 }
 
+# Ensure that $linkFilePath refers to $targetFilePath as a symlink
 function Link-File($linkFilePath, $targetFilePath) {
   Write-Verbose "Creating link from $linkFilePath to $targetFilePath"
   $null = Create-Directory (Split-Path -Parent $linkFilePath)
@@ -29,11 +30,13 @@ function Link-File($linkFilePath, $targetFilePath) {
   Exec-Command "cmd" "/C mklink /h $linkFilePath $targetFilePath" | Out-Null
 }
 
-# Ensure the $targetDir points to the $destDir on the machine. Will
-# error if existing files in the directory
-function Link-Directory($linkDir, $targetDir) {
+# Ensure that $linkDir refers to $targetDir on the machine. If it is 
+# not the same path then a junction will be created from $linkDir to
+# $targetDir
+function Link-Directory([string]$linkDir, [string]$targetDir) {
   Write-Verbose "Creating junction from $linkDir to $targetDir"
-  if ($targetDir -eq $targetDir) {
+  if ($linkDir -eq $targetDir) {
+    Write-Verbose "Link is same as target so no junction needed"
     $null = Create-Directory $targetDir
     return
   }
@@ -43,7 +46,7 @@ function Link-Directory($linkDir, $targetDir) {
   if (Test-Path $linkDir) {
     $i = Get-Item $linkDir
     if ($i.LinkType -eq "Junction") {
-      if ($i.Target -eq $destDir) {
+      if ($i.Target -eq $targetDir) {
         return
       }
 
@@ -70,6 +73,11 @@ function Get-VimFilePath() {
   $all = @("vim82", "vim81", "vim80", "vim74")
   foreach ($version in $all) { 
     $p = "C:\Program Files (x86)\Vim\$($version)\vim.exe"
+    if (Test-Path $p) { 
+        return $p
+    }
+
+    $p = "C:\Program Files\Vim\$($version)\vim.exe"
     if (Test-Path $p) { 
         return $p
     }
