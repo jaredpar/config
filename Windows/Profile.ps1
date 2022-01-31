@@ -29,6 +29,15 @@ function prompt() {
     ' '
 }
 
+function Set-LocationParent() {
+    Set-Location ..
+}
+
+function Set-LocationGrandParent() {
+    Set-Location ..
+    Set-Location ..
+}
+
 # Setup the Console look and feel
 $host.UI.RawUI.ForegroundColor = "Yellow"
 if (Test-Admin) {
@@ -38,6 +47,8 @@ if (Test-Admin) {
 
 Set-Alias ss Select-String
 Set-Alias ssr Select-StringRecurse
+Set-Alias .. Set-LocationParent
+Set-Alias ... Set-LocationGrandParent
 
 # Load machine specific customizations. Any customization which is machine specific 
 # should go into this file as it's not tracked in Git
