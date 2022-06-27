@@ -12,21 +12,32 @@
 # Set the prompt
 function prompt() {
 
-    if (([IntPtr]::size -eq 4) -and (test-path env:\PROCESSOR_ARCHITEW6432)) {
-        Write-Host -NoNewLine "Wow64 "
+    $text = ""
+    if (([IntPtr]::size -eq 4) -and (Test-Path env:\PROCESSOR_ARCHITEW6432)) {
+        $text += "Wow64 "
     }
 
     if (Test-Admin) { 
         Write-Host -NoNewLine -f red "Admin "
+        $text += "`e[34mAdmin `e[0m"
     }
 
-    Write-Host -NoNewLine -ForegroundColor Green $(get-location)
-    foreach ($entry in (Get-Location -stack)) {
-        Write-Host -NoNewLine -ForegroundColor Red '+';
+    $text += "`e[32m"
+    $text += $(Get-Location)
+    $text += "`e[0m"
+    $stack = Get-Location -stack
+    if ($stack) {
+        $text += " `e[34m"
+        foreach ($entry in (Get-Location -stack)) {
+            $text += '+';
+        }
+        $text += "`e[0m"
     }
 
-    Write-Host -NoNewLine -ForegroundColor Green '>'
-    ' '
+    # $text += "`e[1e`e[1d"
+    $text += "`n"
+    $text += "`e[34m> `e[0m"
+    $text
 }
 
 function Set-LocationParent() {
