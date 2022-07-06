@@ -10,7 +10,7 @@ try {
   . (Join-Path $PSScriptRoot "Common-Utils.ps1")
 
   Exec-Command "git" "fetch"
-  Exec-Command "git" "merge origin/master --ff-only"
+  Exec-Command "git" "merge origin/main --ff-only"
   Exec-Script (Join-Path $PSScriptRoot "Go.ps1")
 
   exit 0
