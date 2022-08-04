@@ -170,6 +170,17 @@ function Configure-Terminal() {
   }
 }
 
+function Configure-Winget() {
+  Write-Host "Configuring winget"
+  $linkFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
+  if (Test-Path $linkFilePath) {
+    Link-File $linkFilePath (Join-Path $dataDir "winget-settings.json")
+  }
+  else {
+    Write-Host "Did not find winget"
+  }
+}
+
 # The goal of this function is to ensure that standard directories, like 
 # code, tools or nuget, is in the same location on every machine. If the 
 # real directories differ then create a junction to make it real
@@ -275,6 +286,7 @@ try {
   Configure-PowerShell
   Configure-Git
   Configure-Terminal
+  Configure-Winget
   Configure-Snapshot
 
   exit 0
