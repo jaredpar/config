@@ -131,8 +131,11 @@ function Configure-PowerShell() {
       Set-Location ..
     }
 
-    Write-Verbose "Script Execution"
+    Write-Verbose "Pwsh Script Execution"
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+
+    Write-Verbose "Powershell Script Execution"
+    Exec-Command "powershell" "-NoProfile Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" | Out-Null
   }
   finally {
     Pop-Location
