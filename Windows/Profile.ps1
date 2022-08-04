@@ -12,13 +12,17 @@
 # Set the prompt
 function prompt() {
 
+    if ($PSVersionTable.PSEdition -ne 'Core') {
+        $text = "$(Get-Location)> "
+        return $text
+    }
+
     $text = ""
     if (([IntPtr]::size -eq 4) -and (Test-Path env:\PROCESSOR_ARCHITEW6432)) {
         $text += "Wow64 "
     }
 
     if (Test-Admin) { 
-        Write-Host -NoNewLine -f red "Admin "
         $text += "`e[34mAdmin `e[0m"
     }
 
