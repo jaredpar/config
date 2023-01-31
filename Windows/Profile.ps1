@@ -40,7 +40,8 @@ function prompt() {
 
     # $text += "`e[1e`e[1d"
     $text += "`n"
-    $text += "`e[34m> `e[0m"
+    $text += "🍿🐻"
+    $text += " `e[34m> `e[0m"
     $text
 }
 
