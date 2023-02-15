@@ -26,7 +26,7 @@ function Exec-Block([scriptblock]$cmd) {
   } 
 }
 
-function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true, [switch]$useAdmin = $false, [switch]$checkFailure = $true) {
+function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true, [switch]$useAdmin = $false, [switch]$throwOnFailure = $false) {
   $startInfo = New-Object System.Diagnostics.ProcessStartInfo
   $startInfo.FileName = $command
   $startInfo.Arguments = $commandArgs
@@ -70,8 +70,13 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
     }
 
     $finished = $true
-    if ($checkFailure -and ($process.ExitCode -ne 0)) { 
-      throw "Command failed to execute: $command $commandArgs" 
+    if ($process.ExitCode -ne 0) {
+      $msg = "Command failed to execute $($process.ExitCode): $command $commandArgs" 
+      if ($throwOnFailure) {
+        throw $msg
+      } else {
+        Write-Output $msg
+      }
     }
   }
   finally {
@@ -79,7 +84,7 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
     # way kill the process
     if (-not $finished) {
       $process.Kill()
-      }
+    }
   }
 }
 
@@ -92,8 +97,8 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
 #   $args = "/p:ManualBuild=true Test.proj"
 #   Exec-Command $msbuild $args
 # 
-function Exec-Command([string]$command, [string]$commandArgs) {
-  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false 
+function Exec-Command([string]$command, [string]$commandArgs, [switch]$throwOnFailure = $false) {
+  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false -throwOnFailure:$throwOnFailure
 }
 
 # Functions exactly like Exec-Command but lets the process re-use the current 
@@ -102,8 +107,8 @@ function Exec-Command([string]$command, [string]$commandArgs) {
 # In general this command should be used in place of
 #   Exec-Command $msbuild $args | Out-Host
 #
-function Exec-Console([string]$command, [string]$commandArgs, [switch]$useAdmin = $false) {
-  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$true -useAdmin:$useAdmin
+function Exec-Console([string]$command, [string]$commandArgs, [switch]$useAdmin = $false, [switch]$throwOnFailure = $false) {
+  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$true -useAdmin:$useAdmin -throwOnFailure:$throwOnFailure
 }
 
 # Handy function for executing a powershell script in a clean environment with 

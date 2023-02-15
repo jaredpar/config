@@ -135,7 +135,7 @@ function Configure-PowerShell() {
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
     Write-Verbose "Powershell Script Execution"
-    Exec-Command "powershell" "-NoProfile Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" | Out-Null
+    Exec-Console "powershell" "-NoProfile Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" -throwOnFailure:$false
   }
   finally {
     Pop-Location
@@ -175,8 +175,9 @@ function Configure-Terminal() {
 
 function Configure-Winget() {
   Write-Host "Configuring winget"
-  $linkFilePath = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState\settings.json"
-  if (Test-Path $linkFilePath) {
+  $wingetDir = Join-Path ${env:LOCALAPPDATA} "Packages\Microsoft.DesktopAppInstaller_8wekyb3d8bbwe\LocalState"
+  $linkFilePath = Join-Path $wingetDir "settings.json"
+  if (Test-Path $wingetDir) {
     Link-File $linkFilePath (Join-Path $dataDir "winget-settings.json")
   }
   else {
