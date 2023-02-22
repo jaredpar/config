@@ -135,7 +135,7 @@ function Configure-PowerShell() {
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
 
     Write-Verbose "Powershell Script Execution"
-    Exec-Console "powershell" "-NoProfile Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" -throwOnFailure:$false
+    Exec-Console "powershell" "-NoProfile Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" -softFail
   }
   finally {
     Pop-Location
