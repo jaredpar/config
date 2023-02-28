@@ -154,6 +154,7 @@ function Configure-Git() {
   Write-Verbose "Standard Setup"
   $gitEditor = if ($null -ne $vimFilePath) { $vimFilePath } else { "notepad.exe" }
   Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
+  Exec-Console $gitFilePath "config --global core.longpaths true"
   Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
   Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
   Exec-Console $gitFilePath "config --global fetch.prune true"
