@@ -1,5 +1,6 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhistcnt =5
+let g:netrw_dirhistcnt =6
+let g:netrw_dirhist_6='C:\Users\jaredpar'
 let g:netrw_dirhist_5='C:/Users/jaredpar/Downloads'
 let g:netrw_dirhist_4='C:/Users/jaredpar/temp/console/bin/Debug/net6.0'
 let g:netrw_dirhist_3='C:/Users/jaredpar/temp/console/bin/Debug'
