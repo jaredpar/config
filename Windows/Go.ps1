@@ -70,7 +70,7 @@ function Link-Directory([string]$linkDir, [string]$targetDir) {
 }
 
 function Get-VimFilePath() {
-  $all = @("vim82", "vim81", "vim80", "vim74")
+  $all = @("vim90", "vim82", "vim81", "vim80", "vim74")
   foreach ($version in $all) { 
     $p = "C:\Program Files (x86)\Vim\$($version)\vim.exe"
     if (Test-Path $p) { 
@@ -133,9 +133,6 @@ function Configure-PowerShell() {
 
     Write-Verbose "Pwsh Script Execution"
     Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-
-    Write-Verbose "Powershell Script Execution"
-    Exec-Console "powershell" "-NoProfile Set-ExecutionPolicy RemoteSigned -Scope CurrentUser" -softFail
   }
   finally {
     Pop-Location
