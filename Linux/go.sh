@@ -9,7 +9,7 @@ fi
 ln -sf $THIS_DIR/vimfiles ~/.vim
 ln -sf $THIS_DIR/.bashrc ~/.bashrc
 
-git config --global user.email "jaredpparsons@gmail.com"
+git config --global user.email "jared@popcornbear.org"
 git config --global user.name "Jared Parsons"
 git config --global core.editor "vim"
 git config --global fetch.prune true
