@@ -140,23 +140,8 @@ function Configure-PowerShell() {
 }
 
 function Configure-Git() { 
-  if ($null -eq $gitFilePath) {
-    Write-Verbose "Skip git configuration because git isn't installed"
-    return
-  }
-
   Write-Host "Configuring Git"
-  Write-Verbose "Location: $gitFilePath"
-
-  Write-Verbose "Standard Setup"
-  $gitEditor = if ($null -ne $vimFilePath) { $vimFilePath } else { "notepad.exe" }
-  Exec-Console $gitFilePath "config --global core.editor `"'$gitEditor'`""
-  Exec-Console $gitFilePath "config --global core.longpaths true"
-  Exec-Console $gitFilePath "config --global user.name `"Jared Parsons`""
-  Exec-Console $gitFilePath "config --global user.email `"jaredpparsons@gmail.com`""
-  Exec-Console $gitFilePath "config --global fetch.prune true"
-  Exec-Console $gitFilePath "config --global push.default current"
-  Exec-Console $gitFilePath "config --global commit.gpgsign false"
+  Link-File (Join-Path $env:UserProfile ".gitconfig") (Join-Path $commonDataDir ".gitconfig")
 }
 
 function Configure-Terminal() {

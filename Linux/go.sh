@@ -8,10 +8,5 @@ if [ -L ~/.vim ]; then
 fi
 ln -sf $THIS_DIR/vimfiles ~/.vim
 ln -sf $THIS_DIR/.bashrc ~/.bashrc
+ln -sf $THIS_DIR/../CommonData/.gitconfig  ~/.gitconfig
 
-git config --global user.email "jared@popcornbear.org"
-git config --global user.name "Jared Parsons"
-git config --global core.editor "vim"
-git config --global fetch.prune true
-git config --global push.default current
-git config --global commit.gpgsign false

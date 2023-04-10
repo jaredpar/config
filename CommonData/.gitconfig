@@ -1,0 +1,19 @@
+[core]
+  editor = 'vim'
+[user]
+  name = Jared Parsons
+  email = jared@popcornbear.org
+[alias]
+  assume = update-index --assume-unchanged       # Always assume file is unchanged
+  unassume = update-index --no-assume-unchanged  # Undo above command
+[fetch]
+  prune = true
+[push]
+  default = current
+[commit]
+  gpgsign = false
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true

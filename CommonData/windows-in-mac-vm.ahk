@@ -1,2 +1,0 @@
-RAlt & ,::Send ^`,
-RAlt & .::Send ^.
