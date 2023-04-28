@@ -11,3 +11,9 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
+
+if [ -f "$(eval echo ~/.bashrc-local)" ]; then
+    . ~/.bashrc-local
+else
+    echo "here we arent'"
+fi
