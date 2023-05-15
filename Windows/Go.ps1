@@ -131,8 +131,13 @@ function Configure-PowerShell() {
       Set-Location ..
     }
 
+    # The PSMODULEPATH must be cleared to ensure PowerShell doesn't cross contaminate pwsh and
+    # vice versa. 
     Write-Verbose "Pwsh Script Execution"
-    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+    Exec-Command "cmd" "/C PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
+
+    Write-Verbose "Powershell Script Execution"
+    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
   }
   finally {
     Pop-Location

@@ -11,7 +11,7 @@ try {
 
   Exec-Command "git" "fetch"
   Exec-Command "git" "merge origin/main --ff-only"
-  Exec-Script (Join-Path $PSScriptRoot "Go.ps1")
+  Exec-Command "pwsh" $(Join-Path $PSScriptRoot "Go.ps1")
 
   exit 0
 }
