@@ -1,4 +1,5 @@
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\n🍿🐻 > '
+THIS_DIR=$1
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
@@ -12,8 +13,7 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-if [ -f "$(eval echo ~/.bashrc-local)" ]; then
-    . ~/.bashrc-local
-else
-    echo "here we arent'"
+BASHRC_LOCAL="$THIS_DIR/Local/bashrc-local.sh"
+if [ -f "$BASHRC_LOCAL" ]; then
+    source $BASHRC_LOCAL
 fi
