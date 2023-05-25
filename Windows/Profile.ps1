@@ -68,7 +68,7 @@ Set-Alias ... Set-LocationGrandParent
 
 # Load machine specific customizations. Any customization which is machine specific 
 # should go into this file as it's not tracked in Git
-$script:machineProfileFilePath = Join-Path $PSScriptRoot "Generated\machine-profile.ps1"
+$script:machineProfileFilePath = Join-Path $PSScriptRoot "Local\machine-profile.ps1"
 if (-not (Test-Path $machineProfileFilePath)) {
     $machineProfileContent = "# Machine specific profile code"
     Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
