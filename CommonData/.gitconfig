@@ -1,8 +1,8 @@
 [core]
-  editor = 'vim'
+  editor = vim --nofork
 [user]
   name = Jared Parsons
-  email = jared@popcornbear.org
+  email = jared@paranoidcoding.org
 [alias]
   assume = update-index --assume-unchanged       # Always assume file is unchanged
   unassume = update-index --no-assume-unchanged  # Undo above command
