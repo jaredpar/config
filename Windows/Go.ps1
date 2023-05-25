@@ -86,15 +86,6 @@ function Get-VimFilePath() {
   return $null
 }
 
-function Get-GitFilePath() { 
-  $g = Get-Command "git" -ErrorAction SilentlyContinue
-  if ($null -eq $g) { 
-    return $null
-  }
-
-  return $g.Path
-}
-
 # Configure both the vim and vsvim setup
 function Configure-Vim() { 
   if ($null -eq $vimFilePath) {
@@ -271,7 +262,6 @@ try {
   Write-Host "`tTools Directory: $($settings.toolsDir)"
 
   $vimFilePath = Get-VimFilePath
-  $gitFilePath = Get-GitFilePath
 
   Configure-Junctions
   Configure-Vim
