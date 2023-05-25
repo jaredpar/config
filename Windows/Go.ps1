@@ -125,7 +125,7 @@ function Configure-PowerShell() {
     # The PSMODULEPATH must be cleared to ensure PowerShell doesn't cross contaminate pwsh and
     # vice versa. 
     Write-Verbose "Pwsh Script Execution"
-    Exec-Command "cmd" "/C PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
+    Exec-Command "cmd" "/C set PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
 
     Write-Verbose "Powershell Script Execution"
     Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
@@ -252,8 +252,8 @@ try {
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
   $isRunFromGit = Test-Path (Join-Path $repoDir ".git")
-  $generatedDir = Join-Path $PSScriptRoot "Generated"
-  Create-Directory $generatedDir
+  $localDir = Join-Path $PSScriptRoot "Local"
+  Create-Directory $localDir
 
   Load-Settings
   Write-Host "Data Source Directories"
