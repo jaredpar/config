@@ -33,8 +33,8 @@ filetype plugin on
 filetype indent on
 
 " Source a Couple of scripts
-source ~\vimfiles\matchit.vim
-source ~\vimfiles\plugin\fswitch.vim
+source ~/vimfiles/matchit.vim
+source ~/vimfiles/plugin/fswitch.vim
 
 function SetPowershellOptions()
     set softtabstop=2
