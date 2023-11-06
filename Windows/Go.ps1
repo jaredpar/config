@@ -1,5 +1,5 @@
 #####
-#
+
 # Configure the Windows environment based on the script contents
 #
 ####
@@ -146,8 +146,31 @@ function Configure-PowerShell() {
 }
 
 function Configure-Git() { 
+
+  function Core([string]$arg) {
+    Exec-Command "git" "config --global $arg"
+  }
+
   Write-Host "Configuring Git"
-  Link-File (Join-Path $env:UserProfile ".gitconfig") (Join-Path $commonDataDir ".gitconfig")
+
+  # Remove the old way where ~/.gitconfig was setup as a hard link
+  $config = Join-Path $env:UserProfile ".gitconfig"
+  if (Test-Path $config && ((Get-Item $config).LinkType -eq "HardLink")) { 
+    Remove-Item $config
+  }
+
+  & git config --global user.name "Jared Parsons"
+  & git config --global user.email jared@paranoidcoding.org
+  & git config --global fetch.prune true
+  & git config --global core.longpaths true
+  & git config --global push.default current
+  & git config --global commit.gpgsign false
+  & git config --global alias.assume 'update-index --assume-unchanged'
+  & git config --global alias.unassume 'update-index --no-assume-unchanged'
+
+  if ($script:settings.gitEditor -ne "") {
+    & git config --global core.editor $script:settings.gitEditor
+  }
 }
 
 function Configure-Terminal() {
@@ -208,6 +231,7 @@ function Load-Settings() {
   $realCodeDir = $codeDir
   $realNuGetDir = $nugetDir
   $realToolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
+  $gitEditor = ""
 
   # When running as a snapshot the Tools directory will be a sibling of the current 
   # directory.
@@ -237,6 +261,7 @@ function Load-Settings() {
     "PARANOID3\*" { 
       $realCodeDir = "e:\code"
       $realNuGetDir = "e:\nuget"
+      $gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
       Ensure-EnvironmentVariable "NUGET_PACKAGES" "e:\nuget"
       break;
     }
@@ -247,6 +272,7 @@ function Load-Settings() {
     codeDir = $realCodeDir
     nugetDir = $realNugetDir
     toolsDir = $realToolsDir
+    gitEditor = $gitEditor
   }
 }
 
