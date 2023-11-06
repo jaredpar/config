@@ -19,6 +19,16 @@ function Write-HostError([string]$message) {
   Write-Host -ForegroundColor Red "ERROR: $message"
 }
 
+function Ensure-EnvironmentVariable([string]$name, [string]$value)
+{
+  if ([System.Environment]::GetEnvironmentVariable($name) -eq $value) {
+    return
+  }
+
+  Write-Host "Setting environment variable $name to $value"
+  Exec-Command "setx" "$name `"$value`""
+}
+
 # Ensure that $linkFilePath refers to $targetFilePath as a symlink
 function Link-File($linkFilePath, $targetFilePath) {
   Write-Verbose "Creating link from $linkFilePath to $targetFilePath"
@@ -222,6 +232,12 @@ function Load-Settings() {
     "JAREDPAR06\*" { 
       $realCodeDir = "e:\code"
       $realNuGetDir = "e:\nuget"
+      break;
+    }
+    "PARANOID3\*" { 
+      $realCodeDir = "e:\code"
+      $realNuGetDir = "e:\nuget"
+      Ensure-EnvironmentVariable "NUGET_PACKAGES" "e:\nuget"
       break;
     }
     default { }
