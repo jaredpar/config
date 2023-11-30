@@ -13,3 +13,4 @@ set nu
 :imap <C-L> <Esc>:vsc View.Terminal<CR>
 :nmap <C-T> :vsc Edit.GoToAll<CR>
 :imap <C-T> <Esc>:vsc Edit.GoToAll<CR>
+:imap <C-G> <Esc>:vsc Edit.GoToAll<CR>
