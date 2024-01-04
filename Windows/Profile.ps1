@@ -54,6 +54,19 @@ function Set-LocationGrandParent() {
     Set-Location ..
 }
 
+# Make it so ~ expansion works in a sane way until the 7.4.0 behavior 
+# is resolved
+# https://github.com/PowerShell/PowerShell/issues/20750
+function code() {
+    if ($args.Length -gt 0) {
+        $p = Resolve-Path $args[0]
+        & code.cmd $p ($args[1..$args.Length] -join " ")
+    }
+    else {
+        & code.cmd
+    }
+}
+
 # Setup the Console look and feel
 $host.UI.RawUI.ForegroundColor = "Yellow"
 if (Test-Admin) {
