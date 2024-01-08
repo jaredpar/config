@@ -138,7 +138,7 @@ function Configure-PowerShell() {
     Exec-Command "cmd" "/C set PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
 
     Write-Verbose "Powershell Script Execution"
-    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
+    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
   }
   finally {
     Pop-Location
