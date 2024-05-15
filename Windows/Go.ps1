@@ -146,11 +146,6 @@ function Configure-PowerShell() {
 }
 
 function Configure-Git() { 
-
-  function Core([string]$arg) {
-    Exec-Command "git" "config --global $arg"
-  }
-
   Write-Host "Configuring Git"
 
   # Remove the old way where ~/.gitconfig was setup as a hard link
@@ -170,6 +165,9 @@ function Configure-Git() {
 
   if ($script:settings.gitEditor -ne "") {
     & git config --global core.editor $script:settings.gitEditor
+  }
+  else {
+    Write-HostWarning "No git editor configured"
   }
 }
 
@@ -264,6 +262,9 @@ function Load-Settings() {
       $gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
       Ensure-EnvironmentVariable "NUGET_PACKAGES" "e:\nuget"
       break;
+    }
+    "CPC-jared-P2WJZ\*" {
+      $gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
     }
     default { }
   }
