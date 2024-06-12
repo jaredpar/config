@@ -1,5 +1,5 @@
 #####
-
+#
 # Configure the Windows environment based on the script contents
 #
 ####
@@ -135,10 +135,10 @@ function Configure-PowerShell() {
     # The PSMODULEPATH must be cleared to ensure PowerShell doesn't cross contaminate pwsh and
     # vice versa. 
     Write-Verbose "Pwsh Script Execution"
-    Exec-Command "cmd" "/C set PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
+    Exec-Command "cmd" "/C set PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy Bypass -Scope CurrentUser"
 
     Write-Verbose "Powershell Script Execution"
-    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -Command Set-ExecutionPolicy RemoteSigned -Scope CurrentUser"
+    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -Command Set-ExecutionPolicy Bypass -Scope CurrentUser"
   }
   finally {
     Pop-Location
@@ -163,8 +163,8 @@ function Configure-Git() {
   & git config --global alias.assume 'update-index --assume-unchanged'
   & git config --global alias.unassume 'update-index --no-assume-unchanged'
 
-  if ($script:settings.gitEditor -ne "") {
-    & git config --global core.editor $script:settings.gitEditor
+  if ($gitEditor -ne "") {
+    & git config --global core.editor $gitEditor
   }
   else {
     Write-HostWarning "No git editor configured"
@@ -195,86 +195,34 @@ function Configure-Winget() {
   }
 }
 
-# The goal of this function is to ensure that standard directories, like 
-# code, tools or nuget, is in the same location on every machine. If the 
-# real directories differ then create a junction to make it real
-function Configure-Junctions() {
-  Link-Directory $codeDir $script:settings.codeDir
-  Link-Directory $nugetDir $script:settings.nugetDir
-  Link-Directory $toolsDir $script:settings.toolsDir
+# The goal of this function is to ensure that a standard tools directory
+# exists on all machines
+function Configure-Tools() {
+  Write-Host "Configuring Tools"
+  $d = Join-Path $env:USERPROFILE "tools"
+  Link-Directory $d $toolsDir
 }
 
-# This will update the snapshot in the OneDrive Config folder if OneDrive is syncing on
-# this machine.
-function Configure-Snapshot() {
-  if (-not $isRunFromGit) {
-    Write-Verbose "Not configuring snapshot because not running from Git"
-  }
-
-  Write-Host "Configuring OneDrive Snapshot"
-
-  $oneDriveDir = Join-Path ${env:USERPROFILE} "OneDrive\Config"
-  if (-not (Test-Path $oneDriveDir)) {
-    Write-HostWarning "OneDrive not available at $oneDriveDir"
-    return
-  }
-
-  $snapshotDir = Join-Path $oneDriveDir "Snapshot"
-  Create-Directory $snapshotDir
-
-  & robocopy "$repoDir" "$snapshotDir" /E /PURGE /XD ".git" | Out-Null
+function Configure-NuGet() {
+  Write-Host "Configuring NuGet"
+  Ensure-EnvironmentVariable "NUGET_PACKAGES" $nugetDir
 }
 
-function Load-Settings() {
-  $realCodeDir = $codeDir
-  $realNuGetDir = $nugetDir
-  $realToolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
-  $gitEditor = ""
-
-  # When running as a snapshot the Tools directory will be a sibling of the current 
-  # directory.
-  if (-not (Test-Path $realToolsDir)) {
-    $realToolsDir = Split-Path -Parent $PSScriptRoot
-    $realToolsDir = Split-Path -Parent $realToolsDir
-    $realToolsDir = Join-Path $realToolsDir "Tools"
-
-    if (-not (Test-Path $realToolsDir)) {
-      $realToolsDir = Join-Path ${env:USERPROFILE} "Tools"
-      Write-HostWarning "Can't find any tools directory using empty $realToolsDir"
-      Create-Directory $realToolsDir
-    }
+function Load-MachineSettings() {
+  $localDir = Join-Path $PSScriptRoot "Local"
+  $null = Create-Directory $localDir
+  $machineSettingsFilePath = Join-Path $localDir "machine-settings.ps1"
+  if (-not (Test-Path $machineSettingsFilePath)) {
+    $content = @"
+# `$script:codeDir = "$codeDir"
+# `$script:nugetDir = "$nugetDir"
+# `$script:toolsDir = "$toolsDir"
+# `$script:gitEditor = ""
+"@
+    Write-Output $content | Out-File $machineSettingsFilePath -encoding ASCII 
   }
 
-  switch -Wildcard ("${env:COMPUTERNAME}\${env:USERNAME}") {
-    "JAREDPAR05\*" { 
-      $realCodeDir = "e:\code"
-      $realNuGetDir = "e:\nuget"
-      break;
-    }
-    "JAREDPAR06\*" { 
-      $realCodeDir = "e:\code"
-      $realNuGetDir = "e:\nuget"
-      break;
-    }
-    "PARANOID3\*" { 
-      $realCodeDir = "e:\code"
-      $realNuGetDir = "e:\nuget"
-      $gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
-      Ensure-EnvironmentVariable "NUGET_PACKAGES" "e:\nuget"
-      break;
-    }
-    "CPC-jared-P2WJZ\*" {
-      $gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
-    }
-    default { }
-  }
-
-  $script:settings = @{
-    codeDir = $realCodeDir
-    nugetDir = $realNugetDir
-    toolsDir = $realToolsDir
-    gitEditor = $gitEditor
-  }
+  . $machineSettingsFilePath
 }
 
 try {
@@ -287,32 +235,30 @@ try {
     exit 1
   }
 
-  # Setup the directories referenced in the script
   $codeDir = Join-Path ${env:USERPROFILE} "code";
   $nugetDir = Join-Path ${env:USERPROFILE} ".nuget";
-  $toolsDir = Join-Path ${env:USERPROFILE} "tools";
+  $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
   $repoDir = Split-Path -parent $PSScriptRoot
   $commonDataDir = Join-Path $repoDir "CommonData"
   $dataDir = Join-Path $PSScriptRoot "Data"
-  $isRunFromGit = Test-Path (Join-Path $repoDir ".git")
-  $localDir = Join-Path $PSScriptRoot "Local"
-  Create-Directory $localDir
+  $gitEditor = ""
 
-  Load-Settings
+  Load-MachineSettings
+
   Write-Host "Data Source Directories"
-  Write-Host "`tCode Directory: $($settings.codeDir)"
-  Write-Host "`tNuget Directory: $($settings.nugetDir)"
-  Write-Host "`tTools Directory: $($settings.toolsDir)"
+  Write-Host "`tCode Directory: $codeDir"
+  Write-Host "`tNuget Directory: $nugetDir"
+  Write-Host "`tTools Directory: $toolsDir"
 
   $vimFilePath = Get-VimFilePath
 
-  Configure-Junctions
+  Configure-Tools
+  Configure-NuGet
   Configure-Vim
   Configure-PowerShell
   Configure-Git
   Configure-Terminal
   Configure-Winget
-  Configure-Snapshot
 
   exit 0
 }

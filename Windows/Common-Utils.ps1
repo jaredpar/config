@@ -6,26 +6,6 @@ param()
 Set-StrictMode -version 2.0
 $ErrorActionPreference="Stop"
 
-# Handy function for executing a command in powershell and throwing if it 
-# fails.  
-#
-# Use this when the full command is known at script authoring time and 
-# doesn't require any dynamic argument build up.  Example:
-#
-#   Exec-Block { & $msbuild Test.proj }
-# 
-# Original sample came from: http://jameskovacs.com/2010/02/25/the-exec-problem/
-function Exec-Block([scriptblock]$cmd) {
-  & $cmd
-
-  # Need to check both of these cases for errors as they represent different items
-  # - $?: did the powershell script block throw an error
-  # - $lastexitcode: did a windows command executed by the script block end in error
-  if ((-not $?) -or ($lastexitcode -ne 0)) {
-    throw "Command failed to execute: $cmd"
-  } 
-}
-
 function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true, [switch]$useAdmin = $false, [switch]$softFail = $false) {
   $startInfo = New-Object System.Diagnostics.ProcessStartInfo
   $startInfo.FileName = $command
@@ -111,13 +91,6 @@ function Exec-Console([string]$command, [string]$commandArgs, [switch]$useAdmin 
   Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$true -useAdmin:$useAdmin -softFail:$softFail
 }
 
-# Handy function for executing a powershell script in a clean environment with 
-# arguments.  Prefer this over & sourcing a script as it will both use a clean
-# environment and do proper error checking
-function Exec-Script([string]$script, [string]$scriptArgs = "") {
-  Exec-Command "powershell" "-noprofile -executionPolicy RemoteSigned -file `"$script`" $scriptArgs"
-}
-
 function Create-Directory([string]$dir) {
   New-Item $dir -ItemType Directory -ErrorAction SilentlyContinue | Out-Null
 }
@@ -134,6 +107,12 @@ function Test-Admin() {
   }
 
   return $false;
+}
+
+function Check-LastExitCode() {
+  if ($LASTEXITCODE -ne 0) {
+    throw "Last command failed with exit code $LASTEXITCODE"
+  }
 }
 
 function Select-StringRecurse(
