@@ -80,7 +80,7 @@ function Link-Directory([string]$linkDir, [string]$targetDir) {
 }
 
 function Get-VimFilePath() {
-  $all = @("vim90", "vim82", "vim81", "vim80", "vim74")
+  $all = @("vim91", "vim90", "vim82", "vim81", "vim80", "vim74")
   foreach ($version in $all) { 
     $p = "C:\Program Files (x86)\Vim\$($version)\vim.exe"
     if (Test-Path $p) { 
@@ -132,13 +132,16 @@ function Configure-PowerShell() {
       Set-Location ..
     }
 
+    Write-Verbose "Pwsh Script Execution"
+    $policy = Get-ExecutionPolicy
+    if ($policy -ne "Bypass" -and $policy -ne "RemoteSigned") {
+      Set-ExecutionPolicy Bypass -Scope CurrentUser
+    }
+
     # The PSMODULEPATH must be cleared to ensure PowerShell doesn't cross contaminate pwsh and
     # vice versa. 
-    Write-Verbose "Pwsh Script Execution"
-    Exec-Command "cmd" "/C set PSMODULEPATH=&&pwsh -Command Set-ExecutionPolicy Bypass -Scope CurrentUser"
-
     Write-Verbose "Powershell Script Execution"
-    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -Command Set-ExecutionPolicy Bypass -Scope CurrentUser"
+    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -ExecutionPolicy Bypass -Command Set-ExecutionPolicy Bypass -Scope CurrentUser" -softFail
   }
   finally {
     Pop-Location
@@ -150,7 +153,7 @@ function Configure-Git() {
 
   # Remove the old way where ~/.gitconfig was setup as a hard link
   $config = Join-Path $env:UserProfile ".gitconfig"
-  if (Test-Path $config && ((Get-Item $config).LinkType -eq "HardLink")) { 
+  if ((Test-Path $config) -and ((Get-Item $config).LinkType -eq "HardLink")) { 
     Remove-Item $config
   }
 
