@@ -79,13 +79,11 @@ Set-Alias ssr Select-StringRecurse
 Set-Alias .. Set-LocationParent
 Set-Alias ... Set-LocationGrandParent
 
-# Load machine specific customizations. Any customization which is machine specific 
-# should go into this file as it's not tracked in Git
-$script:machineProfileFilePath = Join-Path $PSScriptRoot "Local\machine-profile.ps1"
-if (-not (Test-Path $machineProfileFilePath)) {
-    $machineProfileContent = "# Machine specific profile code"
-    Write-Output $machineProfileContent | Out-File $machineProfileFilePath -encoding ASCII 
-} else {
-    . $machineProfileFilePath
+switch ($env:COMPUTERNAME) {
+    'PARANOID1' {
+        Set-Alias msbuild 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe'
+    }
+    default {
+        Write-Host "No computer specific profile"
+    }
 }
-

@@ -26,7 +26,7 @@ function Ensure-EnvironmentVariable([string]$name, [string]$value)
   }
 
   Write-Host "Setting environment variable $name to $value"
-  Exec-Command "setx" "$name `"$value`""
+  Exec-Command "setx" "$name $value"
 }
 
 # Ensure that $linkFilePath refers to $targetFilePath as a symlink
@@ -211,21 +211,17 @@ function Configure-NuGet() {
   Ensure-EnvironmentVariable "NUGET_PACKAGES" $nugetDir
 }
 
-function Load-MachineSettings() {
-  $localDir = Join-Path $PSScriptRoot "Local"
-  $null = Create-Directory $localDir
-  $machineSettingsFilePath = Join-Path $localDir "machine-settings.ps1"
-  if (-not (Test-Path $machineSettingsFilePath)) {
-    $content = @"
-# `$script:codeDir = "$codeDir"
-# `$script:nugetDir = "$nugetDir"
-# `$script:toolsDir = "$toolsDir"
-# `$script:gitEditor = ""
-"@
-    Write-Output $content | Out-File $machineSettingsFilePath -encoding ASCII 
+function Load-ComputerSettings() {
+  switch ($env:COMPUTERNAME) {
+    'PARANOID1' {
+      $script:codeDir = 'E:\code\'
+      $script:nugetDir = 'E:\nuget\'
+      $script:gitEditor = 'C:\Program Files\Vim\vim91\vim.exe --nofork'
+    }
+    default {
+      Write-Host "No computer specific settings"
+    }
   }
-
-  . $machineSettingsFilePath
 }
 
 try {
@@ -246,7 +242,7 @@ try {
   $dataDir = Join-Path $PSScriptRoot "Data"
   $gitEditor = ""
 
-  Load-MachineSettings
+  Load-ComputerSettings
 
   Write-Host "Data Source Directories"
   Write-Host "`tCode Directory: $codeDir"
