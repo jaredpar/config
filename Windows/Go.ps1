@@ -216,7 +216,8 @@ function Load-ComputerSettings() {
     'PARANOID1' {
       $script:codeDir = 'E:\code\'
       $script:nugetDir = 'E:\nuget\'
-      $script:gitEditor = 'C:\Program Files\Vim\vim91\vim.exe --nofork'
+      $script:gitEditor = '"C:\Program Files\Vim\vim91\vim.exe" --nofork'
+      Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
     }
     default {
       Write-Host "No computer specific settings"
