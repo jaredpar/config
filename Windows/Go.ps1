@@ -213,9 +213,9 @@ function Configure-NuGet() {
 
 function Load-ComputerSettings() {
   switch ($env:COMPUTERNAME) {
-    'PARANOID1' {
-      $script:codeDir = 'E:\code\'
-      $script:nugetDir = 'E:\nuget\'
+    'PARANOID2' {
+      $script:codeDir = 'C:\Users\jaredpar\code\'
+      $script:nugetDir = 'C:\Users\jaredpar\code\.nuget\'
       $script:gitEditor = '"C:\Program Files\Vim\vim91\vim.exe" --nofork'
       Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
     }

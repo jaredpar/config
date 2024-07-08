@@ -80,7 +80,7 @@ Set-Alias .. Set-LocationParent
 Set-Alias ... Set-LocationGrandParent
 
 switch ($env:COMPUTERNAME) {
-    'PARANOID1' {
+    'PARANOID2' {
         Set-Alias msbuild 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe'
     }
     default {
