@@ -83,6 +83,10 @@ switch ($env:COMPUTERNAME) {
     'PARANOID2' {
         Set-Alias msbuild 'C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin\MSBuild.exe'
     }
+    'CPC-jared-P2WJZ' {
+        Set-Alias msbuild 'C:\Program Files\Microsoft Visual Studio\2022\Main\MSBuild\Current\Bin\MSBuild.exe'
+        Set-Alias msbuildp 'C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\MSBuild.exe'
+    }
     default {
         Write-Host "No computer specific profile"
     }
