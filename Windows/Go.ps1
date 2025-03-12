@@ -223,6 +223,9 @@ function Load-ComputerSettings() {
       $script:nugetDir = 'C:\.tools\.nuget\packages\'
       $script:gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
     }
+    "LAPTOP-SQG715JD" {
+      $script:gitEditor = '"C:\Program Files\Vim\vim82\vim.exe" --nofork'
+    }
     default {
       Write-Host "No computer specific settings"
     }
