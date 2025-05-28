@@ -161,7 +161,7 @@ function Configure-Git() {
   & git config --global user.email jared@paranoidcoding.org
   & git config --global fetch.prune true
   & git config --global core.longpaths true
-  & git config --global push.default current
+  & git config --global push.default upstream
   & git config --global commit.gpgsign false
   & git config --global alias.assume 'update-index --assume-unchanged'
   & git config --global alias.unassume 'update-index --no-assume-unchanged'
@@ -216,15 +216,15 @@ function Load-ComputerSettings() {
     'PARANOID2' {
       $script:codeDir = 'C:\Users\jaredpar\code'
       $script:nugetDir = 'C:\Users\jaredpar\code\.nuget\'
-      $script:gitEditor = '"C:\Program Files\Vim\vim91\vim.exe" --nofork'
+      $script:gitEditor = '''C:\Program Files\Vim\vim91\vim.exe'' --nofork'
       Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
     }
     'CPC-jared-P2WJZ' {
       $script:nugetDir = 'C:\.tools\.nuget\packages\'
-      $script:gitEditor = '"C:\Program Files\Vim\vim90\vim.exe" --nofork'
+      $script:gitEditor = '''C:\Program Files\Vim\vim90\vim.exe'' --nofork'
     }
     "LAPTOP-SQG715JD" {
-      $script:gitEditor = '"C:\Program Files\Vim\vim82\vim.exe" --nofork'
+      $script:gitEditor = '''C:\Program Files\Vim\vim82\vim.exe'' --nofork'
     }
     default {
       Write-Host "No computer specific settings"
