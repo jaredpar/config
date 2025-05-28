@@ -222,9 +222,11 @@ function Load-ComputerSettings() {
     'CPC-jared-P2WJZ' {
       $script:nugetDir = 'C:\.tools\.nuget\packages\'
       $script:gitEditor = '''C:\Program Files\Vim\vim90\vim.exe'' --nofork'
+      Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
     }
     "LAPTOP-SQG715JD" {
-      $script:gitEditor = '''C:\Program Files\Vim\vim82\vim.exe'' --nofork'
+      $script:gitEditor = '''C:\Program Files\Vim\vim91\vim.exe'' --nofork'
+      Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
     }
     default {
       Write-Host "No computer specific settings"

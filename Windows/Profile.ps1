@@ -87,6 +87,9 @@ switch ($env:COMPUTERNAME) {
         Set-Alias msbuild 'C:\Program Files\Microsoft Visual Studio\2022\Main\MSBuild\Current\Bin\MSBuild.exe'
         Set-Alias msbuildp 'C:\Program Files\Microsoft Visual Studio\2022\Preview\MSBuild\Current\Bin\MSBuild.exe'
     }
+    'LAPTOP-SQG715JD' {
+        Set-Alias msbuild 'C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Current\Bin\MSBuild.exe'
+    }
     default {
         Write-Host "No computer specific profile"
     }
