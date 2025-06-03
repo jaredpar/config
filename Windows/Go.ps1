@@ -161,7 +161,7 @@ function Configure-Git() {
   & git config --global user.email jared@paranoidcoding.org
   & git config --global fetch.prune true
   & git config --global core.longpaths true
-  & git config --global push.default upstream
+  & git config --global push.default current
   & git config --global commit.gpgsign false
   & git config --global alias.assume 'update-index --assume-unchanged'
   & git config --global alias.unassume 'update-index --no-assume-unchanged'
