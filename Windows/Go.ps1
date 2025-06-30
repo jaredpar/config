@@ -214,7 +214,6 @@ function Configure-NuGet() {
 function Load-ComputerSettings() {
   switch ($env:COMPUTERNAME) {
     'PARANOID2' {
-      $script:codeDir = 'C:\Users\jaredpar\code'
       $script:nugetDir = 'C:\Users\jaredpar\code\.nuget\'
       $script:gitEditor = '''C:\Program Files\Vim\vim91\vim.exe'' --nofork'
       Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
@@ -244,7 +243,6 @@ try {
     exit 1
   }
 
-  $codeDir = Join-Path ${env:USERPROFILE} "code";
   $nugetDir = Join-Path ${env:USERPROFILE} ".nuget";
   $toolsDir = Join-Path ${env:USERPROFILE} "OneDrive\Config\Tools"
   $repoDir = Split-Path -parent $PSScriptRoot
@@ -255,7 +253,6 @@ try {
   Load-ComputerSettings
 
   Write-Host "Data Source Directories"
-  Write-Host "`tCode Directory: $codeDir"
   Write-Host "`tNuget Directory: $nugetDir"
   Write-Host "`tTools Directory: $toolsDir"
 
