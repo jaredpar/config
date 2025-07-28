@@ -141,7 +141,7 @@ function Configure-PowerShell() {
     # The PSMODULEPATH must be cleared to ensure PowerShell doesn't cross contaminate pwsh and
     # vice versa. 
     Write-Verbose "Powershell Script Execution"
-    Exec-Command "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -ExecutionPolicy Bypass -Command Set-ExecutionPolicy Bypass -Scope CurrentUser" -softFail
+    Exec-CommandRaw "cmd" "/C set PSMODULEPATH=&&powershell -NoProfile -ExecutionPolicy Bypass -Command Set-ExecutionPolicy Bypass -Scope CurrentUser" | Out-Null
   }
   finally {
     Pop-Location

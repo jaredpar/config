@@ -6,7 +6,7 @@ param()
 Set-StrictMode -version 2.0
 $ErrorActionPreference="Stop"
 
-function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true, [switch]$useAdmin = $false, [switch]$softFail = $false) {
+function script:Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useConsole = $true, [switch]$useAdmin = $false) {
   $startInfo = New-Object System.Diagnostics.ProcessStartInfo
   $startInfo.FileName = $command
   $startInfo.Arguments = $commandArgs
@@ -31,6 +31,7 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
   $process.Start() | Out-Null
 
   $finished = $false
+  $output = ""
   try {
     if (-not $useConsole) { 
       # The OutputDataReceived event doesn't fire as events are sent by the 
@@ -39,10 +40,12 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
       # reading here as an alternative which is fine since this blocks 
       # on completion already.
       $out = $process.StandardOutput
+      $builder = New-Object System.Text.StringBuilder
       while (-not $out.EndOfStream) {
-        $line = $out.ReadLine()
-        Write-Output $line
+        $builder.AppendLine($out.ReadLine()) | Out-Null
       }
+
+      $output = $builder.ToString()
     }
 
     while (-not $process.WaitForExit(100)) { 
@@ -50,17 +53,13 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
     }
 
     $finished = $true
-    if ($process.ExitCode -ne 0) {
-      $msg = "Command failed to execute $($process.ExitCode): $command $commandArgs" 
-      if ($softFail) {
-        Write-Output $msg
-      } else {
-        throw $msg
-      }
+    return @{
+      ExitCode = $process.ExitCode
+      Output = $output
     }
   }
   finally {
-    # If we didn't finish then an error occured or the user hit ctrl-c.  Either
+    # If we didn't finish then an error ocurred or the user hit ctrl-c.  Either
     # way kill the process
     if (-not $finished) {
       $process.Kill()
@@ -68,27 +67,74 @@ function Exec-CommandCore([string]$command, [string]$commandArgs, [switch]$useCo
   }
 }
 
-# Handy function for executing a windows command which needs to go through 
-# windows command line parsing.  
-#
-# Use this when the command arguments are stored in a variable.  Particularly 
-# when the variable needs reparsing by the windows command line. Example:
-#
-#   $args = "/p:ManualBuild=true Test.proj"
-#   Exec-Command $msbuild $args
-# 
-function Exec-Command([string]$command, [string]$commandArgs, [switch]$softFail = $false) {
-  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false -softFail:$softFail
+<#
+  .SYNOPSIS
+    Handy function for executing a windows command which needs to go through 
+    windows command line parsing.
+
+  .OUTPUTS
+    Returns a tuple of the process exit code and output of the command executed.
+
+  .NOTES
+    This function will not throw on failure
+#>
+function Exec-CommandRaw([string]$command, [string]$commandArgs, [switch]$useAdmin = $false) {
+  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false -useAdmin:$useAdmin
 }
 
-# Functions exactly like Exec-Command but lets the process re-use the current 
-# console. This means items like colored output will function correctly.
-#
-# In general this command should be used in place of
-#   Exec-Command $msbuild $args | Out-Host
-#
-function Exec-Console([string]$command, [string]$commandArgs, [switch]$useAdmin = $false, [switch]$softFail = $false) {
-  Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$true -useAdmin:$useAdmin -softFail:$softFail
+<#
+  .SYNOPSIS
+    Handy function for executing a windows command which needs to go through 
+    windows command line parsing.
+
+  .OUTPUTS
+    Returns the output of the command executed.
+
+  .NOTES
+    This function will throw on failure
+#>
+function Exec-Command([string]$command, [string]$commandArgs, [switch]$useAdmin = $false) {
+  $t = Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$false -useAdmin:$useAdmin
+  if ($t.ExitCode -ne 0) {
+    $msg = "Command failed to execute $($t.ExitCode): $command $commandArgs" 
+    throw $msg
+  }
+
+  return $t.Output
+}
+
+<#
+  .SYNOPSIS
+    Functions exactly like Exec-Command but lets the process re-use the current
+    console. This means items like colored output will function correctly.
+
+  .OUTPUTS
+    There are no outputs
+
+  .NOTES
+    This function will throw on failure
+#>
+function Exec-Console([string]$command, [string]$commandArgs, [switch]$useAdmin = $false) {
+  $t = Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$true -useAdmin:$useAdmin
+  if ($t.ExitCode -ne 0) {
+    $msg = "Command failed to execute $($t.ExitCode): $command $commandArgs" 
+    throw $msg
+  }
+}
+
+<#
+  .SYNOPSIS
+    Functions exactly like Exec-Console but returns the exit code of the command executed.
+
+  .OUTPUTS
+    Exit code of the command executed.
+
+  .NOTES
+    This function will not throw on failure
+#>
+function Exec-ConsoleRaw([string]$command, [string]$commandArgs, [switch]$useAdmin = $false) {
+  $t = Exec-CommandCore -command $command -commandArgs $commandargs -useConsole:$true -useAdmin:$useAdmin
+  return $t.ExitCode
 }
 
 function Create-Directory([string]$dir) {
