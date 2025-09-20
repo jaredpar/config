@@ -20,6 +20,7 @@ try {
 
   Install-App "ILSpy" "icsharpcode.ILSpy"
   Install-App "Vim" "vim.vim"
+  Install-App "PerfView" "Microsoft.PerfView"
 
   exit 0
 }

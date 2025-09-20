@@ -214,7 +214,10 @@ function Configure-NuGet() {
 function Load-ComputerSettings() {
   switch ($env:COMPUTERNAME) {
     'PARANOID2' {
-      $script:nugetDir = 'C:\Users\jaredpar\code\.nuget\'
+      # Use the real drive name, not the mapped drive name. This is better supported 
+      # as some tools that look at NUGET_PACKAGES don't understand junctions. Testing
+      # locally this has no impact on hard links
+      $script:nugetDir = 'E:\.nuget\'
       $script:gitEditor = '''C:\Program Files\Vim\vim91\vim.exe'' --nofork'
       Ensure-EnvironmentVariable "ROSLYNUSEHARDLINKS" "true"
     }
